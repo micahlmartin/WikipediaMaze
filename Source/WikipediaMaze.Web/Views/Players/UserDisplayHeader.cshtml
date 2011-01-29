@@ -1,0 +1,68 @@
+﻿@model UserProfileViewModel
+    
+<div id="user-display-header" class="content-page">
+        <div id="user-display-header-left">
+            <img alt="Avatar for @Model.UserName" height="120" width="120" src="@Model.GetGravatarUrl(120)" title="Avatar for @Model.UserName" />
+            <p>
+                <span>@Model.Reputation.ToString("N0")</span>  Reputation <br />
+                @Html.ActionLink("Get your profile badge", "flair", new { id = @Model.UserId }, new { style = "font-size:0.9em;" })
+            </p>
+            
+        </div>
+        <table>
+            <tr>
+                <td class="rowHeader"><strong>Name:</strong></td>
+                <td>@Model.UserName</td>
+            </tr>
+            <tr>
+                <td class="rowHeader"><strong>Joined:</strong></td>
+                <td>@Model.Joined.FormatDate()</td>
+            </tr>
+            <tr>
+                <td class="rowHeader"><strong>Last Visit:</strong></td>
+                <td>@Model.LastSeen.FormatDate()</td>
+            </tr>
+            <tr>
+                <td class="rowHeader"><strong>Location:</strong></td>
+                <td>@Model.Location</td>
+            </tr>
+            <tr>
+                <td class="rowHeader"><strong>Age:</strong></td>
+                <td>@Model.Age</td>
+            </tr>
+        @if (Model.IsUser)
+        {
+            <tr>
+                <td class="rowHeader"><strong>OpenId:</strong></td>
+                <td>@Model.OpenId</td>                
+            </tr>
+        }
+        </table>
+        <table>
+            <tr>
+                <tr>
+                    <td class="rowHeader"></td>
+                    <td>
+                        <h3>Contact Info</h3>
+                        <div id="contact-us">
+                            <ul>
+                                @if(!string.IsNullOrEmpty(Model.TwitterUserName)) { 
+                                    <li class="twitter"><a style="font-size:125%;" href="http://www.twitter.com/@Model.TwitterUserName" title="Twitter">@Model.TwitterUserName</a></li>
+                                }
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            </tr>
+        </table>
+        @if (Model.IsUser)
+        {
+        <div id="user-display-header-links">
+            @Html.ActionLink("edit", "edit", new {id = Model.UserId})
+        </div>
+        }
+    </div>
+<div class="user-display-leading">
+    <h3>Leading</h3>
+    <p>@Model.UserName is leading @Model.LeadingPuzzleCount puzzles.</p>
+</div>

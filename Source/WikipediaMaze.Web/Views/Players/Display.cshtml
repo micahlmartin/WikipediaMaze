@@ -1,0 +1,53 @@
+@model UserProfileViewModel
+           
+@{
+    ViewBag.Title = "Player " + Model.UserName + " " + @Model.UserId;
+}
+
+@section OptionalHeadContent
+{
+    <link rel="alternate" type="application/atom+xml" title="Solution feed for player @Model.UserName" href="@Url.Action("playersolutions", "feeds", new { id = Model.UserId })" />  
+    <link rel="alternate" type="application/atom+xml" title="Puzzle feed for player @Model.UserName" href="@Url.Action("playerpuzzles", "feeds", new { id = Model.UserId })" />  
+}
+
+@section SectionTitle
+{
+    <h2>@Model.UserName</h2>
+}
+
+<div id="column-full">
+    @{Html.RenderPartial("UserDisplayHeader", Model);}
+    @{Html.RenderPartial("UserDisplayBadges", Model.Badges);}
+    <div id="solutionlist">
+        <p class="loading">Loading solutions...</p>
+    </div>
+    <div id="puzzlelist">
+        <p class="loading">Loading Puzzles...</p>
+    </div>
+</div>
+<script type="text/javascript">
+        $().ready(function() {
+        
+            $.ajax({
+            
+                type: "GET",
+                url: "/players/UserDisplayPuzzles/@Model.UserId",
+                dataType: "html",
+                cache: false,
+                success: function(data) {
+                    $("#puzzlelist").html(data);
+                }
+            });
+
+            $.ajax({
+
+                type: "GET",
+                url: "/players/UserDisplaySolutions/@Model.UserId",
+                dataType: "html",
+                cache: false,
+                success: function(data) {
+                    $("#solutionlist").html(data);
+                }
+            });
+        });
+    </script>

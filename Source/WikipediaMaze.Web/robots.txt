@@ -1,0 +1,11 @@
+﻿User-agent: *
+Disallow: /content/
+Disallow: /App_Data/
+Disallow: /App/
+Disallow: /Logs/
+Disallow: /Models/
+Disallow: /Scripts/
+Disallow: /ViewModels/
+Disallow: /Views/
+
+Sitemap: http://www.wikipediamaze.com/sitemap.xml

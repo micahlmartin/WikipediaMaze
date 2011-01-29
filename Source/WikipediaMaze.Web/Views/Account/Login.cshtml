@@ -1,0 +1,76 @@
+﻿@model LoginViewModel
+
+@{
+    ViewBag.Title = "Log on";
+}
+
+@section OptionalHeadContent
+{
+    <meta name="description" content="Login to Wikipedia Maze" />
+    <link href="/Content/openid.css" rel="stylesheet" type="text/css" />
+}
+
+@section SectionTitle
+{
+    <h2>Log on</h2>
+}
+
+@section AdditionalScripts
+{
+@*    <script src="/Scripts/openid-jquery.js?v=061209" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            openid.init('openid_identifier');
+        });
+	</script>*@
+}
+
+<div id="column-full">
+    <div class="content-page reading-text">
+      @if (!Model.IsAuthenticated)
+      {
+          <p>
+            Hello! In order to play <em>Wikipedia Maze</em> you must be logged in.
+          </p>
+          <p>
+            Although you're required to be logged in <em>you don't have to create yet another account</em>. 
+            You can simply log in with one of your existing accounts from other popular websites.
+          </p>
+      } 
+@*      else
+      {
+          <p>You are a <em>registered user</em>. You can log in anytime using your <em>openId</em> that is associated with your account.</p>
+          <p>Logging in with a different openId will associate it with this account.</p>
+      }*@
+          
+          <iframe src="http://wikipediamaze.rpxnow.com/openid/embed?token_url=@Server.UrlEncode("{0}/account/Logon?returnUrl={1}".ToFormat(WikipediaMaze.Core.Properties.Settings.Default.Host, HttpContext.Current.Request.Url))" scrolling="no" frameBorder="no" allowtransparency="true" style="width:400px;height:240px"></iframe>
+
+
+        <form action="@("http://{0}/account/Authenticate?returnUrl={1}".ToFormat(WikipediaMaze.Core.Properties.Settings.Default.Host, ViewData["returnUrl"]))" method="POST" id="openid_form">
+	    <input type="hidden" name="action" value="verify" />
+        
+@*        @if (GlobalData.IsDebugging)
+        {
+	    <fieldset>
+    		    <legend>Sign-in using one of your existing accounts</legend>
+        		
+			    <div id="openid_input_area">
+				    <input id="openid_identifier" name="openid_identifier" type="text" value="http://" />
+				    <input id="openid_submit" type="submit" value="Sign-In"/> 
+			    </div>
+			    
+    		    <div id="openid_choice">
+	    		    <p>Please click your account provider:</p>
+	    		    <div id="openid_btns"></div>
+			    </div>
+    			    
+			    <noscript>
+			    <p>OpenID is service that allows you to log-on to many different websites using a single indentity.
+			    Find out <a href="http://openid.net/what/">more about OpenID</a> and <a href="http://openid.net/get/">how to get an OpenID enabled account</a>.</p>
+			    </noscript>
+	    </fieldset>
+        }*@
+    </form>
+    </div>
+</div>
+

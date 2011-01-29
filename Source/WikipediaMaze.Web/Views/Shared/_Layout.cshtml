@@ -1,0 +1,83 @@
+﻿@using WikipediaMaze.App
+@using MvcContrib
+@using System.Web.Mvc
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>@ViewBag.Title - Wikipedia Maze - The Wikipedia Game</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <meta name="copyright" content="All content on this site is copyrighted by Micah Martin &copy; 2009, All rights reserved, with the exception of the specific content used from Wikipedia.org which is reproduced under the GNU Free Documentation License." />
+    <meta property="fb:admins" content="100000045390247" />
+    <link type="text/css" rel="Stylesheet" href="/cache/CSSInclude/@(DateTime.Now.Ticks)/css" />
+    <script type="text/javascript" src="/cache/JavaScriptInclude/@(DateTime.Now.Ticks)/javascript"></script>
+    <link rel="shortcut icon" type="image/ico" href="/Content/img/new/wm.ico" />
+    @RenderSection(name: "OptionalHeadContent", required: false)
+</head>
+
+<body>
+    <div id="container">
+        <div id="user-panel" style="display:none;"></div>
+        <div id="header-wrap">
+            <div id="header">
+                @{Html.RenderPartial("HeaderUserControl");}
+            </div>
+        </div>
+
+            <ul id="menu">
+                <li>@Html.ActionLink("Puzzles", "Index","Puzzles")</li>
+                <li>@Html.ActionLink("Themes", "themes", "puzzles")</li>
+                <li>@Html.ActionLink("Players", "Index", "Players")</li>
+                <li>@Html.ActionLink("Badges", "Index", "Badges")</li>
+                <li>@Html.ActionLink("Create Puzzle", "Create", "Puzzles")</li>
+                <li>@Html.ActionLink("How To Play", "HowToPlay", "Home")</li>
+            </ul>
+
+        <div id="section-title">
+            @RenderSection("SectionTitle")
+        </div>
+        <div id="columns">
+            <div id="column-wrap">
+                @RenderBody()
+            </div>
+            
+        </div>
+        <div class="push"></div>
+        
+    </div>
+    <div id="footer-wrap">
+            <ul id="footer">
+                <li id="footer-logo"><a href="/" title="WikipediaMaze">Wikipedia<span>Maze</span></a></li>
+                <li>&copy; 2009</li>
+                <li>@Html.ActionLink("About", "about", "home")</li>
+                <li>@Html.ActionLink("How to Play", "howtoplay", "home")</li>
+                <li>@Html.ActionLink("Feeds", "index", "feeds")</li>
+                <li><a href="http://blog.wikipediamaze.com/" title="Blog">Blog</a></li>
+                <li><a class="lastItem" href="http://wikipediamaze.uservoice.com/" title="Feedback">Feedback</a></li>
+            </ul>            
+        </div>
+    
+<!-- Scripts -->
+@RenderSection(name: "AdditionalScripts", required: false)
+<script type="text/javascript">
+/* <![CDATA[ */
+puzzles.init();
+/* ]] */
+</script>
+<!-- Google Analytics Script -->
+<script type="text/javascript">
+
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', '@WikipediaMaze.Core.Properties.Settings.Default.GoogleAnalytics']);
+    _gaq.push(['_trackPageview']);
+
+    (function () {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+
+</script>
+
+</body>
+</html>

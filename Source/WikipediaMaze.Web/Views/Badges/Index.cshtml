@@ -1,0 +1,20 @@
+@model IEnumerable<WikipediaMaze.Core.Badge>
+
+@{
+    ViewBag.Title = "Badges";
+}
+
+<div id="column-full">
+    @foreach (var badge in Model)
+    {
+        <div class="badges-large-display">
+            <p>
+                <span class="badge-large"><span class="@(badge.Level.ToString().ToLower())-large">@badge.Name</span></span> 
+                <span class="badge-description">@badge.Description</span></p>
+        </div>
+    }
+</div>
+
+<asp:Content ID="Content4" ContentPlaceHolderID="SectionTitle" runat="server">
+    <h2>Badges</h2>
+</asp:Content>

@@ -1,0 +1,43 @@
+﻿@model UserProfileViewModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        @*<link type="text/css" rel="Stylesheet" href="/cache/CSSInclude/@(DateTime.Now.Ticks)/css" />*@
+        <style type="text/css">
+            body { 	color:#444;	font-family:'Trebuchet MS', Verdana, Arial, Helvetica, sans-serif; font-size:1em; padding:0px; margin:0; }
+            div.puzzle-user-info { padding:6px; font-size:.7em; line-height:1.6em; overflow:hidden; text-align:left; width:@(ViewBag.Width)px; background: url("/content/img/new/puzzle-gradient.gif") repeat-x scroll 0 0 #F8F8F8; border: 4px solid #B0C0CF; }
+            div.puzzle-user-info span { display:block; margin:0 0 .2em; }
+            div.puzzle-user-info ul li.reputation { font-size:1.2em; padding:0; font-weight:bold; }
+            .puzzle-user-info ul { float:right; text-align:right; list-style:none; margin:0; padding:0; }
+            .puzzle-user-info .accomplishments { }
+            .puzzle-user-info .accomplishments li { display:block; float:left; padding:0 0 0 22px; margin:0 10px 0 0; }
+            .puzzle-user-info .accomplishments .leading-star { padding:0 0 0 16px; }
+            .puzzle-user-info img { border:1px solid #7AA1C5; clear:left; float:left; margin:0 7px 0 0; padding:1px; }
+            .username { color: #225189; display:block; font-size:1.2em; height:18px; overflow:hidden; text-decoration:none; text-transform:capitalize; width:@(ViewBag.Width - 61)px; }
+            div.puzzle-user-info a:hover { text-decoration:underline; }
+            .leading-star {	background:url(/content/img/leader-star.png) no-repeat -11px -2px; }
+            .gold { background:url(/content/img/new/badges.png) no-repeat -5px -3px; }
+            .silver { background:url(/content/img/new/badges.png) no-repeat -5px -21px; }
+            .bronze { background:url(/content/img/new/badges.png) no-repeat -5px -39px; }
+        </style>
+    </head>
+    <body>
+        <div class="puzzle-user-info">
+            <img height="50" width="50" src="@Model.GetGravatarUrl(50)" alt="Gravatar" />
+            <ul>
+                <li class="username">@Model.UserName</li>
+                <li class="reputation" title="Your Reputation Score">@Model.Reputation.FormatInteger()</li> 
+            </ul>
+            <ul class="accomplishments">
+                <li class="leading-star" title="Number of puzzles you are leading">@Model.LeadingPuzzleCount</li>
+                <li class="gold" title="Number of Gold Badges">@Model.GoldBadgeCount</li>
+                <li class="silver" title="Number of Silver Badges">@Model.SilverBadgeCount</li>
+                <li style="margin:0px;" class="bronze" title="Number of Bronze Badges">@Model.BronzeBadgeCount</li>
+            </ul>
+        </div>
+    </body>
+</html>

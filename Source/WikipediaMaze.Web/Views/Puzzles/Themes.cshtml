@@ -1,0 +1,49 @@
+@model WikipediaMaze.Web.ViewModels.ThemeListViewModel
+
+@{
+    ViewBag.Title = "Themes";
+}
+
+@section SectionTitle
+{
+    <h2>@Model.PaginatedThemes.TotalItems Themes</h2>
+    <div class="tabs">
+        <a class="@(Model.SortType == ThemeSortType.Popular ? "selected" : "")" href="@Url.Action("Themes", new { sortType = ThemeSortType.Popular })">Popular</a>
+        <a class="@(Model.SortType == ThemeSortType.Alphabetical ? "selected" : "")" href="@Url.Action("Themes", new { sortType = ThemeSortType.Alphabetical })">Alphabetical</a>
+    </div>
+}
+
+<div id="column-full">
+        <div class="content-page">
+            <table>
+                <tr>
+                    <td>
+                    @for (int j = 0; j < Model.PaginatedThemes.Count(); j++)
+                    {
+                        var theme = Model.PaginatedThemes.ElementAt(j);
+                      
+                      <div class="theme" title="@theme.Name">
+                        <p>
+                            @Html.ActionLink(theme.Name, "themed", new { controller = "puzzles", themes = theme.Name})
+                            <span>@theme.Count</span>
+                        </p>
+                      </div>
+                
+                        if ((j+1)%10 == 0)
+                        {
+                            @Html.Raw("</td>") 
+                            if (j != Model.PaginatedThemes.Count() - 1)
+                            { 
+                                @Html.Raw("<td valign='top'>")
+                            }
+                        }
+                    }
+                </tr>
+            </table>
+        </div>
+        
+        <div class="pager">
+            @Html.Raw(Html.Pager(Model.PaginatedThemes, "Themes", "Puzzles", new RouteValueDictionary(new { sortType = Model.SortType })))
+        </div>
+        
+    </div>

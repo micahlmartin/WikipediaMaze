@@ -1,0 +1,36 @@
+﻿@model IEnumerable<BadgeViewModel>
+@using System.Linq
+
+<h3>Badges</h3>
+
+<div class="user-display-badges">
+    <table>
+    <tr>
+        <td>
+        @{
+            
+            var sortedBadges = Model.OrderByDescending(x => x.BadgeLevel);
+            for (int j = 0; j < sortedBadges.Count(); j++)
+            {
+                var badge = sortedBadges.ElementAt(j);
+                      
+            <div class="badge-large" title="@badge.BadgeDescription">
+            <p>
+                <span class="badge-large"><span class="@(badge.BadgeLevel)-large">@badge.BadgeName</span></span> 
+                <span class="badge-count">@(badge.BadgeCount > 1 ? "x {0}".ToFormat(badge.BadgeCount.ToInvariantString()) : "")</span></p>
+            </div>
+
+                if ((j + 1) % 4 == 0)
+                {
+                    @Html.Raw("</td>");
+                    if (j != Model.Count() - 1) 
+                    {
+                        @Html.Raw("<td  valign=\"top\">")
+                    }
+                }
+
+            }
+        }
+    </tr>
+</table>
+</div>

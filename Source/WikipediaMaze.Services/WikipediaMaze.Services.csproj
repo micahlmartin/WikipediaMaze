@@ -1,0 +1,151 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{A73743B4-9109-4ED4-A7A9-7BED6330B647}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>WikipediaMaze.Services</RootNamespace>
+    <AssemblyName>WikipediaMaze.Services</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <PlatformTarget>x86</PlatformTarget>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DotNetOpenAuth, Version=3.2.0.9177, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Binaries\DotNetOpenAuth.dll</HintPath>
+    </Reference>
+    <Reference Include="facebook, Version=2.1.3464.14912, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Binaries\facebook.dll</HintPath>
+    </Reference>
+    <Reference Include="HtmlAgilityPack, Version=1.3.0.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Binaries\HtmlAgilityPack.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Binaries\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="MvcContrib, Version=1.0.0.932, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Binaries\MvcContrib.dll</HintPath>
+    </Reference>
+    <Reference Include="NHibernate, Version=2.1.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Binaries\NHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="NHibernate.Linq, Version=1.0.0.4000, Culture=neutral, PublicKeyToken=444cf6a87fdab271, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Binaries\NHibernate.Linq.dll</HintPath>
+    </Reference>
+    <Reference Include="StructureMap, Version=2.5.3.0, Culture=neutral, PublicKeyToken=e60ad81abae3c223, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Binaries\StructureMap.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="TwitterLib, Version=1.0.0.0, Culture=neutral, PublicKeyToken=19392ef3ce00d32c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Binaries\TwitterLib.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Filters.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Implementations\AccountService.cs" />
+    <Compile Include="Implementations\ApiAuthorizationService.cs" />
+    <Compile Include="Implementations\AwardBadgesService.cs" />
+    <Compile Include="Implementations\FaceBookService.cs" />
+    <Compile Include="Implementations\FormsAuthenticationService.cs" />
+    <Compile Include="Implementations\GameService.cs" />
+    <Compile Include="Implementations\MessengerService.cs" />
+    <Compile Include="Implementations\PuzzleCache.cs" />
+    <Compile Include="Implementations\PuzzleLeaderUpdateService.cs" />
+    <Compile Include="Implementations\PuzzleService.cs" />
+    <Compile Include="Implementations\RecurringServiceBase.cs" />
+    <Compile Include="Implementations\ReputationService.cs" />
+    <Compile Include="Implementations\Rpx.cs" />
+    <Compile Include="Implementations\ThemeCountUpdateService.cs" />
+    <Compile Include="Implementations\TokenManager.cs" />
+    <Compile Include="Implementations\TopicCache.cs" />
+    <Compile Include="Implementations\TopicService.cs" />
+    <Compile Include="Implementations\TwitterConsumer.cs" />
+    <Compile Include="Implementations\TwitterService.cs" />
+    <Compile Include="Implementations\UpdatePuzzleSolutionCountService.cs" />
+    <Compile Include="Implementations\WebSnapshotService.cs" />
+    <Compile Include="Interfaces\IApiAuthorizationService.cs" />
+    <Compile Include="Interfaces\IAuthenticationsService.cs" />
+    <Compile Include="Interfaces\IAccountService.cs" />
+    <Compile Include="Interfaces\IFaceBookService.cs" />
+    <Compile Include="Interfaces\IGameService.cs" />
+    <Compile Include="Interfaces\IMessengerService.cs" />
+    <Compile Include="Interfaces\IPuzzleCache.cs" />
+    <Compile Include="Interfaces\IPuzzleService.cs" />
+    <Compile Include="Interfaces\IRecurringService.cs" />
+    <Compile Include="Interfaces\IReputationService.cs" />
+    <Compile Include="Interfaces\IServiceAgent.cs" />
+    <Compile Include="Interfaces\ITopicCache.cs" />
+    <Compile Include="Interfaces\ITopicService.cs" />
+    <Compile Include="Interfaces\ITwitterService.cs" />
+    <Compile Include="Interfaces\IWebSnapshotService.cs" />
+    <Compile Include="Pipelines\SolvePuzzlePipeline.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WikipediaMaze.Core\WikipediaMaze.Core.csproj">
+      <Project>{7894DBAE-0DD3-46A3-8BB7-1CBB920D2639}</Project>
+      <Name>WikipediaMaze.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WikipediaMaze.Data\WikipediaMaze.Data.csproj">
+      <Project>{F2C5FFA6-4AC7-4B5D-A826-1D76712D12D3}</Project>
+      <Name>WikipediaMaze.Data</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

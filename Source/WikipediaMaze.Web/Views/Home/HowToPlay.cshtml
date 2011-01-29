@@ -1,0 +1,88 @@
+@{
+    ViewBag.Title = "How To Play";
+}
+
+@section OptionalHeadContent
+{
+    <meta name="description" content="Learn how to play Wikipedia Maze" />
+}
+
+@section SectionTitle
+{
+    <h2>HowToPlay</h2>
+}
+    <div id="column-full">
+        <div class="content-page reading-text">
+            <h3>
+                How do I play?</h3>
+            <p>
+                Getting started is very simple. Simply login using any one of your existing accounts
+                from a number of other popular web sites (i.e., facebook, google, yahoo, openId,
+                etc.) by clicking the "Login" link at the top of the screen. After logging in, find
+                a puzzle you want to play and click the <em>start</em> link.
+            </p>
+            <p>
+                Once you start a <em>puzzle</em> you will be redirected to the page containing the
+                first topic. The goal is to try to reach the ending topic in as few links as possible
+                by following links to other topics. Once you reach the end you will be awarded points
+                based on how well you did.
+            </p>
+            <h3>
+                Walkthrough</h3>
+            <p>
+                Let's play the
+                @Html.ActionLink("\"Kevin Bacon\" to \"Canadian Bacon\" puzzle", "start", new {controller = "game", id = 2}).
+                Here are a couple of things we know about <em>Kevin Bacon</em> and <em>Canadian Bacon</em>:
+            </p>
+            <ul>
+                <li><em>John Candy</em> stars in the movie <em>Canadian Bacon.</em></li>
+                <li><em>John Candy</em> and <em>Kevin Bacon</em> were both in a movie called <em>Planes,
+                    Trains, and Automobiles.</em></li>
+            </ul>
+            <p>
+                Now that we have these nice little tidbits of information let's play. We start off
+                on the <em>Kevin Bacon</em> page. Since we know he played in the movie <em>Planes, Trains,
+                    and Automobiles</em> find that link on the page and click it.
+            </p>
+            <p>
+                Now, since we know <em>John Candy</em> starred in the movie <em>Canadian Bacon</em>
+                find the link to <em>John Candy</em> on the page and click it.
+            </p>
+            <p>
+                Finally, after a little reading we discover that <em>Canadian Bacon</em> was the
+                last movie that <em>John Candy</em> starred in. Find the link and click it.
+            </p>
+            <p>
+                Congratulations you just completed your first puzzle and earned <em>25 points.</em>
+            </p>
+            <h3>
+                How do I earn Points?</h3>
+            <p>
+                Points are awarded for several different events.
+            </p>
+            <ul>
+                <li>When you solve a puzzle</li>
+                <li>When you create a puzzle</li>
+                <li>When another player solves a puzzle you created</li>
+                <li>When another user up-votes a puzzle you created</li>
+            </ul>
+            <h3>
+                How do you determine how many points are awarded?</h3>
+            <p>
+                When a user's puzzle is up-voted they are awarded <em>10 points.</em> When it is
+                down-voted <em>5 points</em> are taken away.</p>
+            <p>
+                The amount of points awarded for completing a puzzle is calculated based on the
+                number of steps it took you to complete the puzzle and what the average amount of
+                steps are for the puzzle. A base amount of <em>25 points</em> are awarded if you
+                solve the puzzle in the same amount of steps as the average for the puzzle. The
+                more steps it takes the fewer points that are awarded, and the fewer steps it takes
+                the more points that are awarded. The fewest amount of points awarded for a puzzle
+                is <em>10 points.</em>
+            </p>
+            <p>
+                When another player solves your puzzle you awarded <em>5 points</em>. Getting a lot of people
+                to play your puzzles will help you ramp up your score fairly quickly.
+            </p>
+        </div>
+    </div>

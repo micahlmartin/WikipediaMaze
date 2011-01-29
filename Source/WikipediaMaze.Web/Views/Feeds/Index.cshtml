@@ -1,0 +1,102 @@
+﻿@{
+    ViewBag.Title = "Feeds";
+}
+
+@section SectionTitle
+{
+    <h2>Feeds</h2>
+}
+
+<div id="column-full">
+    <div class="content-page reading-text">
+        <p>
+            One of the goals here at <em>Wikipedia Maze</em> is to make all the information on this site as accessible as possible. 
+            To help us acheive that we have exposed quite a few different data feeds that you may find useful.
+        </p>
+                
+        <p>
+            Listed below are the various feeds we expose along with some optional parameters that will help you get
+            what you're looking for. If there is anything you need that you can't find here <a href="http://wikipediamaze.uservoice.com" target="_blank">send us some feedback</a>.
+        </p>
+        <h3>Format</h3>
+        <p>
+            For all of the puzzle feeds only the first 50 results will be returned.
+        </p>
+        <ul>
+            <li><em>atom</em> - Atom 1.0 (default)</li>
+            <li><em>rss</em> - Rss 2.0</li>
+            <li><em>json</em></li>
+        </ul>
+        <p>
+            You can specify the format you want by passing it as a parameter in the querystring. 
+            Excluding this parameter will return Atom 1.0 by default.
+        </p>
+        <span>Example usage:</span>
+        <blockquote>@Html.ActionLink("http://www.wikipediamaze.com" + Url.Action("puzzles", "feeds", new { format = "atom" }), "puzzles", new { controller="feed", format = "atom" })</blockquote>
+
+        <p>Here are some examples of the JSON format</p>
+        <em>Puzzle</em>
+        <pre>[{"Id":94,"startTopic":"ping","endTopic":"pong","creatorId":157,"dateCreated":"\/Date(1247163267000)\/","level":4,"votes":11,"themes":["funny"],"solutionCount":85,"leadingPlayerId":627}]</pre>
+        <em>Player</em>
+        <pre>[{"id":46,"lastVisit":"\/Date(1266360221000)\/","reputation":6961,"bronzeBadges":["Player","Critic","Supporter","Creator","Popular","Leader"],"bronzeBadgeCount":10,"silverBadges":["Notable","Beta","Dominator"],"silverBadgeCount":3,"goldBadges":["Master"],"goldBadgeCount":1,"birthDate":null,"location":"","photoUrl":"http://www.gravatar.com/avatar.php?gravatar_id=26d55cf322a6b301f413075dc0bcbf2e&amp;d=identicon","displayName":"Loren Lang","leadingPuzzleCount":48,"twitterUserName":""}]</pre>
+        <em>Solution</em>
+        <pre>[{"puzzleId":94,"pointsAwarded":60,"stepCount":2,"dateCreated":"\/Date(1266996471000)\/","startTopic":"ping","endTopic":"pong"}]</pre>
+        <h3>Main Puzzle Feed</h3>
+        <p>This is the main feed for all the puzzles. Only the top 50 puzzles are shown.</p>
+        <h4>Optional Parameters</h4>
+        <p><em>SortType</em> - The order in which the puzzles are sorted.</p>
+        <ul>
+            <li>newest (default)</li>
+            <li>solutions - Highest number of solutions first</li>
+            <li>level - Hardest puzzles first</li>
+            <li>votes - Highest votes first</li>
+        </ul>
+        <p>Example usage:</p>
+        <blockquote>@Html.ActionLink("http://www.wikipediamaze.com" + Url.Action("puzzles", "feeds", new { sortType = "votes", format = "rss" }), "puzzles", new { controller = "feeds", sortType = "votes", format = "rss" })</blockquote>
+
+        <h3>Puzzles by Theme</h3>
+        <p>This feed allows you to get the puzzles for specific themes. Only the top 50 puzzles are shown.</p>
+        <h4>Optional Parameters</h4>
+        <p><em>SortType</em> - The order in which the puzzles are sorted.</p>
+        <ul>
+            <li>newest (default)</li>
+            <li>solutions - Highest number of solutions first</li>
+            <li>level - Hardest puzzles first</li>
+            <li>votes - Highest votes first</li>
+        </ul>
+        <p><em>Themes</em> - This is a comma separated list of themes. Spaces in the name of the theme should be replaced by the '-' (dash) character. 
+            Any puzzle matching 1 or more of the specified themes are returned. Themes are not case sensitive.</p>
+        <p>Example usage:</p>
+        <blockquote><a href="http://www.wikipediamaze.com/feeds/themed?themes=funny,star-wars&sortType=votes&format=rss">http://www.wikipediamaze.com/feeds/themed?themes=funny,star-wars&amp;sortType=votes&amp;format=rss</a></blockquote>
+
+        <h3>Puzzles By Player</h3>
+        <p>This is a feed for all the puzzles created by a specific player.</p>
+        <h4>Required Parameters</h4>
+        <p><em>Id</em> - The id of the player</p>
+        <h4>Optional Parameters</h4>
+        <p><em>SortType</em> - The order in which the puzzles are sorted.</p>
+        <ul>
+            <li>newest (default)</li>
+            <li>solutions - Highest number of solutions first</li>
+            <li>level - Hardest puzzles first</li>
+            <li>votes - Highest votes first</li>
+        </ul>
+        <p>Example usage:</p>
+        <blockquote><a href="http://www.wikipediamaze.com/feeds/playerpuzzles/16">http://www.wikipediamaze.com/feeds/playerpuzzles/16</a></blockquote>
+
+        <h3>Solutions By Player</h3>
+        <p>This is a feed for all the solution by a specific player. This is just the stats not the actual steps taken by the user.</p>
+        <h4>Required Parameters</h4>
+        <p><em>Id</em> - The id of the player</p>
+        <h4>Optional Parameters</h4>
+        <p><em>SortType</em> - The order in which the puzzles are sorted.</p>
+        <ul>
+            <li>newest (default)</li>
+            <li>solutions - Highest number of solutions first</li>
+            <li>level - Hardest puzzles first</li>
+            <li>votes - Highest votes first</li>
+        </ul>
+        <p>Example usage:</p>
+        <blockquote><a href="http://www.wikipediamaze.com/feeds/playersolutions/16">http://www.wikipediamaze.com/feeds/playersolutions/16</a></blockquote>
+    </div>
+</div>

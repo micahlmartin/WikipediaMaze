@@ -1,0 +1,104 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="c:\program files (x86)\microsoft visual studio 10.0\team tools\static analysis tools\fxcop\Xml\CodeAnalysisReport.xsl"?>
+<FxCopReport Version="10.0">
+ <Targets>
+  <Target Name="C:\code\wm\Source\WikipediaMaze.Web\bin\WikipediaMaze.Web.dll">
+   <Modules>
+    <Module Name="wikipediamaze.web.dll">
+     <Namespaces>
+      <Namespace Name="WikipediaMaze.Controllers">
+       <Types>
+        <Type Name="PlayersController" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#FlairImage(System.Int32,System.Nullable`1&lt;System.Int32&gt;)" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message TypeName="Dispose objects before losing scope" Category="Microsoft.Reliability" CheckId="CA2000" Status="Active" Created="2011-01-29 22:37:01Z" FixCategory="DependsOnFix">
+             <Issue Name="NonExceptionEdge" Certainty="75" Level="Warning" Path="C:\code\wm\Source\WikipediaMaze.Web\Controllers" File="PlayersController.cs" Line="420">In method 'PlayersController.FlairImage(int, int?)', call System.IDisposable.Dispose on object 'imageStream' before all references to it are out of scope.</Issue>
+             <Issue Name="NonExceptionEdge" Certainty="75" Level="Warning" Path="C:\code\wm\Source\WikipediaMaze.Web\Controllers" File="PlayersController.cs" Line="424">In method 'PlayersController.FlairImage(int, int?)', call System.IDisposable.Dispose on object 'imageStream' before all references to it are out of scope.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+       </Types>
+      </Namespace>
+      <Namespace Name="WikipediaMaze.Web">
+       <Types>
+        <Type Name="Extensions" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#GenerateCaptcha(System.Web.Mvc.HtmlHelper)" Kind="Method" Static="True" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message TypeName="Dispose objects before losing scope" Category="Microsoft.Reliability" CheckId="CA2000" Status="Active" Created="2011-01-29 22:37:01Z" FixCategory="DependsOnFix">
+             <Issue Name="ExceptionEdge" Certainty="75" Level="Warning" Path="C:\code\wm\Source\WikipediaMaze.Web\Web" File="Extensions.cs" Line="35">In method 'Extensions.GenerateCaptcha(this HtmlHelper)', object 'new StringWriter(CultureInfo.InvariantCulture)' is not disposed along all exception paths. Call System.IDisposable.Dispose on object 'new StringWriter(CultureInfo.InvariantCulture)' before all references to it are out of scope.</Issue>
+             <Issue Name="NonExceptionEdge" Certainty="75" Level="Warning" Path="C:\code\wm\Source\WikipediaMaze.Web\Web" File="Extensions.cs" Line="27">In method 'Extensions.GenerateCaptcha(this HtmlHelper)', call System.IDisposable.Dispose on object '&lt;&gt;g__initLocal0' before all references to it are out of scope.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#Pager(System.Web.Mvc.HtmlHelper,MvcContrib.Pagination.IPagination,System.String,System.String,System.Web.Routing.RouteValueDictionary)" Kind="Method" Static="True" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message TypeName="Dispose objects before losing scope" Category="Microsoft.Reliability" CheckId="CA2000" Status="Active" Created="2011-01-29 22:37:01Z" FixCategory="DependsOnFix">
+             <Issue Name="NonExceptionEdge" Certainty="75" Level="Warning" Path="C:\code\wm\Source\WikipediaMaze.Web\Web" File="Extensions.cs" Line="61">In method 'Extensions.Pager(this HtmlHelper, IPagination, string, string, RouteValueDictionary)', call System.IDisposable.Dispose on object 'sw' before all references to it are out of scope.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+       </Types>
+      </Namespace>
+     </Namespaces>
+    </Module>
+   </Modules>
+  </Target>
+ </Targets>
+ <Rules>
+  <Rule TypeName="Dispose objects before losing scope" Category="Microsoft.Reliability" CheckId="CA2000">
+   <Name>Dispose objects before losing scope</Name>
+   <Description>If a disposable object is not explicitly disposed before all references to it are out of scope, the object will be disposed at some indeterminate time when the garbage collector runs the finalizer of the object. Because an exceptional event might occur that will prevent the finalizer of the object from running, the object should be explicitly disposed instead.</Description>
+   <Resolution Name="ExceptionEdge">In method {0}, object {1} is not disposed along all exception paths. Call System.IDisposable.Dispose on object {1} before all references to it are out of scope.</Resolution>
+   <Resolution Name="NonExceptionEdge">In method {0}, call System.IDisposable.Dispose on object {1} before all references to it are out of scope.</Resolution>
+   <Owner>RuleOwner</Owner>
+   <Url>http://msdn.microsoft.com/library/ms182289(VS.100).aspx</Url>
+   <Email />
+   <MessageLevel Certainty="75">Warning</MessageLevel>
+   <File Name="dataflowrules.dll" Version="10.0.0.0" />
+  </Rule>
+ </Rules>
+ <Localized>
+  <String Key="Category">Category</String>
+  <String Key="Certainty">Certainty</String>
+  <String Key="CollapseAll">Collapse All</String>
+  <String Key="CheckId">Check Id</String>
+  <String Key="Error">Error</String>
+  <String Key="Errors">error(s)</String>
+  <String Key="ExpandAll">Expand All</String>
+  <String Key="Help">Help</String>
+  <String Key="Line">Line</String>
+  <String Key="Messages">message(s)</String>
+  <String Key="LocationNotStoredInPdb">[Location not stored in Pdb]</String>
+  <String Key="Project">Project</String>
+  <String Key="Resolution">Resolution</String>
+  <String Key="Rule">Rule</String>
+  <String Key="RuleFile">Rule File</String>
+  <String Key="RuleDescription">Rule Description</String>
+  <String Key="Source">Source</String>
+  <String Key="Status">Status</String>
+  <String Key="Target">Target</String>
+  <String Key="Warning">Warning</String>
+  <String Key="Warnings">warning(s)</String>
+  <String Key="ReportTitle">Code Analysis Report</String>
+ </Localized>
+ <Exceptions>
+  <Exception Keyword="CA0060" Kind="Engine" TreatAsWarning="True">
+   <Type>Microsoft.FxCop.Sdk.FxCopException</Type>
+   <ExceptionMessage>The indirectly-referenced assembly 'Microsoft.Web.Mvc, Version=1.0.0.0, Culture=neutral' could not be found. This assembly is not required for analysis, however, analysis results could be incomplete. This assembly was referenced by: C:\code\wm\Binaries\MvcContrib.dll.</ExceptionMessage>
+  </Exception>
+  <Exception Keyword="CA0060" Kind="Engine" TreatAsWarning="True">
+   <Type>Microsoft.FxCop.Sdk.FxCopException</Type>
+   <ExceptionMessage>The indirectly-referenced assembly 'System.Data.SQLite, Version=1.0.61.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139' could not be found. This assembly is not required for analysis, however, analysis results could be incomplete. This assembly was referenced by: C:\code\wm\Binaries\Elmah.dll.</ExceptionMessage>
+  </Exception>
+  <Exception Keyword="CA0060" Kind="Engine" TreatAsWarning="True">
+   <Type>Microsoft.FxCop.Sdk.FxCopException</Type>
+   <ExceptionMessage>The indirectly-referenced assembly 'VistaDB.NET20, Version=3.4.2.77, Culture=neutral, PublicKeyToken=dfc935afe2125461' could not be found. This assembly is not required for analysis, however, analysis results could be incomplete. This assembly was referenced by: C:\code\wm\Binaries\Elmah.dll.</ExceptionMessage>
+  </Exception>
+ </Exceptions>
+</FxCopReport>

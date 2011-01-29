@@ -1,0 +1,65 @@
+@model UserProfileListViewModel
+
+@{
+    ViewBag.Title = Model.PageTitle;
+}
+
+@section OptionalHeadContent
+{
+    <link rel="alternate" type="application/atom+xml" title="Feed for @Model.PageTitle" href="@Url.Action("players", "feeds", new { sortType = Model.SortType })" />
+}
+
+@section SectionTitle
+{
+    <h2>@Model.Users.TotalItems Players</h2>
+        <div class="tabs">
+            <a class="@(Model.SortType == PlayerSortType.Reputation? "selected" : "")" href="@Url.Action("Index", new { sortType = PlayerSortType.Reputation, id = ViewData["id"]})">Reputation</a>
+            <a class="@(Model.SortType == PlayerSortType.Newest ? "selected" : "")" href="@Url.Action("Index", new { sortType = PlayerSortType.Newest, id = ViewData["id"] })">Newest</a>
+            <a class="@(Model.SortType == PlayerSortType.Oldest ? "selected" : "")" href="@Url.Action("Index", new { sortType = PlayerSortType.Oldest, id = ViewData["id"] })">Oldest</a>
+            <a class="@(Model.SortType == PlayerSortType.Name ? "selected" : "")" href="@Url.Action("Index", new { sortType = PlayerSortType.Name, id = ViewData["id"] })">Name</a>
+    </div>
+}
+
+<div id="column-full">
+        <div class="content-page">
+            <table>
+                <tr>
+                  <td valign="top">
+                    @for (int i = 0; i < Model.Users.Count(); i++)
+                    {
+                        var user = Model.Users.ElementAt(i);
+                        
+                            <div class="all-users-info">
+                                <img height="40" width="40" src="@user.GetGravatarUrl(40)" alt="Gravatar" />
+                                <div class="all-users-reputation">
+                                    @Html.ActionLink(user.UserName, "display",
+                                                          new
+                                                              {
+                                                                  controller = "Players",
+                                                                  id = user.UserId,
+                                                                  userName = user.UserName.FormatTitleForUrl()
+                                                              })
+                                    <ul>
+                                        <li class="reputation" title="Your Reputation Score">@user.Reputation.FormatInteger()</li> 
+                                        @if(user.GoldBadgeCount > 0) { <li class="gold" title="Number of Gold Badges">@user.GoldBadgeCount</li> }
+                                        @if(user.SilverBadgeCount > 0) { <li class="silver" title="Number of Silver Badges">@user.SilverBadgeCount</li> }
+                                        @if(user.BronzeBadgeCount > 0) { <li class="bronze" title="Number of Bronze Badges">@user.BronzeBadgeCount</li> }
+                                    </ul>
+                                 </div>
+                            </div>     
+                        if ((i + 1)%7 == 0)
+                        {
+                            @Html.Raw("</td>")
+                            if (i != Model.Users.Count() - 1) {}
+                                @Html.Raw("<td  valign=\"top\">")
+                        }
+
+                    }
+                  </tr>
+            </table>
+        </div>
+        
+        <div class="pager">
+            @Html.Raw(Html.Pager(Model.Users, "index", "Players", new RouteValueDictionary(new { sortType = Model.SortType })))
+        </div>
+    </div>

@@ -1,0 +1,31 @@
+@model WikipediaMaze.Controllers.SubControllers.HeaderViewModel
+
+<script src="https://rpxnow.com/openid/v2/widget" type="text/javascript"></script>
+<script type="text/javascript">
+  RPXNOW.token_url = "@("{0}/account/Logon".ToFormat(WikipediaMaze.Core.Properties.Settings.Default.Host))";
+  RPXNOW.domain = "@WikipediaMaze.Core.Properties.Settings.Default.RpxDomain";
+  RPXNOW.overlay = true;
+  RPXNOW.language_preference = 'en';
+</script>
+
+<ul>
+    @if (Model != null && Model.IsAuthenticated)
+    {
+    <li class="user" title="View your profile">
+        <img height="23" width="23" src="@Model.GetGravatarUrl(20)" alt="Gravatar" />
+        @Html.ActionLink(Model.DisplayName, "Display", new {controller = "Players", id = Model.UserId, userName = Model.DisplayName.FormatTitleForUrl()})
+    </li>
+    <li class="reputation" title="Your Reputation Score">@Model.Reputation.FormatInteger()</li>
+    <li class="leading-star" title="Number of puzzles you are leading">@Model.LeadingPuzzleCount</li>
+    <li class="badges gold" title="Number of Gold Badges">@Model.GoldBadgeCount</li>
+    <li class="badges silver" title="Number of Silver Badges">@Model.SilverBadgeCount</li>
+    <li class="badges bronze" title="Number of Bronze Badges">@Model.BronzeBadgeCount</li>
+    <li class="logout">@Html.ActionLink("Logout", "LogOff", "Account")</li>
+    } else
+    {
+      <li class="login">
+        <a class="rpxnow" onclick="return false;" title="Login" href="https://wikipediamaze.rpxnow.com/openid/v2/signin?token_url=@Server.UrlEncode("{0}/account/Logon?returnUrl={1}".ToFormat(WikipediaMaze.Core.Properties.Settings.Default.Host, HttpContext.Current.Request.Url))">Login</a> using Facebook, Twitter or other popular accounts.
+      </li>
+    }
+    <div class="panel-fake"></div>
+</ul>

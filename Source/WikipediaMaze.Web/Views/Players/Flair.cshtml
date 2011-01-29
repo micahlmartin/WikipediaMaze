@@ -1,0 +1,28 @@
+﻿@section SectionTitle
+{
+    <h2>Profile Badge</h2>
+}
+
+@section OptionalHeadContent
+{
+    <style type="text/css">
+        textarea { width:700px; height:110px; }
+    </style>
+}
+
+<div id="column-full">
+    <div class="content-page reading-text">
+        <p>Want the world to see how awesome you are at WikipediaMaze? Get your badge and show of your profile on any website.</p>
+        <p><img width="240" height="74" src="/players/@ViewBag.CurrentUserId/flairimage.png" title="Wikipedia Maze profile for @ViewBag.CurrentUsername. The Wikipedia game." alt="Wikipedia Maze profile for @ViewBag.CurrentUsername. The Wikipedia game." /></p>
+
+        <h3>How to use it</h3>
+        <p>Just copy and paste the code snippet below anywhere you want to display your badge.</p>
+
+        <textarea>
+<a href="@(WikipediaMaze.Core.Properties.Settings.Default.Host + "/players/" + @ViewBag.CurrentUserId)">
+<img style="border:none" width="240" height="74" src="@WikipediaMaze.Core.Properties.Settings.Default.Host/players/@ViewBag.CurrentUserId/flairimage.png" title="Wikipedia Maze profile for @ViewBag.CurrentUsername. The Wikipedia game." alt="Wikipedia Maze profile for @ViewBag.CurrentUsername. The Wikipedia game." />
+</a>
+        </textarea>
+
+    </div>
+</div>

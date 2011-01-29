@@ -1,0 +1,47 @@
+﻿@using WikipediaMaze.ViewModels
+@using MvcContrib
+@using WikipediaMaze
+@using MvcContrib.Pagination
+@using WikipediaMaze.App
+@using WikipediaMaze.Core
+
+@model PuzzleListViewModel
+           
+@{
+    ViewBag.Title = Model.PageTitle;
+}
+
+@section OptionalHeadContent 
+{
+    <meta name="keywords" content="game, puzzle, six degrees of separation, six degrees of wikipedia, challenge, maze, wikipedia, wikipedia game, wikipedia maze, wiki, fun, play, bored" />
+    <meta name="description" content="A maze-like game based on the wikipedia website where players earn points and badges for solving puzzles." />
+    <link rel="alternate" type="application/atom+xml" title="Feed for @ViewBag.Title" href="@Url.Action("puzzles", "feeds", new { sortType = Model.SortType })" />
+}
+
+@section SectionTitle
+{
+    <h2>@Model.PaginatedPuzzles.TotalItems Puzzles</h2>
+    <div class="tabs">
+            <a class="@if(Model.SortType == PuzzleSortType.Newest) { <text>selected</text> }" href="@Url.Action("Index", new { controller = "puzzles", sortType = PuzzleSortType.Newest, id = ViewData["id"], themes = ViewData["themes"]})">newest</a>
+            <a class="@if(Model.SortType == PuzzleSortType.Level) { <text>selected</text> }" href="@Url.Action("Index", new { controller = "puzzles", sortType = PuzzleSortType.Level, id = ViewData["id"], themes = ViewData["themes"] })">steps</a>
+            <a class="@if(Model.SortType == PuzzleSortType.Solutions) { <text>selected</text> }" href="@Url.Action("Index", new { controller = "puzzles", sortType = PuzzleSortType.Solutions, id = ViewData["id"], themes = ViewData["themes"] })">solutions</a>
+            <a class="@if(Model.SortType == PuzzleSortType.Votes) { <text>selected</text> }" href="@Url.Action("Index", new { controller = "puzzles", sortType = PuzzleSortType.Votes, id = ViewData["id"], themes = ViewData["themes"] })">votes</a>
+    </div>
+}
+
+<div id="column-left">
+@{Html.RenderPartial("PuzzleList", Model);}
+</div>
+    
+<div id="column-right">
+    <div id="contact-us">
+        <h3>Connect With Us</h3>
+        <ul>
+            <li class="twitter"><a href="http://www.twitter.com/wikipediamaze" target="_blank" title="Follow us on twitter @@WikipediaMaze">Twitter</a></li>
+            <li class="facebook"><a href="http://www.facebook.com/pages/Wikipedia-Maze/121337846250" target="_blank" title="Facebook Fan Page">Facebook</a></li>
+        </ul>            
+    </div>
+    
+    @{Html.RenderAction("Sidebar", "Sidebar");}
+
+</div>

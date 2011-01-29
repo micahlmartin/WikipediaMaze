@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>http://www.wikipediamaze.com/</loc>
+    <lastmod>2009-06-23</lastmod>
+    <changefreq>hourly</changefreq>
+  </url>
+  <url>
+    <loc>http://www.wikipediamaze.com/puzzles</loc>
+    <changefreq>hourly</changefreq>
+  </url>
+  <url>
+    <loc>http://www.wikipediamaze.com/players</loc>
+    <changefreq>hourly</changefreq>
+  </url>
+  <url>
+    <loc>http://www.wikipediamaze.com/home/about</loc>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>http://www.wikipediamaze.com/home/HowToPlay</loc>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>http://www.wikipediamaze.com/wiki</loc>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
+    <loc>http://www.wikipediamaze.com/badges</loc>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>http://www.wikipediamaze.com/feeds/puzzles</loc>
+    <changefreq>hourly</changefreq>
+  </url>
+</urlset>

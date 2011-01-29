@@ -1,0 +1,125 @@
+﻿@model UserProfilePuzzleListViewModel
+@{
+    Layout = null;
+}
+<div id="puzzles">
+<div class="section-title">
+    <h3>@Model.Puzzles.TotalItems Puzzles</h3>
+    <div id="puzzle-list-tabs" class="tabs">
+        <a class="@(Model.SortType == PuzzleSortType.Newest ? "selected" : "")" href="@Url.Action("UserDisplayPuzzles", new { sortType = PuzzleSortType.Newest, id = Model.ProfileId })">newest</a>
+        <a class="@(Model.SortType == PuzzleSortType.Level ? "selected" : "")" href="@Url.Action("UserDisplayPuzzles", new { sortType = PuzzleSortType.Level, id = Model.ProfileId })">steps</a>
+        <a class="@(Model.SortType == PuzzleSortType.Solutions ? "selected" : "")" href="@Url.Action("UserDisplayPuzzles", new { sortType = PuzzleSortType.Solutions, id = Model.ProfileId })">solutions</a>
+        <a class="@(Model.SortType == PuzzleSortType.Votes ? "selected" : "")" href="@Url.Action("UserDisplayPuzzles", new { sortType = PuzzleSortType.Votes, id = Model.ProfileId })">votes</a>
+    </div>
+</div>
+<div id="user-display-puzzles">
+
+    @{
+        var i = -1;
+        foreach (var puzzle in Model.Puzzles)
+        {   
+            if (!puzzle.CanShowPuzzle) { continue; }
+                    
+            i++;
+            bool isAlternateRow = (i%2 != 0);
+
+            string rowClass = string.Empty;
+            if (!puzzle.IsVerified) { rowClass = " not-verified"; }
+            else {  rowClass = isAlternateRow ? " alternate" : ""; }
+        
+            <div class="puzzle-row-wrapper@(rowClass) puzzleId-@(puzzle.PuzzleId)">
+            <div class="puzzle-row">
+                <div class="votes-arrows">
+                    <input type="hidden" value="@(puzzle.PuzzleId)" />
+                    <span class="vote-up@(puzzle.UserVote == VoteType.Up ? "-selected" : "")" title="This puzzle is fun and interesting. (Click again to undo)">Vote Up</span>
+                    <span class="vote-down@(puzzle.UserVote == VoteType.Down ? "-selected" : "")" title="This puzzle is a waste of time. (Click again to undo)">Vote Down</span>
+                </div>
+                <div class="votes" title="Number of votes for this puzzle.">
+                    <span>@puzzle.VoteCount.FormatInteger()</span>
+                    <h4>Votes</h4>
+                </div>
+                <div class="level" title="The level of difficulty of this puzzle. The average number of steps it takes to complete.">
+                    <span>@puzzle.Level.FormatInteger()</span>
+                    <h4>Average Steps</h4>
+                </div>
+                <div class="solutions" title="The number of times this puzzle has been solved.">
+                    <span>@puzzle.SolutionCount.FormatInteger()</span>
+                    <h4>Times Solved</h4>
+                </div>
+                <div class="puzzle-detail">
+                    <table>
+                        <tr title="The starting topic for this puzzle.">
+                            <td class="start">From</td>
+                            <td class="title"><a href="@Url.Action("continue", "game", new { topic = puzzle.StartTopic.FormatTitleForUrl()})" target="_blank">@puzzle.StartTopic.FormatTopic()</a></td>
+                        </tr>
+                        <tr title="The topic you must find to complete the puzzle">
+                            <td class="end">To</td>
+                            <td class="title"><a href="@Url.Action("continue", "game", new { topic = puzzle.EndTopic.FormatTitleForUrl()})" target="_blank">@puzzle.EndTopic.FormatTopic()</a></td>
+                        </tr>
+                    </table>
+
+                    @if(!puzzle.IsVerified) {
+                        <p class="verify-msg"><span>You still need to verify this puzzle's solution.</span> <br />Or you can <a href="#" onClick="DeletePuzzle(@puzzle.PuzzleId); return false;" title="Delete this puzzle">delete it</a> and create another.</p>   
+                    }
+                </div>
+                <div class="puzzle-row-info">
+                    <div class="puzzle-links">
+                        @Html.ActionLink("Solve", "start", new { controller = "game", id = puzzle.PuzzleId }, new { @class = "start", title = "Solve this puzzle" })
+                        @Html.ActionLink("View", "display", new { controller = "puzzles", id = puzzle.PuzzleId }, new { @class = "view", title = "View the stats on this puzzle" })
+                    </div>    
+                </div>
+            @if(puzzle.Themes.Count() > 0) 
+            {
+                <ul class="puzzle-row-themes">
+                @foreach (var theme in puzzle.Themes) 
+                {
+                    <li>@Html.ActionLink(theme.Name, "themed", new RouteValueDictionary { { "controller", "puzzles" }, { "id", theme.Name } })</li>
+                }
+                </ul>
+            }
+            </div>
+        </div>
+                 
+        }
+    }
+        <div id="puzzle-list-pager" class="pager">
+            @Html.Raw(Html.Pager(Model.Puzzles, "UserDisplayPuzzles", "Players", new RouteValueDictionary { { "sortType", Model.SortType },{"pageSize", Model.Puzzles.PageSize },{"id", Model.ProfileId} }))
+            <ul class="page-size">
+                <li>@Html.ActionLink("10", "UserDisplayPuzzles", new RouteValueDictionary { { "id", Model.ProfileId }, { "sortType", Model.SortType }, { "pageSize", 10 } })</li>
+                <li>@Html.ActionLink("25", "UserDisplayPuzzles", new RouteValueDictionary { { "id", Model.ProfileId }, { "sortType", Model.SortType }, { "pageSize", 25 } })</li>
+            </ul>
+        </div>
+</div>
+</div>
+<script type="text/javascript">
+    function DeletePuzzle(puzzleId) {
+        $(".puzzleId-" + puzzleId.toString()).fadeOut();    
+        $.ajax({
+            type: "GET",
+            url: "/puzzles/Delete/" + puzzleId.toString(),
+            dataType: "json",
+            cache: false
+        });
+    }
+    
+    $().ready(function() {
+        $("#puzzle-list-tabs a, #puzzle-list-pager a").click(function () {
+
+            var url = $(this).attr("href");
+
+            $.ajax({
+                type: "GET",
+                url: url,
+                dataType: "html",
+                cache: false,
+                success: function(data) {
+                    $("#puzzles").html(data);
+
+                    $.scrollTo("#puzzles", 400);
+                }
+            });
+
+            return false;
+        });
+    });
+</script>

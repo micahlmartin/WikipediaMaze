@@ -1,0 +1,71 @@
+@model UserProfileUpdateViewModel
+           
+@{    
+    ViewBag.Title = "Edit Profile for " + Model.UserName;
+}
+
+@section SectionTitle
+{
+    <h2>@Model.UserName - Edit</h2>
+}
+
+@section OptionalHeadContent
+{
+    <meta name="robots" content="noindex, nofollow" />    
+}
+
+<div id="column-full">
+    <div id="user-display-header" class="content-page">
+        <div id="user-display-header-left">
+            <img height="120" width="120" src="@Model.GetGravatar(120)" title="Avatar for @Model.UserName" />
+            <p><a href="http://www.gravatar.com" target="_blank" title="Change avatar">Change Image</a></p>
+        </div>
+        @using(Html.BeginForm("edit", "Players", FormMethod.Post))
+        {
+            <table>
+                <tr>
+                    <td>Display Name:</td>
+                    <td>@Html.TextBox("DisplayName", Model.DisplayName, new { style="width:260px; margin:0 5px 0 0;", maxlength = "30" })</td>
+                    <td>@Html.ValidationMessage("DisplayName")</td>
+                </tr>
+                <tr>
+                    <td>Email:</td>
+                    <td>@Html.TextBox("Email", Model.Email, new { style = "width:260px; margin:0 5px 0 0;", maxlength = "100" })
+                    <span class="form-info">This is never displayed. Used for notifications and avatar.</span></td>
+                    <td>@Html.ValidationMessage("Email")</td>
+                </tr>
+                <tr>
+                    <td>Real Name:</td>
+                    <td>@Html.TextBox("RealName", Model.RealName, new { style = "width:260px; margin:0 5px 0 0;", maxlength = "30" })</td>
+                    <td>@Html.ValidationMessage("RealName")</td>
+                </tr>
+                <tr>
+                    <td>Location:</td>
+                    <td>@Html.TextBox("Location", Model.Location, new { style = "width:260px; margin:0 5px 0 0;", maxlength = "100" })</td>
+                    <td>@Html.ValidationMessage("Location")</td>
+                </tr>
+                <tr>
+                    <td>Birthday:</td>
+                    <td>@Html.TextBox("Birthday", Model.Birthday.HasValue ? Model.Birthday.Value.ToShortDateString() : null, new { @class = "datepicker", style = "width:260px;" })</td>
+                    <td>@Html.ValidationMessage("Birthday")</td>
+                </tr>
+                <tr>
+                    <td>Twitter:</td>
+                    <td>@Html.TextBox("TwitterUserName", Model.TwitterUserName, new { style = "width:260px;", maxlength = "15" })</td>
+                    <td>@Html.ValidationMessage("TwitterUserName")</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        @Html.Hidden("UserId", Model.UserId)
+                        @Html.AntiForgeryToken("#!)Su&$%!_s{")
+                        <input type="submit" value="Save Profile" />
+                        <input type="button" value="Cancel" onclick="location.href='@Url.Action("Display", new {controller = "Players", id=Model.UserId, userName=Model.UserName.FormatTitleForUrl()})'" />    
+                    </td>
+                    <td></td>
+                </tr>
+            </table>
+        }
+    </div>
+</div>
+

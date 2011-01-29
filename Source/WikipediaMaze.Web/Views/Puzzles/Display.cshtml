@@ -1,0 +1,167 @@
+@model PuzzleViewModel
+           
+@{
+    ViewBag.Title = "Puzzle " + Model.StartTopic.FormatTopic() + " to " + Model.EndTopic.FormatTopic();
+}
+
+@section SectionTitle
+{
+    <h2>Puzzle</h2>
+    <div style="float:right;clear:none;" class="share">
+        <p>SHARE</p>
+        <ul>
+            <li><a title="Tweet this puzzle" href="http://www.twitter.com?status=@Model.ShareThisPuzzleMessage" target="_blank"><img alt="Twitter Icon" src="/Content/img/Twitter-24x24.png" /></a></li>
+            <li><a title="Post this puzzle on your FaceBook wall." href="http://www.facebook.com/sharer.php?t=@(Model.ShareThisPuzzleMessage)&u=http://www.wikipediamaze.com/puzzles/@Model.PuzzleId" target="_blank"><img alt="FaceBook Icon" src="/Content/img/FaceBook-24x24.png" /></a></li>
+        </ul>
+    </div>
+}
+
+<div id="column-full">  
+    @if (!Model.IsVerified)
+    { 
+    <div class="notification">
+        <p>Now that you have created this puzzle you need to verify it by creating a solution. Once it has been verified other users will be able to see it.</p>
+    </div>
+    }
+    <div class="puzzle-row-wrapper">    
+        <iframe src="http://www.facebook.com/plugins/like.php?href=www.wikipediamaze.com/puzzles/@(Model.PuzzleId)&amp;layout=button_count&amp;show_faces=true&amp;width=90&amp;action=like&amp;colorscheme=light&amp;height=21" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:90px; height:21px;" allowTransparency="true"></iframe>
+        <a href="http://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="wikipediamaze">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+        <div class="puzzle-row">
+            <div class="votes-arrows">
+                <input type="hidden" value="@Model.PuzzleId" />
+                <span class="vote-up@(Model.UserVote == VoteType.Up ? "-selected" : "")" title="This puzzle is fun and interesting. (Click again to undo)">Vote Up</span>
+                <span class="vote-down@(Model.UserVote == VoteType.Down ? "-selected" : "")" title="This puzzle is a waste of time. (Click again to undo)">Vote Down</span>
+            </div>
+            <div class="votes" title="Number of votes for this puzzle.">
+                <span>@Model.VoteCount.FormatInteger()</span>
+                <h4>Votes</h4>
+            </div>
+            <div class="level" title="The level of difficulty of this puzzle. The average number of steps it takes to complete.">
+                <span>@Model.Level.FormatInteger()</span>
+                <h4>Average Steps</h4>
+            </div>
+            <div class="solutions" title="The number of times this puzzle has been solved.">
+                <span>@Model.SolutionCount.FormatInteger()</span>
+                <h4>Times Solved</h4>
+            </div>
+            <div class="puzzle-detail">
+                <table>
+                    <tr title="The starting topic for this puzzle.">
+                        <td class="start">From</td>
+                        <td class="title"><a href="@Url.Action("continue", "game", new { topic =  Model.StartTopic.FormatTitleForUrl()})" target="_blank">@Model.StartTopic.FormatTopic()</a></td>
+                    </tr>
+                    <tr title="The topic you must find to complete the puzzle">
+                        <td class="end">To</td>
+                        <td class="title"><a href="@Url.Action("continue", "game", new { topic = Model.EndTopic.FormatTitleForUrl()})" target="_blank">@Model.EndTopic.FormatTopic()</a></td>
+                    </tr>
+                </table>
+            </div>      
+            <div class="puzzle-row-info">
+                <div class="puzzle-links">
+                    <div class="edit-puzzle">@Html.ActionLink("Edit", "edit", new { id = Model.PuzzleId})</div>
+                </div>
+                    <div class="puzzle-user-info">
+                        <span>Created @Model.DateCreated.FormatDate() by</span>
+                        <img height="30" width="30" src="@Model.UserInfo.GetGravatarUrl(30)" alt="Gravatar" />
+                        <ul>
+                            <li>@Html.ActionLink(Model.UserInfo.UserName, "Display", new { controller = "Players", id = Model.UserInfo.UserId, userName = Model.UserInfo.UserName.FormatTitleForUrl() })</li>
+                            <li class="reputation" title="Your Reputation Score">@Model.UserInfo.Reputation.FormatInteger()</li> 
+                        </ul>
+                        <ul class="accomplishments">
+                            <li class="leading-star" title="Number of puzzles you are leading">@Model.UserInfo.LeadingPuzzleCount</li>
+                            <li class="gold" title="Number of Gold Badges">@Model.UserInfo.GoldBadgeCount</li>
+                            <li class="silver" title="Number of Silver Badges">@Model.UserInfo.SilverBadgeCount</li>
+                            <li class="bronze" title="Number of Bronze Badges">@Model.UserInfo.BronzeBadgeCount</li>
+                        </ul>
+                    </div>
+            </div>       
+        @if(Model.Themes.Count() > 0)
+        {
+            <ul class="puzzle-row-themes">
+            @foreach (var theme in Model.Themes)
+            { 
+                <li>@Html.ActionLink(theme, "themed", new {controller = "puzzles", action = "themedpuzzles", themes = theme})</li>
+            }
+                
+            </ul>
+        }
+        </div>
+    </div>
+    <div id="display-content">
+        <div id="column-left">
+            
+            <div style="margin:0px;" class="content-page">
+            <h3>Solutions</h3>
+                @if (!Model.HasSolution)
+                {
+                  <p>You have not solved this puzzle.</p>
+                  <div class="puzzle-links">@Html.ActionLink("Solve Now", "start", new { controller = "game", id = Model.PuzzleId }, new { @class = "start" })</div>
+                } 
+                else 
+                {
+                    <p>You have solved this puzzle <em>@Model.UserSolutionCount time(s)</em>. @if(!Model.IsCreator){ <text>Only your best score is counted towards your reputation.</text> } else { <text>You are the creator of this puzzle and you will earn <em>5 points</em> everytime someone solves it and <em>10 points</em> everytime it is up-voted.</text> }</p>
+                    if(Model.BestSolution != null)
+                    {
+                    <div class="puzzle-display-solution">
+                    <h3>Best</h3>
+                
+                    @if(!Model.IsCreator) {
+                    <p class="solution-points-awarded">
+                        <span>@Model.BestSolution.PointsAwarded</span>
+                        Points
+                    </p>
+                    }
+                    <ol style="margin-bottom:0px;">
+                        @foreach (var step in Model.BestSolution.Steps)
+                        {
+                          <li>@step.Topic.FormatTopic()</li>  
+                        }
+                    </ol>
+                    <div class="share">
+                        <p>Share</p>
+                        <ul>
+                            <li><a title="Tweet this solution" href="http://www.twitter.com?status=@Model.ShareThisSolutionMessage" target="_blank"><img alt="Twitter Icon" src="/Content/img/Twitter-24x24.png" /></a></li>
+                            <li><a title="Post this solution on your facebook wall" href="http://www.facebook.com/sharer.php?t=@Model.ShareThisSolutionMessage&u=http://www.wikipediamaze.com/puzzles/@Model.PuzzleId" target="_blank"><img alt="FaceBook Icon" src="/Content/img/FaceBook-24x24.png" /></a></li>
+                        </ul>
+                    </div>
+                </div>  
+                    }
+                
+                    <div class="puzzle-display-solution">
+                    <h3>Most Recent</h3>
+                    @if(!Model.IsCreator)
+                    {
+                    <p class="solution-points-awarded">
+                        <span>@Model.LatestSolution.PointsAwarded</span>
+                        Points
+                    </p>
+                    }
+                    <ol>
+                        @foreach (var step in Model.LatestSolution.Steps)
+                        {
+                          <li>@step.Topic.FormatTopic()</li>  
+                        }
+                    </ol>
+                    <div class="puzzle-links">@Html.ActionLink("Solve Again", "start", new { controller = "game", id = Model.PuzzleId }, new { @class = "start" })</div>
+                </div>
+                }
+            </div>
+        </div>
+        <div id="column-right">
+            <div class="board-wrap">
+            <ul id="top-themes" class="board">
+                <li>
+                    <h2>Puzzle Leaders</h2>              
+                    <ul>
+                    @foreach (var solution in Model.PuzzleLeaderBoard)
+                    {
+                        <li>@Html.ActionLink(solution.UserInfo.UserName, "display", new {controller = "Players", id = solution.UserInfo.UserId, userName = solution.UserInfo.UserName.FormatTitleForUrl()}) <span>@solution.StepCount</span></li>  
+                    }
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        </div>
+    </div>
+ </div>
+

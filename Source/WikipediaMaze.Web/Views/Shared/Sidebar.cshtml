@@ -1,0 +1,68 @@
+@using WikipediaMaze.App
+@using WikipediaMaze.Core
+
+@model WikipediaMaze.Controllers.SubControllers.SidebarViewModel
+
+<div class="board-wrap">
+    <ul id="leaders" class="board">
+    <li>
+        <h2>Leaders</h2>              
+        <ul>
+            @foreach (var user in Model.TopUsers)
+            {
+            <li>@Html.ActionLink(user.DisplayName, "display", new { controller = "Players", id = user.Id, userName = user.DisplayName.FormatTitleForUrl() })
+            <span>@user.Reputation.FormatInteger()</span></li>
+            }
+        </ul>
+    </li>
+    <li class="view-all">@Html.ActionLink("View All Rankings", "Index", "Players")</li>
+    </ul>
+</div>
+<div class="ads">
+    <h3>Sponsors</h3>
+
+<script type="text/javascript"><!--
+google_ad_client = "pub-2126357856738903";
+/* Sidebar Position 1, 200x200, created 6/7/09 */
+google_ad_slot = "1883991356";
+google_ad_width = 200;
+google_ad_height = 200;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+
+</div>
+
+<div class="board-wrap">
+    <ul id="top-themes" class="board">
+    <li>
+        <h2>Top Themes</h2>              
+        <ul>
+            @foreach (var theme in Model.TopThemes)
+            {
+                <li>@Html.ActionLink(theme.Name, "themed", new { controller = "puzzles", themes = theme.Name }) <span>@theme.Count</span></li>   
+            }
+            </ul>
+        </li>
+        <li class="view-all">@Html.ActionLink("View All Themes", "Themes", "puzzles")</li>
+    </ul>
+</div>
+
+<div class="ads">
+    <h3>Sponsors</h3>
+
+<script type="text/javascript"><!--
+google_ad_client = "pub-2126357856738903";
+/* Sidebar Position 2, 200x200, created 6/7/09 */
+google_ad_slot = "9335958155";
+google_ad_width = 200;
+google_ad_height = 200;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+
+</div>
