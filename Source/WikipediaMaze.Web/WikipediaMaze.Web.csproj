@@ -355,6 +355,7 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="App_Data\Topics\" />
     <Folder Include="App_Data\UserBadges\" />
     <Folder Include="Controllers\SubControllers\" />
     <Folder Include="Models\" />
