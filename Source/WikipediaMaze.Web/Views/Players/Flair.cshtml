@@ -19,8 +19,8 @@
         <p>Just copy and paste the code snippet below anywhere you want to display your badge.</p>
 
         <textarea>
-<a href="@(WikipediaMaze.Core.Properties.Settings.Default.Host + "/players/" + @ViewBag.CurrentUserId)">
-<img style="border:none" width="240" height="74" src="@WikipediaMaze.Core.Properties.Settings.Default.Host/players/@ViewBag.CurrentUserId/flairimage.png" title="Wikipedia Maze profile for @ViewBag.CurrentUsername. The Wikipedia game." alt="Wikipedia Maze profile for @ViewBag.CurrentUsername. The Wikipedia game." />
+<a href="@(WikipediaMaze.Core.Settings.Host + "/players/" + @ViewBag.CurrentUserId)">
+<img style="border:none" width="240" height="74" src="@WikipediaMaze.Core.Settings.Host/players/@ViewBag.CurrentUserId/flairimage.png" title="Wikipedia Maze profile for @ViewBag.CurrentUsername. The Wikipedia game." alt="Wikipedia Maze profile for @ViewBag.CurrentUsername. The Wikipedia game." />
 </a>
         </textarea>
 

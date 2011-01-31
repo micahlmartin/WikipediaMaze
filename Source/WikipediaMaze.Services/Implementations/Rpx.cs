@@ -6,14 +6,14 @@ using System.Text;
 using System.Web;
 using System.Xml;
 using System.Xml.Linq;
-using WikipediaMaze.Core.Properties;
+using WikipediaMaze.Core;
 
 namespace WikipediaMaze.Services
 {
     public static class Rpx
     {
         #region - Constants -
-        private readonly static string API_KEY = Settings.Default.RpxApiKey;
+        private readonly static string API_KEY = Settings.RpxApiKey;
         private const string BASE_URL = "https://rpxnow.com";
         #endregion
 

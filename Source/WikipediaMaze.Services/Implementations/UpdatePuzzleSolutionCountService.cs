@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using WikipediaMaze.Core.Properties;
 using WikipediaMaze.Data;
 using System.Data.SqlClient;
+using WikipediaMaze.Core;
 
 namespace WikipediaMaze.Services
 {
@@ -19,7 +19,7 @@ namespace WikipediaMaze.Services
         {
             get
             {
-                return Settings.Default.UpdatePuzzleSolutionCountInterval;
+                return Settings.UpdatePuzzleSolutionCountInterval;
             }
             set
             {
@@ -28,7 +28,7 @@ namespace WikipediaMaze.Services
         }
         protected override void DoWork()
         {
-            using (var connection = new SqlConnection(Settings.Default.WikipediaMazeConnection))
+            using (var connection = new SqlConnection(Settings.WikipediaMazeConnection))
             {
                 connection.Open();
                 using (var command = connection.CreateCommand())

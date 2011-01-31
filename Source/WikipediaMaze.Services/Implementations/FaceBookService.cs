@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using facebook;
 using WikipediaMaze.Services;
-using WikipediaMaze.Core.Properties;
+using WikipediaMaze.Core;
 
 namespace WikipediaMaze.Services
 {
@@ -21,8 +21,8 @@ namespace WikipediaMaze.Services
         public FaceBookService()
         {
             _api = new API();
-            _api.ApplicationKey = Settings.Default.FacebookApiKey;
-            _api.Secret = Settings.Default.FacebookSecret;
+            _api.ApplicationKey = Settings.FacebookApiKey;
+            _api.Secret = Settings.FacebookSecret;
         }
 
         #endregion

@@ -6,7 +6,6 @@ using NHibernate;
 using FluentNHibernate.Cfg;
 using StructureMap.Configuration.DSL;
 using WikipediaMaze.Services;
-using WikipediaMaze.Core.Properties;
 using WikipediaMaze.Services.Interfaces;
 using WikipediaMaze.Services.Implementations;
 
@@ -64,7 +63,7 @@ namespace WikipediaMaze.App
 
 //                                _sessionFactory =  Fluently.Configure()
 //                                    .Database(
-//                                    FluentNHibernate.Cfg.Db.MsSqlConfiguration.MsSql2005.ConnectionString(db => db.Is(Settings.Default.HomeTestDBConnection)
+//                                    FluentNHibernate.Cfg.Db.MsSqlConfiguration.MsSql2005.ConnectionString(db => db.Is(Settings.HomeTestDBConnection)
 //                                        )).Mappings(m => m.FluentMappings.AddFromAssemblyOf<IRepository>())
 //                                    .BuildSessionFactory();
 
@@ -72,7 +71,7 @@ namespace WikipediaMaze.App
 
 //                                  _sessionFactory =  Fluently.Configure()
 //                                    .Database(
-//                                    FluentNHibernate.Cfg.Db.MsSqlConfiguration.MsSql2005.ConnectionString(db => db.Is(Settings.Default.WorkTestDBConnection)
+//                                    FluentNHibernate.Cfg.Db.MsSqlConfiguration.MsSql2005.ConnectionString(db => db.Is(Settings.WorkTestDBConnection)
 //                                        )).Mappings(m => m.FluentMappings.AddFromAssemblyOf<IRepository>())
 //                                    .BuildSessionFactory();
 
@@ -80,7 +79,7 @@ namespace WikipediaMaze.App
 
 //                    _sessionFactory = Fluently.Configure()
 //                       .Database(
-//                        FluentNHibernate.Cfg.Db.MsSqlConfiguration.MsSql2005.ConnectionString(db => db.Is(Settings.Default.WikipediaMazeConnection)
+//                        FluentNHibernate.Cfg.Db.MsSqlConfiguration.MsSql2005.ConnectionString(db => db.Is(Settings.WikipediaMazeConnection)
 //                            )).Mappings(m => m.FluentMappings.AddFromAssemblyOf<IRepository>())
 //                        .BuildSessionFactory();
 

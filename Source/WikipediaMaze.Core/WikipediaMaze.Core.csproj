@@ -101,20 +101,14 @@
     <Compile Include="Mvc\RssActionResult.cs" />
     <Compile Include="Mvc\ScriptCombiner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <DependentUpon>Settings.settings</DependentUpon>
-    </Compile>
     <Compile Include="RegularExpressions.cs" />
-    <Compile Include="Properties\Settings.cs" />
+    <Compile Include="Settings.cs" />
     <Compile Include="StandardComparer.cs" />
     <Compile Include="StructureMap\StructureMapControllerFactory.cs" />
     <Compile Include="StructureMap\StructureMapSubControllerBinder.cs" />
     <Compile Include="Web\AppOfflineModule.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
     <None Include="Models\.svn\all-wcprops" />
     <None Include="Models\.svn\entries" />
     <None Include="Models\.svn\text-base\ActionItem.cs.svn-base" />
@@ -138,10 +132,6 @@
     <None Include="Models\.svn\text-base\User.cs.svn-base" />
     <None Include="Models\.svn\text-base\Vote.cs.svn-base" />
     <None Include="Models\.svn\text-base\VoteResult.cs.svn-base" />
-    <None Include="Properties\Settings.settings">
-      <Generator>PublicSettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\.svn\prop-base\" />

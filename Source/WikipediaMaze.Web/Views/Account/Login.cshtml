@@ -43,10 +43,10 @@
           <p>Logging in with a different openId will associate it with this account.</p>
       }*@
           
-          <iframe src="http://wikipediamaze.rpxnow.com/openid/embed?token_url=@Server.UrlEncode("{0}/account/Logon?returnUrl={1}".ToFormat(WikipediaMaze.Core.Properties.Settings.Default.Host, HttpContext.Current.Request.Url))" scrolling="no" frameBorder="no" allowtransparency="true" style="width:400px;height:240px"></iframe>
+          <iframe src="http://wikipediamaze.rpxnow.com/openid/embed?token_url=@Server.UrlEncode("{0}/account/Logon?returnUrl={1}".ToFormat(WikipediaMaze.Core.Settings.Host, HttpContext.Current.Request.Url))" scrolling="no" frameBorder="no" allowtransparency="true" style="width:400px;height:240px"></iframe>
 
 
-        <form action="@("http://{0}/account/Authenticate?returnUrl={1}".ToFormat(WikipediaMaze.Core.Properties.Settings.Default.Host, ViewData["returnUrl"]))" method="POST" id="openid_form">
+        <form action="@("http://{0}/account/Authenticate?returnUrl={1}".ToFormat(WikipediaMaze.Core.Settings.Host, ViewData["returnUrl"]))" method="POST" id="openid_form">
 	    <input type="hidden" name="action" value="verify" />
         
 @*        @if (GlobalData.IsDebugging)

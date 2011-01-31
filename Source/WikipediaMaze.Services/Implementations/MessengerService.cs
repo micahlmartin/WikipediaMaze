@@ -5,7 +5,6 @@ using System.Web;
 using TwitterLib;
 using WikipediaMaze.Core;
 using WikipediaMaze.Data;
-using WikipediaMaze.Core.Properties;
 
 namespace WikipediaMaze.Services
 {
@@ -25,8 +24,8 @@ namespace WikipediaMaze.Services
 
         public MessengerService(IRepository repository)
         {
-            _twitter = new TwitterNet(Settings.Default.TwitterUserName, TwitterNet.ToSecureString(Settings.Default.TwitterPassword));
-            _twitter.TwitterServerUrl = Settings.Default.TwitterServiceUrl;
+            _twitter = new TwitterNet(Settings.TwitterUserName, TwitterNet.ToSecureString(Settings.TwitterPassword));
+            _twitter.TwitterServerUrl = Settings.TwitterServiceUrl;
             _messageSender = new SendMessageDelegate(SendMessage);
             _urlShortneningService = new UrlShorteningService(ShorteningService.Bitly);
             _repository = repository;
@@ -126,7 +125,7 @@ namespace WikipediaMaze.Services
         }
         private static string GetPuzzleUrl(int puzzleId)
         {
-            return "{0}/puzzles/{1}".ToFormat(Settings.Default.Host, puzzleId);
+            return "{0}/puzzles/{1}".ToFormat(Settings.Host, puzzleId);
         }
         #endregion
     }

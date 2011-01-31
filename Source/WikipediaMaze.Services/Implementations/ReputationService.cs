@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using WikipediaMaze.Data;
 using WikipediaMaze.Core;
-using WikipediaMaze.Core.Properties;
 using NHibernate;
 
 namespace WikipediaMaze.Services
@@ -36,10 +35,10 @@ namespace WikipediaMaze.Services
                 switch (vote.VoteType)
                 {
                     case VoteType.Down:
-                        reputation += Settings.Default.DownVoteReputationValue;
+                        reputation += Settings.DownVoteReputationValue;
                         break;
                     case VoteType.Up:
-                        reputation += Settings.Default.UpVoteReputationValue;
+                        reputation += Settings.UpVoteReputationValue;
                         break;
                 }
             }
@@ -76,22 +75,22 @@ namespace WikipediaMaze.Services
             var difference = puzzleLevel - stepCount;
 
             if (difference == 0)
-                return Settings.Default.AverageSolutionReputationValue;
+                return Settings.AverageSolutionReputationValue;
 
             var percentage = Math.Round(difference / (double)puzzleLevel, 2);
                     
                 //The amount of points awarded before the average is applied    
                 double basePoints;
                 if (puzzleLevel < stepCount) //Puzzle took longer than average
-                    basePoints = (Settings.Default.AverageSolutionReputationValue * percentage);
+                    basePoints = (Settings.AverageSolutionReputationValue * percentage);
                 else //Puzzle was completed in fewer steps than average.
-                    basePoints = (Settings.Default.AverageSolutionReputationValue * percentage * 2);
+                    basePoints = (Settings.AverageSolutionReputationValue * percentage * 2);
 
                 //Add the number points awarded to the average
-                var reputation = (int)Math.Round(basePoints + Settings.Default.AverageSolutionReputationValue, 2);
+                var reputation = (int)Math.Round(basePoints + Settings.AverageSolutionReputationValue, 2);
 
                 //Make sure that the user is always awarded something for their efforts.
-                return Math.Max(reputation, Settings.Default.MinimumSolutionReputationValue);
+                return Math.Max(reputation, Settings.MinimumSolutionReputationValue);
         }
 
         public void CalculateUserReputationForSolution(Solution currentSolution)
@@ -108,7 +107,7 @@ namespace WikipediaMaze.Services
                 solutionUser.Reputation += CalculateSolutionUserReputation(currentSolution, solutions);
 
                 if (solutions.Count() == 1)
-                    puzzleUser.Reputation += Settings.Default.PointsAwardedToCreatorWhenPuzzleIsPlayed;
+                    puzzleUser.Reputation += Settings.PointsAwardedToCreatorWhenPuzzleIsPlayed;
 
                 using (var tx = _repository.BeginTransaction())
                 {

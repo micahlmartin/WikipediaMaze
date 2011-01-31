@@ -12,7 +12,6 @@ using WikipediaMaze.Data.NHibernate;
 using facebook;
 using System.Web;
 using WikipediaMaze.Services;
-using WikipediaMaze.Core.Properties;
 using System.IO;
 
 namespace WikipediaMaze.Services
@@ -44,8 +43,8 @@ namespace WikipediaMaze.Services
 
             _facebookService = new API
                                    {
-                                       ApplicationKey =Settings.Default.FacebookApiKey,
-                                       Secret = Settings.Default.FacebookSecret,
+                                       ApplicationKey =Settings.FacebookApiKey,
+                                       Secret = Settings.FacebookSecret,
                                        IsDesktopApplication = false
                                    };
         }
@@ -312,7 +311,7 @@ namespace WikipediaMaze.Services
         public IPagination<User> GetLeaderBoard(int? page, int? pageSize)
         {
             page = page ?? 1;
-            pageSize = pageSize ?? Settings.Default.DefualtPageSize;
+            pageSize = pageSize ?? Settings.DefualtPageSize;
 
             using (_repository.OpenSession())
             {

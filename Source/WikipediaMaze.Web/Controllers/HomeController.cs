@@ -14,7 +14,6 @@ using log4net;
 using MvcContrib.Pagination;
 using WikipediaMaze.App;
 using WikipediaMaze.ViewModels;
-using WikipediaMaze.Core.Properties;
 
 namespace WikipediaMaze.Controllers
 {
@@ -70,7 +69,7 @@ namespace WikipediaMaze.Controllers
                 else
                 {
                     var cookie = new HttpCookie("ShowNotification", bool.FalseString);
-                    cookie.Domain = Settings.Default.Host;
+                    cookie.Domain = Settings.Host;
                     Response.AppendCookie(cookie);
                 }
             }
@@ -80,7 +79,7 @@ namespace WikipediaMaze.Controllers
 
         public ActionResult Offline()
         {
-            return Settings.Default.IsOffline ? View() : View("NotFound");
+            return Settings.IsOffline ? View() : View("NotFound");
         }
 
         public ActionResult Heartbeat()

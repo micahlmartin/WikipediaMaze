@@ -10,7 +10,6 @@ using WikipediaMaze.Data;
 using WikipediaMaze.Core;
 using System.Web;
 using log4net;
-using WikipediaMaze.Core.Properties;
 
 namespace WikipediaMaze.Services
 {
@@ -149,7 +148,7 @@ namespace WikipediaMaze.Services
             {
                 //Create request
                 req = (HttpWebRequest) WebRequest.Create(url);
-                req.UserAgent = Settings.Default.AppName;
+                req.UserAgent = Settings.AppName;
 
                 //Get Response
                 resp = (HttpWebResponse) req.GetResponse();
@@ -215,7 +214,7 @@ namespace WikipediaMaze.Services
 
             var metaKeywords = doc.DocumentNode.SelectSingleNode("//meta[@name='keywords']");
             var originalTitleNode = doc.DocumentNode.SelectSingleNode("/html/head/title");
-            var titleText = " - {0}".ToFormat(Settings.Default.AppName);
+            var titleText = " - {0}".ToFormat(Settings.AppName);
             if(originalTitleNode != null)
             {
                 var leftSideOfTitle = originalTitleNode.InnerHtml.Split('-')[0];

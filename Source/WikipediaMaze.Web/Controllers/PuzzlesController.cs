@@ -9,7 +9,6 @@ using MvcContrib.Pagination;
 using WikipediaMaze.App;
 using WikipediaMaze.Controllers.SubControllers;
 using WikipediaMaze.Core;
-using WikipediaMaze.Core.Properties;
 using WikipediaMaze.Services;
 using WikipediaMaze.ViewModels;
 using WikipediaMaze.Web;
@@ -309,7 +308,7 @@ namespace WikipediaMaze.Controllers
             if (!_authenticationService.IsAuthenticated)
                 return View("Unauthorized");
 
-            if (_authenticationService.CurrentUser.Reputation < Settings.Default.MinimumReputationToEditPuzzle)
+            if (_authenticationService.CurrentUser.Reputation < Settings.MinimumReputationToEditPuzzle)
                 return View("NotPrivaledged");
 
             var puzzle = _puzzleService.GetPuzzleById(id);
@@ -333,7 +332,7 @@ namespace WikipediaMaze.Controllers
         [AuthorizeRedirect]
         public ActionResult Edit(HeaderInfoController headerInfoController, SidebarController sidebarController, EditPuzzleViewModel viewModel, bool captchaValid)
         {
-            if (_authenticationService.CurrentUser.Reputation < Settings.Default.MinimumReputationToEditPuzzle)
+            if (_authenticationService.CurrentUser.Reputation < Settings.MinimumReputationToEditPuzzle)
                 return View("NotPrivaledged");
 
             var themes = Theme.GetThemesFromString(viewModel.Themes);

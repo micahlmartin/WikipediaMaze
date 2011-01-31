@@ -17,7 +17,6 @@ using WikipediaMaze.Core.Mvc;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Web;
-using WikipediaMaze.Core.Properties;
 
 namespace WikipediaMaze.ViewModels
 {
@@ -422,13 +421,13 @@ namespace WikipediaMaze.Controllers
             else
             {
                 imageStream = new MemoryStream();
-                var url = Settings.Default.Host + Url.Action("flairdetail", new { id = id, width = width.Value });
+                var url = Settings.Host + Url.Action("flairdetail", new { id = id, width = width.Value });
                 var image = _snapshotService.GetSnapshot(url, 74, width.Value + 20);
                 image.Save(imageStream, ImageFormat.Png);
                 imageStream.Flush();
                 imageStream.Position = 0;
                 imageBytes = imageStream.ReadToEnd();
-                HttpRuntime.Cache.Add(GetFLairCacheKey(id, width.Value), imageBytes, null, DateTime.Now.AddMinutes(Settings.Default.FlairCacheMinutes), System.Web.Caching.Cache.NoSlidingExpiration, System.Web.Caching.CacheItemPriority.Normal, null);
+                HttpRuntime.Cache.Add(GetFLairCacheKey(id, width.Value), imageBytes, null, DateTime.Now.AddMinutes(Settings.FlairCacheMinutes), System.Web.Caching.Cache.NoSlidingExpiration, System.Web.Caching.CacheItemPriority.Normal, null);
                 imageStream.Position = 0;
             }
 

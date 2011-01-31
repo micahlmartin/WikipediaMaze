@@ -21,14 +21,17 @@ Setup
 	
 2. Update Settings 
 	
-	All of the application settings are located in the WikipediaMaze.Core project. Open the solution in visual studio and edit the settings file located
-	in the properties folder. The following settings will need to be supplied:
-
-	1. RpxApiKey - (See Rpx below)
-	2. RpxDomain - (See Rpx below)	
-	3. WikipediaMazeConnection - The connection string for the wikipediamaze database created in step 1. 
+	All of the application settings are located in the /source/WikipediaMaze.Web/web.config file. 
 	
-	Rpx
-	========================
-	Wikipedia Maze uses JanRain Engage (formerly Rpx) to handle authentication. You will need to sign up for a free account at http://www.janrain.com/products/engage.
-	Once registering you will need to enter 
+	Add the connection string to the database previosly setup under the <connectionStrings> section. 
+	
+	The following application settings are required and will need to be supplied under the <appSettings> section:
+
+	1. RpxApiKey
+	2. RpxDomain
+	
+	Rpx - Wikipedia Maze uses JanRain Engage (formerly Rpx) to handle authentication. You will need to sign up for a free account at http://www.janrain.com/products/engage.
+	
+	
+	
+	

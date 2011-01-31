@@ -6,7 +6,6 @@ using System.Web.Routing;
 using StructureMap;
 using WikipediaMaze.App;
 using WikipediaMaze.Core;
-using WikipediaMaze.Core.Properties;
 using WikipediaMaze.Core.StructureMap;
 using WikipediaMaze.Services;
 

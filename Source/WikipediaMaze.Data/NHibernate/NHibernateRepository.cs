@@ -5,7 +5,6 @@ using System.Web;
 using NHibernate;
 using NHibernate.Linq;
 using FluentNHibernate.Cfg;
-using WikipediaMaze.Core.Properties;
 
 namespace WikipediaMaze.Data.NHibernate
 {
@@ -36,7 +35,7 @@ namespace WikipediaMaze.Data.NHibernate
                 if (!_IsSessionFactoryInitialized)
                 {
                     _sessionFactory =  Fluently.Configure()
-                                      .Database(FluentNHibernate.Cfg.Db.MsSqlConfiguration.MsSql2008.ConnectionString(db => db.Is(WikipediaMaze.Core.Properties.Settings.Default.WikipediaMazeConnection)))
+                                      .Database(FluentNHibernate.Cfg.Db.MsSqlConfiguration.MsSql2008.ConnectionString(db => db.Is(WikipediaMaze.Core.Settings.WikipediaMazeConnection)))
                                       .Mappings(m => m.FluentMappings.AddFromAssemblyOf<IRepository>())
                                       .BuildSessionFactory();
 

@@ -5,21 +5,14 @@ using System.Linq;
 using System.Security.Principal;
 using System.Web.Mvc;
 using System.Web.Security;
-//using DotNetOpenAuth.Messaging;
-//using DotNetOpenAuth.OpenId.RelyingParty;
 using MvcContrib.Filters;
 using WikipediaMaze.Core;
-using WikipediaMaze.Core.Properties;
 using WikipediaMaze.Services;
 using WikipediaMaze.Controllers.SubControllers;
 using log4net;
 using WikipediaMaze.App;
 using WikipediaMaze.ViewModels;
 using System.Web;
-//using DotNetOpenAuth.OpenId;
-//using facebook;
-//using DotNetOpenAuth.OpenId.Extensions.AttributeExchange;
-//using DotNetOpenAuth.OpenId.Extensions.SimpleRegistration;
 
 namespace WikipediaMaze.ViewModels
 {

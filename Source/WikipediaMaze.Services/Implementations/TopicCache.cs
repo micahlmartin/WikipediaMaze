@@ -13,7 +13,6 @@ using System.IO;
 using WikipediaMaze.Core;
 using System.Web.Caching;
 using log4net;
-using WikipediaMaze.Core.Properties;
 
 namespace WikipediaMaze.Services
 {
@@ -76,7 +75,7 @@ namespace WikipediaMaze.Services
             if (topic == null)
                 HttpContext.Current.Cache.Remove(BASE_TOPIC_CACHE_KEY + name);
             else
-                HttpContext.Current.Cache.Add(BASE_TOPIC_CACHE_KEY + name, topic, null, Cache.NoAbsoluteExpiration, new TimeSpan(Settings.Default.TopicExpirationDays, 0, 0, 0), CacheItemPriority.High, null);
+                HttpContext.Current.Cache.Add(BASE_TOPIC_CACHE_KEY + name, topic, null, Cache.NoAbsoluteExpiration, new TimeSpan(Settings.TopicExpirationDays, 0, 0, 0), CacheItemPriority.High, null);
         }
 
         #endregion

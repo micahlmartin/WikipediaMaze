@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using WikipediaMaze.Data;
 using MvcContrib.Pagination;
-using WikipediaMaze.Core.Properties;
 using WikipediaMaze.Core;
 using System.Data.SqlClient;
 
@@ -232,7 +231,7 @@ namespace WikipediaMaze.Services
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
         public void UpdatePuzzleStats(int puzzleId)
         {
-            using (var connection = new SqlConnection(Settings.Default.TwitterServiceUrl))
+            using (var connection = new SqlConnection(Settings.TwitterServiceUrl))
             {
                 connection.Open();
                 using (var command = connection.CreateCommand())
@@ -349,7 +348,7 @@ namespace WikipediaMaze.Services
 
         public IPagination<Puzzle> GetPuzzlesByUserId(int userId, PuzzleSortType sort, int page, int pageSize)
         {
-            pageSize = Math.Min(pageSize, Settings.Default.DefualtPageSize);
+            pageSize = Math.Min(pageSize, Settings.DefualtPageSize);
 
             IQueryable<Puzzle> puzzles;
             using (_repository.OpenSession())
@@ -405,19 +404,19 @@ namespace WikipediaMaze.Services
                     return new VoteResult { ErrorMessage = "You must be logged in to vote on a puzzle" };
 
                 //Make sure the user has enough reputation to vote
-                if (voteType == VoteType.Up && user.Reputation < Settings.Default.MinimumReputationToUpVote)
+                if (voteType == VoteType.Up && user.Reputation < Settings.MinimumReputationToUpVote)
                     return new VoteResult
                     {
                         ErrorMessage =
                             "You must have a reputation of at least {0} to up vote a puzzle".ToFormat(
-                            Settings.Default.MinimumReputationToUpVote)
+                            Settings.MinimumReputationToUpVote)
                     };
-                if (voteType == VoteType.Down && user.Reputation < Settings.Default.MinimumReputationToDownVote)
+                if (voteType == VoteType.Down && user.Reputation < Settings.MinimumReputationToDownVote)
                     return new VoteResult
                     {
                         ErrorMessage =
                             "You must have a reputation of at least {0} to down vote a puzzle".ToFormat(
-                            Settings.Default.MinimumReputationToDownVote)
+                            Settings.MinimumReputationToDownVote)
                     };
 
                 //Make sure the user is not voting on their own puzzle.
@@ -429,12 +428,12 @@ namespace WikipediaMaze.Services
                     _repository.All<Vote>().Where(x => x.UserId == user.Id && x.DateVoted == DateTime.Now.Date).
                         Count();
 
-                if (todaysNumberOfVotes >= Settings.Default.MaximumDailyVoteLimit)
+                if (todaysNumberOfVotes >= Settings.MaximumDailyVoteLimit)
                     return new VoteResult
                                {
                                    ErrorMessage =
                                        "You have reached the daily vote limit of {0}. Please wait a little while before voting again."
-                                       .ToFormat(Settings.Default.MaximumDailyVoteLimit)
+                                       .ToFormat(Settings.MaximumDailyVoteLimit)
                                };
 
                 #endregion
@@ -526,9 +525,9 @@ namespace WikipediaMaze.Services
                 case VoteType.None:
                     return 0;
                 case VoteType.Up:
-                    return Settings.Default.UpVoteReputationValue;
+                    return Settings.UpVoteReputationValue;
                 case VoteType.Down:
-                    return Settings.Default.DownVoteReputationValue;
+                    return Settings.DownVoteReputationValue;
             }
             return 0;
         }
@@ -553,7 +552,7 @@ namespace WikipediaMaze.Services
         public IPagination<TopicTheme> GetTopThemes(int? page, int? pageSize)
         {
             page = page ?? 1;
-            pageSize = pageSize ?? Settings.Default.DefualtPageSize;
+            pageSize = pageSize ?? Settings.DefualtPageSize;
 
             var themeDictionary = new Dictionary<string, int>();
 
@@ -724,7 +723,7 @@ namespace WikipediaMaze.Services
         public IPagination<Puzzle> GetPuzzlesByTheme(string theme, PuzzleSortType sort, int? page, int? pageSize)
         {
             page = page ?? 1;
-            pageSize = pageSize ?? Settings.Default.DefualtPageSize;
+            pageSize = pageSize ?? Settings.DefualtPageSize;
 
             switch (sort)
             {
@@ -871,7 +870,7 @@ namespace WikipediaMaze.Services
 
         public void UpdateThemeCount()
         {
-            using (var connection = new SqlConnection(Settings.Default.WikipediaMazeConnection))
+            using (var connection = new SqlConnection(Settings.WikipediaMazeConnection))
             {
                 connection.Open();
                 using (var command = connection.CreateCommand())

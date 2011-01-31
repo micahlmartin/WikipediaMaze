@@ -6,7 +6,6 @@ using DotNetOpenAuth.OAuth;
 using TwitterLib;
 using WikipediaMaze.Data;
 using WikipediaMaze.Core;
-using WikipediaMaze.Core.Properties;
 
 namespace WikipediaMaze.Services
 {
@@ -47,7 +46,7 @@ namespace WikipediaMaze.Services
                 var tokenManager = (TokenManager)HttpRuntime.Cache[TwitterTokenManagerKey];
                 if (tokenManager == null)
                 {
-                    tokenManager = new TokenManager(Settings.Default.TwitterConsumerKey, Settings.Default.TwitterConsumerSecret);
+                    tokenManager = new TokenManager(Settings.TwitterConsumerKey, Settings.TwitterConsumerSecret);
                     HttpRuntime.Cache.Add(TwitterTokenManagerKey, tokenManager, null, System.Web.Caching.Cache.NoAbsoluteExpiration, System.Web.Caching.Cache.NoSlidingExpiration, System.Web.Caching.CacheItemPriority.High, null);
                 }
 

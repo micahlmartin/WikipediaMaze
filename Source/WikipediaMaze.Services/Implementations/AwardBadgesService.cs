@@ -4,8 +4,8 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using StructureMap;
-using WikipediaMaze.Core.Properties;
 using WikipediaMaze.Data;
+using WikipediaMaze.Core;
 
 namespace WikipediaMaze.Services
 {
@@ -23,7 +23,7 @@ namespace WikipediaMaze.Services
         {
             get
             {
-                return Settings.Default.AwardBadgeInterval;
+                return Settings.AwardBadgeInterval;
             }
             set
             {
@@ -36,7 +36,7 @@ namespace WikipediaMaze.Services
         /// </summary>
         protected override void DoWork()
         {
-            using (var connection = new SqlConnection(Settings.Default.WikipediaMazeConnection))
+            using (var connection = new SqlConnection(Settings.WikipediaMazeConnection))
             {
                 connection.Open();
                 using (var command = connection.CreateCommand())
