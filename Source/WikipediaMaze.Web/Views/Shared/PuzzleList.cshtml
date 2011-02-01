@@ -8,7 +8,7 @@
         bool isAlternateRow = (i%2 != 0);
         
     <div id="puzzle-@puzzle.PuzzleId" class="puzzle-row-wrapper @if(Model.IsLeadingPuzzle(puzzle.PuzzleId)) { <text>leader</text> } @if(isAlternateRow) { <text>alternate</text> }" @if(Model.IsLeadingPuzzle(puzzle.PuzzleId)) { <text>title="You are currently leading this puzzle"</text> }>
-        <iframe src="http://www.facebook.com/plugins/like.php?href=www.wikipediamaze.com/puzzles/@(puzzle.PuzzleId)&amp;layout=button_count&amp;show_faces=true&amp;width=100&amp;action=like&amp;colorscheme=light&amp;height=21" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:100px; height:21px;" allowTransparency="true"></iframe>
+        @*<iframe src="http://www.facebook.com/plugins/like.php?href=www.wikipediamaze.com/puzzles/@(puzzle.PuzzleId)&amp;layout=button_count&amp;show_faces=true&amp;width=100&amp;action=like&amp;colorscheme=light&amp;height=21" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:100px; height:21px;" allowTransparency="true"></iframe>*@
         <div class="puzzle-row">
             <div class="votes-arrows">
                <input type="hidden" value="@puzzle.PuzzleId" />

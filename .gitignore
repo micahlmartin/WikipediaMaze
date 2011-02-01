@@ -1,6 +1,9 @@
 obj/
 bin/
+Bin/
 *.suo
 App_Data/
 *.pdb
 *.publish.xml
+WikipediaMaze.Web.Publish.xml
+Web.Release.config

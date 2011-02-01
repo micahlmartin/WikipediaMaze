@@ -289,5 +289,31 @@ namespace WikipediaMaze.Core
                 return string.Empty;
             }
         }
+
+        public static string JSVersion
+        {
+            get
+            {
+#if DEBUG
+                return DateTime.Now.Ticks.ToString();
+#else
+                return ConfigurationManager.AppSettings["JSVersion"];
+#endif
+
+            }
+        }
+
+        public static string CSSVersion
+        {
+            get
+            {
+#if DEBUG
+                return DateTime.Now.Ticks.ToString();
+#else
+                return ConfigurationManager.AppSettings["CSSVersion"];
+#endif
+
+            }
+        }
     }
 }

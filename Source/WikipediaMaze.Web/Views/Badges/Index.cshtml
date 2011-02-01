@@ -4,6 +4,11 @@
     ViewBag.Title = "Badges";
 }
 
+@section SectionTitle
+{
+    <h2>Badges</h2>
+}
+
 <div id="column-full">
     @foreach (var badge in Model)
     {
@@ -14,7 +19,3 @@
         </div>
     }
 </div>
-
-<asp:Content ID="Content4" ContentPlaceHolderID="SectionTitle" runat="server">
-    <h2>Badges</h2>
-</asp:Content>

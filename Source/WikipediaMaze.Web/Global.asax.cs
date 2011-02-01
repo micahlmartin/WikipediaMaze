@@ -8,6 +8,9 @@ using WikipediaMaze.App;
 using WikipediaMaze.Core;
 using WikipediaMaze.Core.StructureMap;
 using WikipediaMaze.Services;
+using log4net;
+using log4net.Config;
+using System.Text;
 
 namespace WikipediaMaze
 {
@@ -16,8 +19,14 @@ namespace WikipediaMaze
 
     public class MvcApplication : System.Web.HttpApplication
     {
+        ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         protected void Application_Start()
         {
+            XmlConfigurator.Configure();
+
+            log.Info("Application_Start");
+
             InitializeRouting();
 
             InitializeModelBinders();

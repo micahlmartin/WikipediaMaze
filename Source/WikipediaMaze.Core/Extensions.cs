@@ -152,19 +152,20 @@ namespace WikipediaMaze.Core
         }
         public static string FormatInteger(this int value)
         {
-            var millions = value / 1000000;
-            if (millions >= 1)
-            {
-                return millions.ToString(System.Globalization.CultureInfo.CurrentCulture) + "m";
-            }
+            return value.ToString("N0");
+            //var millions = value / 1000000;
+            //if (millions >= 1)
+            //{
+            //    return millions.ToString(System.Globalization.CultureInfo.CurrentCulture) + "m";
+            //}
 
-            var thousands = value / 1000;
-            if (thousands >= 10)
-            {
-                return thousands.ToString(System.Globalization.CultureInfo.CurrentCulture) + "k";
-            }
+            //var thousands = value / 1000;
+            //if (thousands >= 10)
+            //{
+            //    return thousands.ToString(System.Globalization.CultureInfo.CurrentCulture) + "k";
+            //}
 
-            return value.ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
+            //return value.ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
         }
         public static string FormatDate(this DateTime value)
         {

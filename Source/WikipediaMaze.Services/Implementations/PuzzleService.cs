@@ -231,7 +231,7 @@ namespace WikipediaMaze.Services
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
         public void UpdatePuzzleStats(int puzzleId)
         {
-            using (var connection = new SqlConnection(Settings.TwitterServiceUrl))
+            using (var connection = new SqlConnection(Settings.WikipediaMazeConnection))
             {
                 connection.Open();
                 using (var command = connection.CreateCommand())
