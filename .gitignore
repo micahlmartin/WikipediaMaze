@@ -7,3 +7,4 @@ App_Data/
 *.publish.xml
 WikipediaMaze.Web.Publish.xml
 Web.Release.config
+*.user

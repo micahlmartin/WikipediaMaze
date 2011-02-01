@@ -61,7 +61,7 @@
                 </div>
                     <div class="puzzle-user-info">
                         <span>Created @Model.DateCreated.FormatDate() by</span>
-                        <img height="30" width="30" src="@Model.UserInfo.GetGravatarUrl(30)" alt="Gravatar" />
+                        <img height="30" width="30" src="@Html.Raw(Model.UserInfo.GetGravatarUrl(30))" alt="Gravatar" />
                         <ul>
                             <li>@Html.ActionLink(Model.UserInfo.UserName, "Display", new { controller = "Players", id = Model.UserInfo.UserId, userName = Model.UserInfo.UserName.FormatTitleForUrl() })</li>
                             <li class="reputation" title="Your Reputation Score">@Model.UserInfo.Reputation.FormatInteger()</li> 

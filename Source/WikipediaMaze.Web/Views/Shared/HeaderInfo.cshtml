@@ -12,7 +12,7 @@
     @if (Model != null && Model.IsAuthenticated)
     {
     <li class="user" title="View your profile">
-        <img height="23" width="23" src="@Model.GetGravatarUrl(20)" alt="Gravatar" />
+        <img height="23" width="23" src="@Html.Raw(Model.GetGravatarUrl(20))" alt="Gravatar" />
         @Html.ActionLink(Model.DisplayName, "Display", new {controller = "Players", id = Model.UserId, userName = Model.DisplayName.FormatTitleForUrl()})
     </li>
     <li class="reputation" title="Your Reputation Score">@Model.Reputation.FormatInteger()</li>

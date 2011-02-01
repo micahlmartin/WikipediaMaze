@@ -27,7 +27,7 @@
     </head>
     <body>
         <div class="puzzle-user-info">
-            <img height="50" width="50" src="@Model.GetGravatarUrl(50)" alt="Gravatar" />
+            <img height="50" width="50" src="@Html.Raw(Model.GetGravatarUrl(50))" alt="Gravatar" />
             <ul>
                 <li class="username">@Model.UserName</li>
                 <li class="reputation" title="Your Reputation Score">@Model.Reputation.FormatInteger()</li> 
