@@ -105,11 +105,11 @@ namespace WikipediaMaze.Core
             email += "";
 
             var hash = email.ToLowerInvariant().Trim().ToMD5Hash().ToLowerInvariant();
-            var url = "http://www.gravatar.com/avatar.php?" + "gravatar_id=" + hash + "&amp;d=identicon";
+            var url = "http://www.gravatar.com/avatar.php?" + "gravatar_id=" + hash + "&d=identicon";
 
             if (size.HasValue)
             {
-                url += "&amp;size={0}".ToFormat(size.Value.ToString(System.Globalization.CultureInfo.CurrentCulture));
+                url += "&size={0}".ToFormat(size.Value.ToString(System.Globalization.CultureInfo.CurrentCulture));
             }
 
             return url;
