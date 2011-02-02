@@ -406,6 +406,7 @@ namespace WikipediaMaze.Controllers
         }
 
 
+        [OutputCache(Duration = 900)]
         public ActionResult FlairImage(int id, int? width)
         {
             width = width ?? 220;
@@ -445,16 +446,21 @@ namespace WikipediaMaze.Controllers
             width = width ?? 220;
             width = Math.Max(width.Value, 220);
             var user = _accountService.GetUserById(id);
-            var vm = new UserProfileViewModel(user, _authenticationService.CurrentUserId, null);
+            var vm = new UserProfileViewModel(user, id, null);
             ViewBag.Width = width;
             return View(vm);
         }
 
-        [AuthorizeRedirect]
-        public ActionResult Flair()
+        public ActionResult Flair(int id)
         {
-            ViewBag.CurrentUserId = _authenticationService.CurrentUserId;
-            ViewBag.CurrentUsername = _authenticationService.CurrentUser.DisplayName;
+            var user = _accountService.GetUserById(id);
+            if (user == null)
+                throw new FileNotFoundException();
+
+            var userVM = new UserProfileViewModel(user, _authenticationService.CurrentUserId, null);
+            ViewBag.CurrentUserId = userVM.UserId;
+            ViewBag.CurrentUsername = userVM.UserName;
+
             return View();
         }
 
