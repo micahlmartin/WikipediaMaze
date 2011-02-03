@@ -88,8 +88,7 @@
     </div>
     <div id="display-content">
         <div id="column-left">
-            
-            <div style="margin:0px;" class="content-page">
+            <div style="margin:0 0 20px 0; overflow:hidden;" class="content-page">
             <h3>Solutions</h3>
                 @if (!Model.HasSolution)
                 {
@@ -145,6 +144,19 @@
                 </div>
                 }
             </div>
+            <div id="disqus_thread"></div>
+            <script type="text/javascript">
+                var disqus_shortname = '@Settings.DisqusShortName';
+                var disqus_identifier = 'puzzles_@Model.PuzzleId';
+                var disqus_url = 'http://@Settings.Domain@Url.Action("display", "puzzles", new { id = Model.PuzzleId })';
+                (function () {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            </script>
+            <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+            <a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
         </div>
         <div id="column-right">
             <div class="board-wrap">

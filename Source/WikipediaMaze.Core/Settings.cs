@@ -315,5 +315,21 @@ namespace WikipediaMaze.Core
 
             }
         }
+
+        public static string DisqusShortName
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings["DisqusShortName"];
+            }
+        }
+
+        public static string Domain
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings["Domain"];
+            }
+        }
     }
 }

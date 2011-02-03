@@ -107,6 +107,7 @@
     <Compile Include="StructureMap\StructureMapControllerFactory.cs" />
     <Compile Include="StructureMap\StructureMapSubControllerBinder.cs" />
     <Compile Include="Web\AppOfflineModule.cs" />
+    <Compile Include="Web\RemoveWWWPrefixModule.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Models\.svn\all-wcprops" />

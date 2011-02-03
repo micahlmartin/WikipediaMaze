@@ -39,6 +39,12 @@ namespace WikipediaMaze
 
         }
 
+        protected void Application_BeginRequest()
+        {
+            //if (Request.Url.Host.ToLowerInvariant().Contains("www"))
+            //    Response.RedirectPermanent(Settings.Domain + Request.Url.PathAndQuery);
+        }
+
         #region Initialization
 
         public static void RegisterRoutes(RouteCollection routes)
