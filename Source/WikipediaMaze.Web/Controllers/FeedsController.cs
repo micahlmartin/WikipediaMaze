@@ -216,7 +216,7 @@ namespace WikipediaMaze.Web.Controllers
                                         dateCreated = x.DateCreated,
                                         level = x.Level,
                                         voteCount = x.VoteCount,
-                                        themes = x.Themes.Select(y => y.Name),
+                                        themes = x.Themes,
                                         solutionCount = x.SolutionCount,
                                         leadingPlayerId = x.LeaderId
                                     });
@@ -408,7 +408,7 @@ namespace WikipediaMaze.Web.Controllers
             item.Links.Add(SyndicationLink.CreateAlternateLink(new Uri(GetPuzzleLink(puzzle))));
             foreach (var theme in puzzle.Themes)
             {
-                var category = new SyndicationCategory(theme.Name);
+                var category = new SyndicationCategory(theme);
                 item.Categories.Add(category);
             }
 

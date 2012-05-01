@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Web.Security;
+using MongoDB.Driver.Builders;
 using WikipediaMaze.Data;
 using WikipediaMaze.Core;
 using System.Xml.Linq;
@@ -8,6 +9,7 @@ using System.Xml.XPath;
 using System.Data;
 using MvcContrib.Pagination;
 using System.Collections.Generic;
+using WikipediaMaze.Data.Mongo;
 using WikipediaMaze.Data.NHibernate;
 using facebook;
 using System.Web;
@@ -36,14 +38,14 @@ namespace WikipediaMaze.Services
 
         #region Constructors
 
-        public AccountService(IRepository repository, IAuthenticationService authenticationService)
+        public AccountService(MongoRepository repository, IAuthenticationService authenticationService)
         {
             _repository = repository;
             _authenticationService = authenticationService;
 
             _facebookService = new API
                                    {
-                                       ApplicationKey =Settings.FacebookApiKey,
+                                       ApplicationKey = Settings.FacebookApiKey,
                                        Secret = Settings.FacebookSecret,
                                        IsDesktopApplication = false
                                    };
@@ -60,10 +62,7 @@ namespace WikipediaMaze.Services
         /// <returns>The user record if found, otherwise null.</returns>
         public User GetUserById(int userId)
         {
-            using (var session = _repository.OpenSession())
-            {
-                return _repository.All<User>().ById(userId);    
-            }
+            return _repository.All<User>().FirstOrDefault(x => x.Id == userId);
         }
 
         /// <summary>
@@ -71,58 +70,51 @@ namespace WikipediaMaze.Services
         /// </summary>
         public User GetUserByOpenId(string openId)
         {
-            using (_repository.OpenSession())
-            {
-                return _repository.All<User>().Where(
-                    x => x.OpenIdentifiers.Select(y => y.Identifier).Contains(openId, StringComparer.OrdinalIgnoreCase))
-                    .SingleOrDefault();
-            }
+            var openID = _repository.All<OpenIdentifier>().FirstOrDefault(x => x.Identifier == openId);
+            if (openID == null)
+                return null;
+
+            return _repository.All<User>().FirstOrDefault(x => x.Id == openID.UserId);
         }
 
         public IEnumerable<User> GetAllUsers(PlayerSortType playerSortType)
         {
-            using (_repository.OpenSession())
+            switch (playerSortType)
             {
-                switch (playerSortType)
-                {
-                    case PlayerSortType.Reputation:
-                        return _repository.All<User>().OrderByDescending(x => x.Reputation).ToList();
-                    case PlayerSortType.Newest:
-                        return _repository.All<User>().OrderByDescending(x => x.DateCreated).ToList();
-                    case PlayerSortType.Oldest:
-                        return _repository.All<User>().OrderBy(x => x.DateCreated).ToList();
-                    case PlayerSortType.Name:
-                        return _repository.All<User>().OrderBy(x => x.DisplayName).ToList();
-                    default:
-                        return _repository.All<User>().OrderByDescending(x => x.Reputation).ToList();
-                }
+                case PlayerSortType.Reputation:
+                    return _repository.All<User>().OrderByDescending(x => x.Reputation).ToList();
+                case PlayerSortType.Newest:
+                    return _repository.All<User>().OrderByDescending(x => x.DateCreated).ToList();
+                case PlayerSortType.Oldest:
+                    return _repository.All<User>().OrderBy(x => x.DateCreated).ToList();
+                case PlayerSortType.Name:
+                    return _repository.All<User>().OrderBy(x => x.DisplayName).ToList();
+                default:
+                    return _repository.All<User>().OrderByDescending(x => x.Reputation).ToList();
             }
         }
+
         public IPagination<User> GetUsers(int page, int pageSize, PlayerSortType playerSortType)
         {
             IList<User> users;
-            int totalUsers;
-            using (_repository.OpenSession())
+            var totalUsers = _repository.All<User>().Count();
+            switch (playerSortType)
             {
-                totalUsers = _repository.All<User>().Count();
-                switch (playerSortType)
-                {
-                    case PlayerSortType.Reputation:
-                        users = _repository.All<User>().OrderByDescending(x => x.Reputation).Skip((page - 1) * pageSize).Take(pageSize).ToList();
-                        break;
-                    case PlayerSortType.Newest:
-                        users = _repository.All<User>().OrderByDescending(x => x.DateCreated).Skip((page - 1) * pageSize).Take(pageSize).ToList();
-                        break;
-                    case PlayerSortType.Oldest:
-                        users = _repository.All<User>().OrderBy(x => x.DateCreated).Skip((page - 1) * pageSize).Take(pageSize).ToList();
-                        break;
-                    case PlayerSortType.Name:
-                        users = _repository.All<User>().OrderBy(x => x.DisplayName).Skip((page - 1) * pageSize).Take(pageSize).ToList();
-                        break;
-                    default:
-                        users = _repository.All<User>().OrderByDescending(x => x.Reputation).Skip((page - 1) * pageSize).Take(pageSize).ToList();
-                        break;
-                }
+                case PlayerSortType.Reputation:
+                    users = _repository.All<User>().Skip((page - 1) * pageSize).Take(pageSize).OrderByDescending(x => x.Reputation).ToList();
+                    break;
+                case PlayerSortType.Newest:
+                    users = _repository.All<User>().Skip((page - 1) * pageSize).Take(pageSize).OrderByDescending(x => x.DateCreated).ToList();
+                    break;
+                case PlayerSortType.Oldest:
+                    users = _repository.All<User>().Skip((page - 1) * pageSize).Take(pageSize).OrderBy(x => x.DateCreated).ToList();
+                    break;
+                case PlayerSortType.Name:
+                    users = _repository.All<User>().Skip((page - 1) * pageSize).Take(pageSize).OrderBy(x => x.DisplayName).ToList();
+                    break;
+                default:
+                    users = _repository.All<User>().Skip((page - 1) * pageSize).Take(pageSize).OrderByDescending(x => x.Reputation).ToList();
+                    break;
             }
             return users.AsCustomPagination(page, pageSize, totalUsers);
         }
@@ -158,69 +150,62 @@ namespace WikipediaMaze.Services
             if (profile == null)
                 throw new ArgumentNullException("profile");
 
-            using (_repository.OpenSession())
+            var user = GetExistingUserFromProfile(profile);
+            if (user != null)
             {
-                var user = GetExistingUserFromProfile(profile);
-                if (user != null)
+                if (string.IsNullOrEmpty(user.Email))
                 {
-                    if(string.IsNullOrEmpty(user.Email))
-                    {
-                        user.Email = (string.IsNullOrEmpty(profile.VerifiedEmail)
-                                         ? user.Email = profile.Email
-                                         : profile.VerifiedEmail) + "";
-                    }
-                    if(string.IsNullOrEmpty(user.RealName))
-                    {
-                        if (profile.Name != null)
-                            user.RealName = profile.Name.FormattedName + "";
-                        else
-                            user.RealName = profile.DisplayName + "";
-                    }
-                    if(string.IsNullOrEmpty(user.DisplayName))
-                    {
-                        if (!string.IsNullOrEmpty(profile.DisplayName))
-                            user.DisplayName = profile.DisplayName;
-                        else if (profile.Name != null)
-                            user.DisplayName = profile.Name.FormattedName;
-                        else if (!string.IsNullOrEmpty(profile.PreferredUserName))
-                            user.DisplayName = profile.PreferredUserName;
-
-                        if ((user.DisplayName += "").Trim() == string.Empty)
-                            user.DisplayName = "Uknown";
-                    }
-                    if(string.IsNullOrEmpty(user.Location))
-                    {
-                        if (profile.Address != null)
-                            user.Location = (profile.Address.Locality + " " + profile.Address.Region).Trim();
-                    }
-                    user.BirthDate = user.BirthDate ?? profile.Birthday;
-                    user.Photo = (string.IsNullOrEmpty(user.Photo) ? profile.Photo : user.Photo) + "";
-                    user.PreferredUserName = profile.PreferredUserName + "";
-                    user.LastVisit = DateTime.Now;
-
-                    using (var tx = _repository.BeginTransaction())
-                    {
-                        _repository.Save(user);
-                        _repository.Save(new ActionItem{Action = ActionType.LoggedIn, DateCreated = DateTime.Now, UserId = user.Id});
-                        tx.Commit();
-                    }
-
-                    return user;
+                    user.Email = (string.IsNullOrEmpty(profile.VerifiedEmail)
+                                      ? user.Email = profile.Email
+                                      : profile.VerifiedEmail) + "";
                 }
+                if (string.IsNullOrEmpty(user.RealName))
+                {
+                    if (profile.Name != null)
+                        user.RealName = profile.Name.FormattedName + "";
+                    else
+                        user.RealName = profile.DisplayName + "";
+                }
+                if (string.IsNullOrEmpty(user.DisplayName))
+                {
+                    if (!string.IsNullOrEmpty(profile.DisplayName))
+                        user.DisplayName = profile.DisplayName;
+                    else if (profile.Name != null)
+                        user.DisplayName = profile.Name.FormattedName;
+                    else if (!string.IsNullOrEmpty(profile.PreferredUserName))
+                        user.DisplayName = profile.PreferredUserName;
 
-                return CreateUserFromProfile(profile);
+                    if ((user.DisplayName += "").Trim() == string.Empty)
+                        user.DisplayName = "Uknown";
+                }
+                if (string.IsNullOrEmpty(user.Location))
+                {
+                    if (profile.Address != null)
+                        user.Location = (profile.Address.Locality + " " + profile.Address.Region).Trim();
+                }
+                user.BirthDate = user.BirthDate ?? profile.Birthday;
+                user.Photo = (string.IsNullOrEmpty(user.Photo) ? profile.Photo : user.Photo) + "";
+                user.PreferredUserName = profile.PreferredUserName + "";
+                user.LastVisit = DateTime.Now;
+
+                _repository.Save(user);
+                _repository.Save(new ActionItem { Action = ActionType.LoggedIn, DateCreated = DateTime.Now, UserId = user.Id });
+
+                return user;
             }
+
+            return CreateUserFromProfile(profile);
         }
 
         private User GetExistingUserFromProfile(OpenIdProfile profile)
         {
-            var openIdentifier = _repository.All<OpenIdentifier>().ByIdentifier(profile.Identifier);
-            return openIdentifier == null ? null : _repository.All<User>().ById(openIdentifier.UserId);
+            var openIdentifier = _repository.All<OpenIdentifier>().FirstOrDefault(x => x.Identifier == profile.Identifier);
+            return openIdentifier == null ? null : _repository.All<User>().FirstOrDefault(x => x.Id == openIdentifier.UserId);
         }
 
         private User CreateUserFromProfile(OpenIdProfile profile)
         {
-            if (_repository.All<OpenIdentifier>().ByIdentifier(profile.Identifier) != null)
+            if (_repository.All<OpenIdentifier>().FirstOrDefault(x => x.Identifier == profile.Identifier) != null)
                 throw new InvalidOperationException(
                     "The openId '{0}' is already associated with another user.".ToFormat(profile.Identifier));
 
@@ -235,15 +220,16 @@ namespace WikipediaMaze.Services
                                BirthDate = profile.Birthday,
                                DateCreated = DateTime.Now,
                                DisplayName = (!string.IsNullOrEmpty(profile.DisplayName)
-                                                ? profile.DisplayName : profile.PreferredUserName) + "",
+                                                  ? profile.DisplayName
+                                                  : profile.PreferredUserName) + "",
                                Location =
                                    (profile.Address != null
-                                       ? (profile.Address.Locality + " " + profile.Address.Region).Trim()
-                                       : string.Empty) + "",
+                                        ? (profile.Address.Locality + " " + profile.Address.Region).Trim()
+                                        : string.Empty) + "",
                                Email =
                                    (string.IsNullOrEmpty(profile.VerifiedEmail)
-                                       ? profile.Email
-                                       : profile.VerifiedEmail) + "",
+                                        ? profile.Email
+                                        : profile.VerifiedEmail) + "",
                                LastVisit = DateTime.Now,
                                Photo = profile.Photo + "",
                                PreferredUserName = profile.PreferredUserName + "",
@@ -254,18 +240,14 @@ namespace WikipediaMaze.Services
             if (user.DisplayName.Trim() == string.Empty)
                 user.DisplayName = "Uknown";
 
-            using (var tx = _repository.BeginTransaction())
-            {
-                _repository.Save(user);
+            _repository.Save(user);
 
-                openIdentifier.UserId = user.Id;
+            openIdentifier.UserId = user.Id;
 
-                _repository.Save(openIdentifier);
+            _repository.Save(openIdentifier);
 
-                _repository.Save(new ActionItem{Action = ActionType.Registered, DateCreated = DateTime.Now, UserId = user.Id});
-
-                tx.Commit();
-            }
+            _repository.Save(new ActionItem
+                                 {Action = ActionType.Registered, DateCreated = DateTime.Now, UserId = user.Id});
 
             Rpx.Map(profile.Identifier, user.Id.ToString(System.Globalization.CultureInfo.CurrentCulture));
 
@@ -277,11 +259,11 @@ namespace WikipediaMaze.Services
             if (profile == null)
                 throw new ArgumentNullException("profile");
 
-            var user = _repository.All<User>().ById(userId);
+            var user = _repository.All<User>().FirstOrDefault(x => x.Id == userId);
             if (user == null)
                 throw new ArgumentException("A user with the id '{0}' does not exist.");
 
-            var openId = _repository.All<OpenIdentifier>().ByIdentifier(profile.Identifier);
+            var openId = _repository.All<OpenIdentifier>().FirstOrDefault(x => x.Identifier == profile.Identifier);
             if (openId != null)
                 throw new InvalidOperationException("The OpenId you are trying tolink already exists.");
 
@@ -294,18 +276,12 @@ namespace WikipediaMaze.Services
 
         public IEnumerable<Notification> GetNotifications(int userId)
         {
-            using(_repository.OpenSession())
-            {
-                return _repository.All<Notification>().Where(x => x.UserId == userId).ToList();
-            }
+            return _repository.All<Notification>().Where(x => x.UserId == userId).ToList();
         }
 
         public IEnumerable<Badge> GetAvailableBadges()
         {
-            using(_repository.OpenSession())
-            {
-                return _repository.All<Badge>().ToList();
-            }
+            return _repository.All<Badge>().ToList();
         }
 
         public IPagination<User> GetLeaderBoard(int? page, int? pageSize)
@@ -313,11 +289,8 @@ namespace WikipediaMaze.Services
             page = page ?? 1;
             pageSize = pageSize ?? Settings.DefualtPageSize;
 
-            using (_repository.OpenSession())
-            {
-                var users = _repository.All<User>().OrderByDescending(u => u.Reputation).Skip((page.Value - 1) * pageSize.Value).Take(pageSize.Value);
-                return users.AsCustomPagination(page.Value, pageSize.Value, users.Count());
-            }
+            var users = _repository.All<User>().OrderByDescending(u => u.Reputation).Skip((page.Value - 1) * pageSize.Value).Take(pageSize.Value).ToList();
+            return users.AsCustomPagination(page.Value, pageSize.Value, users.Count());
         }
 
         public void EstablishFacebookSession(HttpRequest request, HttpContext httpContext)
@@ -343,40 +316,24 @@ namespace WikipediaMaze.Services
 
         public DateTime? GetLastActivityDate(int userId)
         {
-            using (_repository.OpenSession())
-            {
-                var action = _repository.All<ActionItem>().Where(x => x.UserId == userId).OrderByDescending(x => x.DateCreated).FirstOrDefault();
+            var action = _repository.All<ActionItem>().Where(x =>x.UserId == userId).OrderByDescending(x => x.DateCreated).FirstOrDefault();
 
-                if (action != null)
-                    return action.DateCreated;
+            if (action != null)
+                return action.DateCreated;
 
-                return null;
-            }
+            return null;
         }
 
         public void UpdateUser(User user)
         {
-            using (_repository.OpenSession())
-            {
-                using (var tx = _repository.BeginTransaction())
-                {
-                    _repository.Update(user);
-                    tx.Commit();
-                }
-            }
+            _repository.Save(user);
         }
 
         public void DeleteNotification(int playerId, int notificationId)
         {
-            using(_repository.OpenSession())
-            {
-                var notification = _repository.All<Notification>().Where(x => x.Id == notificationId && x.UserId == playerId).FirstOrDefault();
-                if(notification != null)
-                {
-                    _repository.Delete(notification);
-                    _repository.Flush();
-                }
-            }
+            var notification = _repository.All<Notification>().FirstOrDefault(x => x.UserId == playerId && x.Id == notificationId);
+            if (notification != null)
+                _repository.Delete(notification);
         }
 
         #endregion

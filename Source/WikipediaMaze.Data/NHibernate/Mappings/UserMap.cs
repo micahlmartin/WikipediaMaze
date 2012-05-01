@@ -36,11 +36,11 @@ namespace WikipediaMaze.Data.NHibernate.Mappings
             //    .WithTableName("UserBadges")
             //    .KeyColumnNames.Add("UserId");
 
-            HasManyToMany(x => x.Badges)
-                .Not.LazyLoad()
-                .Table("UserBadges")
-                .ParentKeyColumn("UserId")
-                .ChildKeyColumn("BadgeId");
+            //HasManyToMany(x => x.Badges)
+            //    .Not.LazyLoad()
+            //    .Table("UserBadges")
+            //    .ParentKeyColumn("UserId")
+            //    .ChildKeyColumn("BadgeId");
         }
     }
 }

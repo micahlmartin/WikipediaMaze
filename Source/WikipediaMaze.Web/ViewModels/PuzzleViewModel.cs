@@ -24,7 +24,7 @@ namespace WikipediaMaze.ViewModels
             UserSolutionCount = userSolutionCount;
             PuzzleLeaderBoard = puzzleLeaderBoard;
             IsCreator = isCreator;
-            Themes = puzzle.Themes.Select(x => x.Name);
+            Themes = puzzle.Themes;
             IsLeading = isLeading;
         }
 

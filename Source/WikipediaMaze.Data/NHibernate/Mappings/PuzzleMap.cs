@@ -34,11 +34,11 @@ namespace WikipediaMaze.Data.NHibernate.Mappings
                 .Table("Votes")
                 .KeyColumns.Add("PuzzleId");
 
-            HasManyToMany(x => x.Themes)
-                .Not.LazyLoad()
-                .Table("PuzzleThemes")
-                .ParentKeyColumn("PuzzleId")
-                .ChildKeyColumn("Theme");
+            //HasManyToMany(x => x.Themes)
+            //    .Not.LazyLoad()
+            //    .Table("PuzzleThemes")
+            //    .ParentKeyColumn("PuzzleId")
+            //    .ChildKeyColumn("Theme");
         }
     }
 }

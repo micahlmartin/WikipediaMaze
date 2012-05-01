@@ -11,6 +11,7 @@ namespace WikipediaMaze.Data
         void Save<TModel>(TModel model);
         void Update<TModel>(TModel model);
         void Delete<TModel>(TModel model);
+        void Delete<TModel>(object id);
         ITransaction BeginTransaction();
         void Flush();
     }

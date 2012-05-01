@@ -73,7 +73,7 @@
                 <ul class="puzzle-row-themes">
                 @foreach (var theme in puzzle.Themes) 
                 {
-                    <li>@Html.ActionLink(theme.Name, "themed", new RouteValueDictionary { { "controller", "puzzles" }, { "id", theme.Name } })</li>
+                    <li>@Html.ActionLink(theme.Name, "themed", new RouteValueDictionary { { "controller", "puzzles" }, { "id", theme } })</li>
                 }
                 </ul>
             }

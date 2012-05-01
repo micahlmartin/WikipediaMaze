@@ -82,5 +82,11 @@ namespace WikipediaMaze.Data.NHibernate
         }
         #endregion
 
+
+
+        public void Delete<TModel>(object id)
+        {
+            throw new NotSupportedException();
+        }
     }
 }

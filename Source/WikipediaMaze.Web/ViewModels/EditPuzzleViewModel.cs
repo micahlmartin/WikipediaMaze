@@ -20,7 +20,7 @@ namespace WikipediaMaze.Web.ViewModels
             var sb = new StringBuilder();
             foreach (var theme in puzzle.Themes)
             {
-                sb.Append(theme.Name + ", ");
+                sb.Append(theme + ", ");
             }
             var themeString = sb.ToString();
             if (themeString.Length > 0)

@@ -10,7 +10,7 @@ namespace WikipediaMaze.Core
     {
         #region Properties
 
-        public virtual int Id { get; private set; }
+        public virtual int Id { get; set; }
         public virtual string StartTopic { get; set; }
         public virtual string EndTopic { get; set; }
         public virtual User User { get; set; }
@@ -21,8 +21,9 @@ namespace WikipediaMaze.Core
         public virtual int VoteCount { get; set; }
         public virtual int SolutionCount { get; set; }
         public virtual bool IsVerified { get; set; }
-        public virtual IList<Theme> Themes { get; set; }
+        public virtual IEnumerable<string> Themes { get; set; }
         public virtual int LeaderId { get; set; }
+        public virtual int CreatedById { get; set; }
         
         #endregion
 

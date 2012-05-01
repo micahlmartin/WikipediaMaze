@@ -32,7 +32,7 @@ namespace WikipediaMaze.ViewModels
             _lastActivity = lastActivity;
 
             var badgeViewModels = new List<BadgeViewModel>();
-            var groupedBadges = user.Badges.GroupBy(x => x.Id);
+            var groupedBadges = user.Badges.GroupBy(x => x.Name);
             foreach (var badge in groupedBadges)
             {
                 badgeViewModels.Add(new BadgeViewModel(badge));
@@ -128,7 +128,7 @@ namespace WikipediaMaze.ViewModels
             _userVote = userVote;
             Themes = puzzle.Themes;
         }
-        public IEnumerable<Theme> Themes { get; private set; }
+        public IEnumerable<string> Themes { get; private set; }
         public int PuzzleId
         {
             get { return _puzzle.Id; }
@@ -242,7 +242,7 @@ namespace WikipediaMaze.ViewModels
     }
     public class BadgeViewModel
     {
-        public BadgeViewModel(IEnumerable<Badge> badges)
+        public BadgeViewModel(IEnumerable<UserBadgeInfo> badges)
         {
             var badge = badges.ElementAt(0);
             BadgeCount = badges.Count();

@@ -6,10 +6,10 @@ namespace WikipediaMaze.Core
 {
     public class User : IValidate
     {
-        public virtual int Id { get; private set; }
+        public virtual int Id { get;  set; }
         public virtual DateTime LastVisit { get; set; }
         public virtual int Reputation { get; set; }
-        public virtual IList<Badge> Badges { get; private set; }    
+        public virtual IList<UserBadgeInfo> Badges { get; set; }    
         public virtual string RealName { get; set; }
         public virtual DateTime DateCreated { get; set; }
         public virtual DateTime? BirthDate { get; set; }
