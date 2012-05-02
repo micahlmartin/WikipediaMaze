@@ -8,7 +8,8 @@ namespace WikipediaMaze.Core
     public class Solution
     {
         #region Properties
-        public virtual int Id { get; private set; }
+        public virtual Guid Id { get; set; }
+        public virtual int SolutionId { get; set; }
         public virtual int UserId { get; set; }
         public virtual int PuzzleId { get; set; }
         public virtual IEnumerable<Step> Steps { get; set; }

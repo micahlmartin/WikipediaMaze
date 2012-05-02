@@ -57,9 +57,9 @@ namespace WikipediaMaze.Services
              * Points are awarded based on the number of steps it took to solve
              * the puzzle in relation to the average.
              * If it took fewer steps than normal than they get more points
-             * If it took longer than they get fewer points.
+             * If it took longer then they get fewer points.
              * 
-             * First calculatue the difference between the number of steps and the average.
+             * First calculate the difference between the number of steps and the average.
              * This number will be negative if it took longer.
              * Get the percentage of that number in relation to the average.
              * Multiply that percentage by the AverageSolutionReputationValue. 
@@ -121,7 +121,7 @@ namespace WikipediaMaze.Services
         private static int CalculateSolutionUserReputation(Solution currentSolution, IEnumerable<Solution> solutions)
         {
             var previousBestSolution = solutions
-                .Where(x => x.Id != currentSolution.Id)
+                .Where(x => x.SolutionId != currentSolution.SolutionId)
                 .OrderByDescending(x => x.PointsAwarded)
                 .FirstOrDefault();
 

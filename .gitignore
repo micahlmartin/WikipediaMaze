@@ -1,6 +1,11 @@
 obj/
 bin/
 Bin/
+_ReSharper.*
+_UpgradeReport.*
+*.csproj.user
+*.resharper.user
+*.resharper
 *.suo
 App_Data/
 *.pdb
@@ -8,3 +13,9 @@ App_Data/
 WikipediaMaze.Web.Publish.xml
 Web.config
 *.user
+*.orig
+packages
+PrecompiledWeb
+core-only
+Release
+Artifacts

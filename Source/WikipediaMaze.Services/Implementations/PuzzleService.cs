@@ -42,7 +42,9 @@ namespace WikipediaMaze.Services
 		/// <param name="id">The id of the puzzle to retrieve.</param>
         public Puzzle GetPuzzleById(int id)
 		{
-		    return _repository.All<Puzzle>().ById(id);
+		    var puzzle = _repository.All<Puzzle>().ById(id);
+		    puzzle.User = _repository.All<User>().ById(puzzle.CreatedById);
+		    return puzzle;
 		}
 
         public void DeletePuzzle(int id)
@@ -52,7 +54,7 @@ namespace WikipediaMaze.Services
 
             var puzzle = _repository.All<Puzzle>().ById(id);
 
-            if (puzzle.User.Id != _authenticationService.CurrentUserId)
+            if (puzzle.CreatedById != _authenticationService.CurrentUserId)
                 throw new UnauthorizedAccessException();
 
             if (puzzle.IsVerified)
@@ -363,7 +365,7 @@ namespace WikipediaMaze.Services
 		                   };
 
 		    //Make sure the user is not voting on their own puzzle.
-		    if (user.Id == puzzle.User.Id)
+            if (user.Id == puzzle.CreatedById)
 		        return new VoteResult {ErrorMessage = "You cannot vote on your own puzzle."};
 
 		    //Make sure the user hasn't reached their vote limit for the day
@@ -448,7 +450,7 @@ namespace WikipediaMaze.Services
 		                             UserId = user.Id,
 		                             PuzzleId = puzzleId,
 		                             VoteType = voteResult.VoteType.Value,
-		                             AffectedUserId = puzzle.User.Id
+                                     AffectedUserId = puzzle.CreatedById
 		                         });
 
 		    //Update Puzzle Vote Count
@@ -749,7 +751,7 @@ namespace WikipediaMaze.Services
                 _repository.Save(new ActionItem
                                      {
                                          Action = ActionType.ReTaggedPuzzle,
-                                         AffectedUserId = puzzle.User.Id,
+                                         AffectedUserId = puzzle.CreatedById,
                                          DateCreated = DateTime.Now,
                                          PuzzleId = puzzle.Id,
                                          UserId = _authenticationService.CurrentUserId

@@ -147,7 +147,7 @@
             <div id="disqus_thread"></div>
             <script type="text/javascript">
                 var disqus_shortname = '@Settings.DisqusShortName';
-                var disqus_identifier = 'puzzles_@Model.PuzzleId';
+                var disqus_identifier = 'puzzles_' + '@Model.PuzzleId';
                 var disqus_url = 'http://@Settings.Domain@Url.Action("display", "puzzles", new { id = Model.PuzzleId })';
                 (function () {
                     var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

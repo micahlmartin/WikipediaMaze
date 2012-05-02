@@ -107,7 +107,7 @@ namespace WikipediaMaze.Controllers
             //Only show puzzles that have not been verified to the user who created them.
             if (!puzzle.IsVerified)
             {
-                if(puzzle.User.Id != _authenticationService.CurrentUserId)
+                if (puzzle.CreatedById != _authenticationService.CurrentUserId)
                     return View("NotFound");
             }
 
@@ -117,13 +117,13 @@ namespace WikipediaMaze.Controllers
             var latestSolution = puzzle.Solutions.Where(x => x.UserId == _authenticationService.CurrentUserId).LastOrDefault();
             if (latestSolution != null)
             {
-                latestSolution.Steps = _puzzleService.GetSteps(latestSolution.Id);
+                latestSolution.Steps = _puzzleService.GetSteps(latestSolution.SolutionId);
             }
 
             var bestSolution = puzzle.Solutions.Where(x => x.UserId == _authenticationService.CurrentUserId).OrderByDescending(x => x.PointsAwarded).FirstOrDefault();
             if (bestSolution != null)
             {
-                bestSolution.Steps = _puzzleService.GetSteps(bestSolution.Id);
+                bestSolution.Steps = _puzzleService.GetSteps(bestSolution.SolutionId);
             }
 
             var vote = puzzle.Votes.Where(x => x.UserId == _authenticationService.CurrentUserId).SingleOrDefault();
@@ -138,7 +138,7 @@ namespace WikipediaMaze.Controllers
 	        }
             var puzzleLeaderBoard = topSolutions.OrderBy(x => x.StepCount).CreateOrderedEnumerable(x => x.DateCreated, new StandardComparer<DateTime>(), false).Take(10).Select(x => new SolutionViewModel(x, _accountService.GetUserById(x.UserId)));
 
-            var viewModel = new PuzzleViewModel(puzzle, voteType, latestSolution, bestSolution, userSolutionCount, puzzleLeaderBoard, puzzle.User.Id == _authenticationService.CurrentUserId, false);
+            var viewModel = new PuzzleViewModel(puzzle, voteType, latestSolution, bestSolution, userSolutionCount, puzzleLeaderBoard, puzzle.CreatedById == _authenticationService.CurrentUserId, false);
 
             return View(viewModel);
         }
@@ -293,7 +293,7 @@ namespace WikipediaMaze.Controllers
             if (puzzle == null)
                 return Json(false, JsonRequestBehavior.AllowGet);
 
-            if (puzzle.IsVerified || puzzle.User.Id != _authenticationService.CurrentUserId)
+            if (puzzle.IsVerified || puzzle.CreatedById != _authenticationService.CurrentUserId)
                 return Json(false, JsonRequestBehavior.AllowGet);
 
             _puzzleService.DeletePuzzle(id);
@@ -319,7 +319,7 @@ namespace WikipediaMaze.Controllers
             //Only show puzzles that have not been verified to the user who created them.
             if (!puzzle.IsVerified)
             {
-                if (puzzle.User.Id != _authenticationService.CurrentUserId)
+                if (puzzle.CreatedById != _authenticationService.CurrentUserId)
                     return View("NotFound");
             }
 

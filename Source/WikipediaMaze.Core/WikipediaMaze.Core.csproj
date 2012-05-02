@@ -88,6 +88,7 @@
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserBadge.cs" />
     <Compile Include="Models\UserBadgeInfo.cs" />
+    <Compile Include="Models\UserInfo.cs" />
     <Compile Include="Models\Vote.cs" />
     <Compile Include="Models\VoteResult.cs" />
     <Compile Include="Mvc\AtomActionResult.cs" />

@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Security;
 using WikipediaMaze.Data;
 using WikipediaMaze.Core;
+using WikipediaMaze.Data.Mongo;
 
 namespace WikipediaMaze.Services
 {
@@ -18,7 +19,7 @@ namespace WikipediaMaze.Services
 
         #region Constructors
 
-        public FormsAuthenticationService(IRepository repository)
+        public FormsAuthenticationService(MongoRepository repository)
         {
             _repository = repository;
         }
@@ -57,13 +58,7 @@ namespace WikipediaMaze.Services
 
         public User CurrentUser
         {
-            get
-            {
-                using(_repository.OpenSession())
-                {
-                    return _repository.All<User>().ById(CurrentUserId);
-                }
-            }
+            get { return _repository.All<User>().ById(CurrentUserId); }
         }
 
         #endregion

@@ -92,17 +92,17 @@ namespace WikipediaMaze.Data.Mongo
 
         public IQueryable<TModel> All<TModel>()
         {
-            return Database.GetCollection<TModel>(typeof (TModel).Name).AsQueryable();
+            return Database.GetCollection<TModel>(GetCollectionNamingConvention(typeof(TModel))).AsQueryable();
         }
 
         public void Save<TModel>(TModel model)
         {
-            Database.GetCollection<TModel>(typeof (TModel).Name).Save(model);
+            Database.GetCollection<TModel>(GetCollectionNamingConvention(typeof(TModel))).Save(model);
         }
 
         public void InsertBatch<TModel>(IEnumerable<TModel> model)
         {
-            Database.GetCollection<TModel>(typeof (TModel).Name).InsertBatch(model);
+            Database.GetCollection<TModel>(GetCollectionNamingConvention(typeof(TModel))).InsertBatch(model);
         }
 
         public void Update<TModel>(TModel model)
@@ -116,12 +116,12 @@ namespace WikipediaMaze.Data.Mongo
             var idMemberName = BsonClassMap.LookupClassMap(t).IdMemberMap.MemberName;
             var val = t.GetProperty(idMemberName).GetValue(model, null);
 
-            Database.GetCollection<TModel>(typeof(TModel).Name).Remove(Query.EQ("_id", MongoDB.Bson.BsonTypeMapper.MapToBsonValue(val)));
+            Database.GetCollection<TModel>(GetCollectionNamingConvention(typeof(TModel))).Remove(Query.EQ("_id", MongoDB.Bson.BsonTypeMapper.MapToBsonValue(val)));
         }
 
         public void Delete<TModel>(object id)
         {
-            Database.GetCollection<TModel>(typeof(TModel).Name).Remove(Query.EQ("_id", MongoDB.Bson.BsonTypeMapper.MapToBsonValue(id)));
+            Database.GetCollection<TModel>(GetCollectionNamingConvention(typeof(TModel))).Remove(Query.EQ("_id", MongoDB.Bson.BsonTypeMapper.MapToBsonValue(id)));
         }
 
         public ITransaction BeginTransaction()
@@ -133,5 +133,7 @@ namespace WikipediaMaze.Data.Mongo
         {
             throw new NotSupportedException();
         }
+
+        public static Func<Type, string> GetCollectionNamingConvention = (t) => t.Name;
     }
 }

@@ -40,7 +40,7 @@ namespace WikipediaMaze.Data
         }
         public static Solution ById(this IQueryable<Solution> query, int solutionId)
         {
-            return query.Where(x => x.Id == solutionId).SingleOrDefault();
+            return query.Where(x => x.SolutionId == solutionId).SingleOrDefault();
         }
         public static IQueryable<Solution> ByUser(this IQueryable<Solution> query, int userId)
         {

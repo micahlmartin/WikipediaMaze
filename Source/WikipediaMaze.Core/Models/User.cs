@@ -19,7 +19,7 @@ namespace WikipediaMaze.Core
         public virtual string DisplayName { get; set; }
         public virtual string PreferredUserName { get; set; }
         public virtual int LeadingPuzzleCount { get; set; }
-        public virtual IEnumerable<OpenIdentifier> OpenIdentifiers { get; private set; }
+        public virtual IList<OpenIdentifier> OpenIdentifiers { get; set; }
         public virtual string TwitterUserName { get; set; }
         public virtual string GetGravatarUrl(int? size)
         {

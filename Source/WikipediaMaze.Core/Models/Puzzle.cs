@@ -24,7 +24,6 @@ namespace WikipediaMaze.Core
         public virtual IEnumerable<string> Themes { get; set; }
         public virtual int LeaderId { get; set; }
         public virtual int CreatedById { get; set; }
-        
         #endregion
 
         public static class Comparers

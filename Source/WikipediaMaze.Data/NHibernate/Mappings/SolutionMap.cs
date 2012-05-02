@@ -12,7 +12,7 @@ namespace WikipediaMaze.Data.NHibernate.Mappings
         public SolutionMap()
         {
             Table("Solutions");
-            Id(s => s.Id);
+            Id(s => s.SolutionId, "Id");
             Map(x => x.PointsAwarded);
             Map(x => x.PuzzleId);
             Map(x => x.UserId);

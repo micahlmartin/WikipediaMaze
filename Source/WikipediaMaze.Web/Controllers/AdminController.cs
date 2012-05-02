@@ -65,14 +65,48 @@ namespace WikipediaMaze.Web.Controllers
                                                                                               PreferredUserName = user.PreferredUserName,
                                                                                               LeadingPuzzleCount = user.LeadingPuzzleCount,
                                                                                               TwitterUserName = user.TwitterUserName,
+                                                                                              OpenIdentifiers = GetOpenIdentifiers(user),
                                                                                           });
 
                 _mongoRepository.InsertBatch(users);
 
                 #endregion
+
+                #region Solutions
+
+                var solutions = _nhibernateRepository.All<Solution>().ToList().Select(solution => new Solution
+                                                                                                      {
+                                                                                                          CurrentPuzzleLevel = solution.CurrentPuzzleLevel,
+                                                                                                          CurrentSolutionCount = solution.CurrentSolutionCount,
+                                                                                                          DateCreated = solution.DateCreated,
+                                                                                                          PuzzleId = solution.PuzzleId,
+                                                                                                          Id = Guid.NewGuid(),
+                                                                                                          PointsAwarded = solution.PointsAwarded,
+                                                                                                          StepCount = solution.StepCount,
+                                                                                                          Steps = solution.Steps.Select(step => new Step
+                                                                                                                                                    {
+                                                                                                                                                        StepNumber = step.StepNumber,
+                                                                                                                                                        Topic = step.Topic
+                                                                                                                                                    }).ToList(),
+                                                                                                          UserId = solution.UserId,
+                                                                                                      }).ToList();
+
+                _mongoRepository.InsertBatch(solutions);
+
+                #endregion
             }
 
             return Content("Success");
+        }
+
+        private IList<OpenIdentifier> GetOpenIdentifiers(User user)
+        {
+            var s = _nhibernateRepository.All<OpenIdentifier>().Where(x => x.UserId == user.Id).Select(x => new OpenIdentifier
+                                                                                                               {
+                                                                                                                   Identifier = x.Identifier,
+                                                                                                                   IsPrimary = x.IsPrimary
+                                                                                                               }).ToList();
+            return s;
         }
 
         private IList<UserBadgeInfo> GetUserBadges(int userId)

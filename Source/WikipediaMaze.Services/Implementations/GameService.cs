@@ -4,6 +4,7 @@ using System.Security.Authentication;
 using WikipediaMaze.Core;
 using WikipediaMaze.Data;
 using System.IO;
+using WikipediaMaze.Data.Mongo;
 
 namespace WikipediaMaze.Services
 {
@@ -23,7 +24,7 @@ namespace WikipediaMaze.Services
 
         #region Constructors
 
-        public GameService(ITopicService topicService, IAuthenticationService authenticationService, IAccountService accountService, IPuzzleService puzzleService, IPuzzleCache puzzleCache, IRepository repository, IReputationService reputationService, IMessengerService twitterService)
+        public GameService(ITopicService topicService, IAuthenticationService authenticationService, IAccountService accountService, IPuzzleService puzzleService, IPuzzleCache puzzleCache, MongoRepository repository, IReputationService reputationService, IMessengerService twitterService)
         {
             _topicService = topicService;
             _authenticationService = authenticationService;
@@ -101,7 +102,7 @@ namespace WikipediaMaze.Services
             if (startTopic == null)
                 throw new FileNotFoundException("The starting topic '{0}' could not be found".ToFormat(puzzle.StartTopic));
 
-            if (!puzzle.IsVerified && puzzle.User.Id != user.Id)
+            if (!puzzle.IsVerified && puzzle.CreatedById != user.Id)
                throw new UnauthorizedAccessException("You are trying to access a puzzle that has not been verified and you aren't the creator.");
 
             #endregion
@@ -207,69 +208,62 @@ namespace WikipediaMaze.Services
             Solution solution;
             var isValidating = false;
             bool isLeader;
-            
-            using (_repository.OpenSession())
+
+            user = _repository.All<User>().ById(puzzleInfo.UserId);
+
+            puzzle = _repository.All<Puzzle>().ById(puzzleInfo.PuzzleId);
+            solution = new Solution
+                               {
+                                   PuzzleId = puzzle.Id,
+                                   UserId = puzzleInfo.UserId,
+                                   PointsAwarded = _reputationService.CalculateSolutionReputation(puzzle.CreatedById, puzzleInfo.UserId, puzzleInfo.Steps.Count + 1, puzzle.Level),
+                                   StepCount = puzzleInfo.Steps.Count + 1 /* add 1 for the final step */,
+                                   DateCreated = DateTime.Now,
+                                   CurrentPuzzleLevel = puzzle.Level,
+                                   CurrentSolutionCount = puzzle.SolutionCount
+                               };
+
+            _repository.Save(solution);
+
+            for (var i = 0; i < puzzleInfo.Steps.Count; i++)
             {
-                user = _repository.All<User>().ById(puzzleInfo.UserId);
-
-                using (var tx = _repository.BeginTransaction())
-                {
-                    puzzle = _repository.All<Puzzle>().ById(puzzleInfo.PuzzleId);
-                    solution = new Solution
-                                       {
-                                           PuzzleId = puzzle.Id,
-                                           UserId = puzzleInfo.UserId,
-                                           PointsAwarded = _reputationService.CalculateSolutionReputation(puzzle.User.Id, puzzleInfo.UserId, puzzleInfo.Steps.Count + 1, puzzle.Level),
-                                           StepCount = puzzleInfo.Steps.Count + 1 /* add 1 for the final step */,
-                                           DateCreated = DateTime.Now,
-                                           CurrentPuzzleLevel = puzzle.Level,
-                                           CurrentSolutionCount = puzzle.SolutionCount
-                                       };
-
-                    _repository.Save(solution);
-
-                    for (var i = 0; i < puzzleInfo.Steps.Count; i++)
-                    {
-                        var step = new Step
-                                       {
-                                           StepNumber = i,
-                                           Topic = puzzleInfo.Steps[i].Name,
-                                           SolutionId = solution.Id,
-                                       };
-                        _repository.Save(step);
-                    }
-                    var finalStep = new Step
-                                        {
-                                            StepNumber = puzzleInfo.Steps.Count,
-                                            Topic = puzzle.EndTopic,
-                                            SolutionId = solution.Id
-                                        };
-
-                    _repository.Save(finalStep);
-
-                    if (!puzzle.IsVerified)
-                    {
-                        isValidating = true;
-                        puzzle.IsVerified = true;
-                    }
-
-                    _repository.Save(puzzle);
-
-                    _repository.Save(new ActionItem
-                                         {
-                                             Action = ActionType.SolvedPuzzle,
-                                             DateCreated = DateTime.Now,
-                                             PuzzleId = puzzle.Id,
-                                             SolutionId = solution.Id,
-                                             UserId = user.Id,
-                                             AffectedUserId = puzzle.User.Id
-                                         });
-
-                    tx.Commit();
-                }
-                //Solution is commited at this point so if there is only 1 solution then we are the leader
-                isLeader = _repository.All<Solution>().Where(x => x.PuzzleId == puzzle.Id && x.StepCount <= solution.StepCount).Count() == 1;
+                var step = new Step
+                               {
+                                   StepNumber = i,
+                                   Topic = puzzleInfo.Steps[i].Name,
+                                   SolutionId = solution.SolutionId,
+                               };
+                _repository.Save(step);
             }
+            var finalStep = new Step
+                                {
+                                    StepNumber = puzzleInfo.Steps.Count,
+                                    Topic = puzzle.EndTopic,
+                                    SolutionId = solution.SolutionId
+                                };
+
+            _repository.Save(finalStep);
+
+            if (!puzzle.IsVerified)
+            {
+                isValidating = true;
+                puzzle.IsVerified = true;
+            }
+
+            _repository.Save(puzzle);
+
+            _repository.Save(new ActionItem
+                                 {
+                                     Action = ActionType.SolvedPuzzle,
+                                     DateCreated = DateTime.Now,
+                                     PuzzleId = puzzle.Id,
+                                     SolutionId = solution.SolutionId,
+                                     UserId = user.Id,
+                                     AffectedUserId = puzzle.CreatedById
+                                 });
+
+            //Solution is commited at this point so if there is only 1 solution then we are the leader
+            isLeader = _repository.All<Solution>().Where(x => x.PuzzleId == puzzle.Id && x.StepCount <= solution.StepCount).Count() == 1;
 
             _puzzleCache.ClearCurrentPuzzleInfo();
 

@@ -70,11 +70,7 @@ namespace WikipediaMaze.Services
         /// </summary>
         public User GetUserByOpenId(string openId)
         {
-            var openID = _repository.All<OpenIdentifier>().FirstOrDefault(x => x.Identifier == openId);
-            if (openID == null)
-                return null;
-
-            return _repository.All<User>().FirstOrDefault(x => x.Id == openID.UserId);
+            return MongoRepository.Database.GetCollection<User>(MongoRepository.GetCollectionNamingConvention(typeof(User))).FindOne(Query.ElemMatch("OpenIdentifiers", Query.EQ("_id", openId)));
         }
 
         public IEnumerable<User> GetAllUsers(PlayerSortType playerSortType)
@@ -199,13 +195,12 @@ namespace WikipediaMaze.Services
 
         private User GetExistingUserFromProfile(OpenIdProfile profile)
         {
-            var openIdentifier = _repository.All<OpenIdentifier>().FirstOrDefault(x => x.Identifier == profile.Identifier);
-            return openIdentifier == null ? null : _repository.All<User>().FirstOrDefault(x => x.Id == openIdentifier.UserId);
+            return MongoRepository.Database.GetCollection<User>(MongoRepository.GetCollectionNamingConvention(typeof(User))).FindOne(Query.ElemMatch("OpenIdentifiers", Query.EQ("_id", profile.Identifier)));
         }
 
         private User CreateUserFromProfile(OpenIdProfile profile)
         {
-            if (_repository.All<OpenIdentifier>().FirstOrDefault(x => x.Identifier == profile.Identifier) != null)
+            if (MongoRepository.Database.GetCollection<User>(MongoRepository.GetCollectionNamingConvention(typeof(User))).FindOne(Query.ElemMatch("OpenIdentifiers", Query.EQ("_id", profile.Identifier))) != null)
                 throw new InvalidOperationException(
                     "The openId '{0}' is already associated with another user.".ToFormat(profile.Identifier));
 
@@ -263,13 +258,13 @@ namespace WikipediaMaze.Services
             if (user == null)
                 throw new ArgumentException("A user with the id '{0}' does not exist.");
 
-            var openId = _repository.All<OpenIdentifier>().FirstOrDefault(x => x.Identifier == profile.Identifier);
-            if (openId != null)
+            var existingOpenId = MongoRepository.Database.GetCollection<User>(MongoRepository.GetCollectionNamingConvention(typeof(User))).FindOne(Query.ElemMatch("OpenIdentifiers", Query.EQ("_id", profile.Identifier)));
+            if (existingOpenId != null)
                 throw new InvalidOperationException("The OpenId you are trying tolink already exists.");
 
-            openId = new OpenIdentifier {Identifier = profile.Identifier, IsPrimary = false, UserId = user.Id};
+            user.OpenIdentifiers.Add(new OpenIdentifier {Identifier = profile.Identifier, IsPrimary = false});
 
-            _repository.Save(openId);
+            _repository.Save(user);
 
             return user;
         }
