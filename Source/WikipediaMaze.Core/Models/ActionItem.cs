@@ -7,7 +7,8 @@ namespace WikipediaMaze.Core
 {
     public class ActionItem
     {
-        public virtual int Id { get; private set; }
+        public virtual int ActionId { get; set; }
+        public virtual Guid Id { get; set; }
         public virtual ActionType Action { get; set; }
         public virtual int UserId { get; set; }
         public virtual DateTime DateCreated { get; set; }

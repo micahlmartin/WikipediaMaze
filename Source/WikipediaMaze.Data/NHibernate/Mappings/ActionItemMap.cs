@@ -12,7 +12,7 @@ namespace WikipediaMaze.Data.NHibernate.Mappings
         public ActionItemMap()
         {
             Table("Actions");
-            Id(x => x.Id);
+            Id(x => x.ActionId, "Id");
             Map(x => x.UserId);
             Map(x => x.Action)
                 .Columns.Add("ActionType")

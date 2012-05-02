@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using WikipediaMaze.Data;
 using MvcContrib.Pagination;
 using WikipediaMaze.Core;
 using System.Data.SqlClient;
 using WikipediaMaze.Data.Mongo;
+using MongoDB.Driver.Linq;
 
 namespace WikipediaMaze.Services
 {
@@ -68,8 +70,8 @@ namespace WikipediaMaze.Services
 		/// </summary>
         public CreatePuzzleResult CreatePuzzle(string startTopic, string endTopic)
 	    {
-	        int id = 0;
-	        User user = _authenticationService.CurrentUser;
+	        var id = 0;
+	        var user = _authenticationService.CurrentUser;
 
 	        #region Ensure
 
@@ -187,8 +189,8 @@ namespace WikipediaMaze.Services
 				return
 					_repository.All<Puzzle>().Where(
 						p =>
-						p.StartTopic.Equals(startTopicName, StringComparison.InvariantCultureIgnoreCase) &&
-						p.EndTopic.Equals(endTopicName, StringComparison.InvariantCultureIgnoreCase)).SingleOrDefault() !=
+						Regex.IsMatch(p.StartTopic, startTopicName, RegexOptions.IgnoreCase) &&
+					    Regex.IsMatch(p.EndTopic, endTopicName, RegexOptions.IgnoreCase)).SingleOrDefault() !=
 					null;
 		}
 
@@ -582,7 +584,7 @@ namespace WikipediaMaze.Services
             foreach (var theme in themes)
             {
                 var currentTheme = theme;
-                var themedPuzzles = _repository.All<PuzzleTheme>().Where(x => x.Theme.Equals(currentTheme, StringComparison.OrdinalIgnoreCase) && x.Puzzle.IsVerified).Select(x => x.Puzzle).ToList();
+                var themedPuzzles = _repository.All<Puzzle>().Where(x => x.Themes.Contains(currentTheme)).ToList();
                 if (themedPuzzles.Count > 0)
                     puzzles.AddRange(themedPuzzles);
             }
