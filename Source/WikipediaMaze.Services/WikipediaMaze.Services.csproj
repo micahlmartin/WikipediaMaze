@@ -100,7 +100,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Implementations\AccountService.cs" />
-    <Compile Include="Implementations\ApiAuthorizationService.cs" />
     <Compile Include="Implementations\AwardBadgesService.cs" />
     <Compile Include="Implementations\FaceBookService.cs" />
     <Compile Include="Implementations\FormsAuthenticationService.cs" />

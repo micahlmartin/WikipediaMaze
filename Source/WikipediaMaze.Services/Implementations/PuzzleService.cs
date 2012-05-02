@@ -250,25 +250,20 @@ namespace WikipediaMaze.Services
 		/// <param name="puzzles">A collection of puzzles that is being checked to see if the user is in the lead</param>
 		/// <param name="userId">The id of the user</param>
 		/// <returns></returns>
-		public IEnumerable<int> GetPuzzlesLedByUser(IEnumerable<Puzzle> puzzles, int userId)
-		{
-			using (_repository.OpenSession())
-			{
-				return GetPuzzlesLedByUserInternal(puzzles, userId);
-			}
-		}
+        public IEnumerable<int> GetPuzzlesLedByUser(IEnumerable<Puzzle> puzzles, int userId)
+	    {
+	        return GetPuzzlesLedByUserInternal(puzzles, userId);
+	    }
 
-		/// <summary>
+	    /// <summary>
 		/// Get's a list of all puzzles that the user is leading.
 		/// </summary>
-		public IEnumerable<int> GetPuzzlesLedByUser(int userId)
-		{
-			using (_repository.OpenSession())
-			{
-				return GetPuzzlesLedByUserInternal(_repository.All<Puzzle>().ByUser(userId), userId);
-			}
-		}
-		private IEnumerable<int> GetPuzzlesLedByUserInternal(IEnumerable<Puzzle> puzzles, int userId)
+        public IEnumerable<int> GetPuzzlesLedByUser(int userId)
+	    {
+	        return GetPuzzlesLedByUserInternal(_repository.All<Puzzle>().ByUser(userId), userId);
+	    }
+
+	    private IEnumerable<int> GetPuzzlesLedByUserInternal(IEnumerable<Puzzle> puzzles, int userId)
 		{
 			var puzzleIds = new List<int>();
 
@@ -614,41 +609,38 @@ namespace WikipediaMaze.Services
             }
             return new CustomPagination<Puzzle>(puzzles.Skip((page - 1) * pageSize).Take(pageSize), page, pageSize, puzzles.Count());
         }
-		public IPagination<PuzzleDetailView> GetPuzzleDetailView(PuzzleSortType sort, int page, int pageSize, IEnumerable<string> themes)
-		{
-			using (_repository.OpenSession())
-			{
-				IList<PuzzleDetailView> puzzles = new List<PuzzleDetailView>();
+        public IPagination<PuzzleDetailView> GetPuzzleDetailView(PuzzleSortType sort, int page, int pageSize, IEnumerable<string> themes)
+        {
+            IList<PuzzleDetailView> puzzles = new List<PuzzleDetailView>();
 
-				foreach (var theme in themes)
-				{
-					var currentTheme = theme;
-					puzzles.AddRange(_repository.All<PuzzleDetailView>().Where(x => x.Themes.Contains(theme)).ToList());
-				}
+            foreach (var theme in themes)
+            {
+                var currentTheme = theme;
+                puzzles.AddRange(_repository.All<PuzzleDetailView>().Where(x => x.Themes.Contains(theme)).ToList());
+            }
 
 
-				puzzles = puzzles.Distinct(PuzzleDetailView.Comparers.PuzzleIdComparer).ToList();
+            puzzles = puzzles.Distinct(PuzzleDetailView.Comparers.PuzzleIdComparer).ToList();
 
-				switch (sort)
-				{
-					case PuzzleSortType.Newest:
-						puzzles = puzzles.Where(x => x.IsVerified).OrderByDescending(p => p.DateCreated).ToList();
-						break;
-					case PuzzleSortType.Solutions:
-						puzzles = puzzles.Where(x => x.IsVerified).OrderByDescending(p => p.SolutionCount).ToList();
-						break;
-					case PuzzleSortType.Level:
-						puzzles = puzzles.Where(x => x.IsVerified).OrderByDescending(p => p.Level).ToList();
-						break;
-					case PuzzleSortType.Votes:
-						puzzles = puzzles.Where(x => x.IsVerified).OrderByDescending(p => p.VoteCount).ToList();
-						break;
-					default:
-						throw new ArgumentOutOfRangeException("sort");
-				}
-				return new CustomPagination<PuzzleDetailView>(puzzles.Skip((page - 1) * pageSize).Take(pageSize), page, pageSize, puzzles.Count());
-			}
-		}
+            switch (sort)
+            {
+                case PuzzleSortType.Newest:
+                    puzzles = puzzles.Where(x => x.IsVerified).OrderByDescending(p => p.DateCreated).ToList();
+                    break;
+                case PuzzleSortType.Solutions:
+                    puzzles = puzzles.Where(x => x.IsVerified).OrderByDescending(p => p.SolutionCount).ToList();
+                    break;
+                case PuzzleSortType.Level:
+                    puzzles = puzzles.Where(x => x.IsVerified).OrderByDescending(p => p.Level).ToList();
+                    break;
+                case PuzzleSortType.Votes:
+                    puzzles = puzzles.Where(x => x.IsVerified).OrderByDescending(p => p.VoteCount).ToList();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException("sort");
+            }
+            return new CustomPagination<PuzzleDetailView>(puzzles.Skip((page - 1) * pageSize).Take(pageSize), page, pageSize, puzzles.Count());
+        }
 		public IPagination<Puzzle> GetPuzzlesByTheme(string theme, PuzzleSortType sort, int? page, int? pageSize)
 		{
 			page = page ?? 1;

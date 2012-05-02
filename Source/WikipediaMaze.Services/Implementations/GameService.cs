@@ -203,25 +203,19 @@ namespace WikipediaMaze.Services
         }
         private void CreateSolution(CurrentPuzzleInfo puzzleInfo)
         {
-            User user;
-            Puzzle puzzle;
-            Solution solution;
             var isValidating = false;
-            bool isLeader;
-
-            user = _repository.All<User>().ById(puzzleInfo.UserId);
-
-            puzzle = _repository.All<Puzzle>().ById(puzzleInfo.PuzzleId);
-            solution = new Solution
-                               {
-                                   PuzzleId = puzzle.Id,
-                                   UserId = puzzleInfo.UserId,
-                                   PointsAwarded = _reputationService.CalculateSolutionReputation(puzzle.CreatedById, puzzleInfo.UserId, puzzleInfo.Steps.Count + 1, puzzle.Level),
-                                   StepCount = puzzleInfo.Steps.Count + 1 /* add 1 for the final step */,
-                                   DateCreated = DateTime.Now,
-                                   CurrentPuzzleLevel = puzzle.Level,
-                                   CurrentSolutionCount = puzzle.SolutionCount
-                               };
+            var user = _repository.All<User>().ById(puzzleInfo.UserId);
+            var puzzle = _repository.All<Puzzle>().ById(puzzleInfo.PuzzleId);
+            var solution = new Solution
+                                    {
+                                        PuzzleId = puzzle.Id,
+                                        UserId = puzzleInfo.UserId,
+                                        PointsAwarded = _reputationService.CalculateSolutionReputation(puzzle.CreatedById, puzzleInfo.UserId, puzzleInfo.Steps.Count + 1, puzzle.Level),
+                                        StepCount = puzzleInfo.Steps.Count + 1 /* add 1 for the final step */,
+                                        DateCreated = DateTime.Now,
+                                        CurrentPuzzleLevel = puzzle.Level,
+                                        CurrentSolutionCount = puzzle.SolutionCount
+                                    };
 
             _repository.Save(solution);
 
@@ -263,7 +257,7 @@ namespace WikipediaMaze.Services
                                  });
 
             //Solution is commited at this point so if there is only 1 solution then we are the leader
-            isLeader = _repository.All<Solution>().Where(x => x.PuzzleId == puzzle.Id && x.StepCount <= solution.StepCount).Count() == 1;
+            bool isLeader = _repository.All<Solution>().Where(x => x.PuzzleId == puzzle.Id && x.StepCount <= solution.StepCount).Count() == 1;
 
             _puzzleCache.ClearCurrentPuzzleInfo();
 

@@ -95,27 +95,20 @@ namespace WikipediaMaze.Services
 
         public void CalculateUserReputationForSolution(Solution currentSolution)
         {
-            using (_repository.OpenSession())
-            {
-                if (_repository.All<Puzzle>().ById(currentSolution.PuzzleId).User.Id == currentSolution.UserId)
-                    return;
+            if (_repository.All<Puzzle>().ById(currentSolution.PuzzleId).User.Id == currentSolution.UserId)
+                return;
 
-                var solutionUser = _repository.All<User>().ById(currentSolution.UserId);
-                var puzzleUser = _repository.All<Puzzle>().ById(currentSolution.PuzzleId).User;
-                var solutions = _repository.All<Solution>().ByPuzzleId(currentSolution.PuzzleId).ByUser(currentSolution.UserId);
+            var solutionUser = _repository.All<User>().ById(currentSolution.UserId);
+            var puzzleUser = _repository.All<Puzzle>().ById(currentSolution.PuzzleId).User;
+            var solutions = _repository.All<Solution>().ByPuzzleId(currentSolution.PuzzleId).ByUser(currentSolution.UserId);
 
-                solutionUser.Reputation += CalculateSolutionUserReputation(currentSolution, solutions);
+            solutionUser.Reputation += CalculateSolutionUserReputation(currentSolution, solutions);
 
-                if (solutions.Count() == 1)
-                    puzzleUser.Reputation += Settings.PointsAwardedToCreatorWhenPuzzleIsPlayed;
+            if (solutions.Count() == 1)
+                puzzleUser.Reputation += Settings.PointsAwardedToCreatorWhenPuzzleIsPlayed;
 
-                using (var tx = _repository.BeginTransaction())
-                {
-                    _repository.Save(solutionUser);
-                    _repository.Save(puzzleUser);
-                    tx.Commit();
-                }
-            }
+            _repository.Save(solutionUser);
+            _repository.Save(puzzleUser);
         }
 
         private static int CalculateSolutionUserReputation(Solution currentSolution, IEnumerable<Solution> solutions)

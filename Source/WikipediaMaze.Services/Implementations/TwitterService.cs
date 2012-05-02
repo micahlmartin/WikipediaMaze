@@ -6,6 +6,7 @@ using DotNetOpenAuth.OAuth;
 using TwitterLib;
 using WikipediaMaze.Data;
 using WikipediaMaze.Core;
+using WikipediaMaze.Data.Mongo;
 
 namespace WikipediaMaze.Services
 {
@@ -29,7 +30,7 @@ namespace WikipediaMaze.Services
 
         #region Constructors
 
-        public TwitterService(IRepository repository, IAuthenticationService authenticationService)
+        public TwitterService(MongoRepository repository, IAuthenticationService authenticationService)
         {
             _twitter = new WebConsumer(TwitterConsumer.ServiceDescription, TokenManager);
             _shorteningService = new TwitterLib.UrlShorteningService(ShorteningService.Bitly);
@@ -73,12 +74,7 @@ namespace WikipediaMaze.Services
             //Can't tweet unless OAuth has occurred.
             if (!IsAuthorized) throw new UnauthorizedAccessException();
 
-            Puzzle puzzle;
-
-            using (_repository.OpenSession())
-            {
-                puzzle = _repository.All<Puzzle>().ById(puzzleId);
-            }
+            var puzzle = _repository.All<Puzzle>().ById(puzzleId);
 
             if (puzzle == null) return;
 
@@ -91,12 +87,7 @@ namespace WikipediaMaze.Services
             //Can't tweet unless OAuth has occurred.
             if (!IsAuthorized) throw new UnauthorizedAccessException();
 
-            SolutionProfile solution;
-
-            using (_repository.OpenSession())
-            {
-                solution = _repository.All<SolutionProfile>().Where(x => x.Id == solutionId).SingleOrDefault();
-            }
+            var solution = _repository.All<SolutionProfile>().Where(x => x.Id == solutionId).SingleOrDefault();
 
             if (solution == null) return;
 

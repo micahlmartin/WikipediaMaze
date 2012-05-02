@@ -141,13 +141,12 @@ namespace WikipediaMaze.Services
         {
             StreamReader rdr = null;
             HttpWebResponse resp = null;
-            HttpWebRequest req = null;
 
-            
+
             try
             {
                 //Create request
-                req = (HttpWebRequest) WebRequest.Create(url);
+                var req = (HttpWebRequest) WebRequest.Create(url);
                 req.UserAgent = Settings.AppName;
 
                 //Get Response

@@ -5,6 +5,7 @@ using System.Web;
 using TwitterLib;
 using WikipediaMaze.Core;
 using WikipediaMaze.Data;
+using User = WikipediaMaze.Core.User;
 
 namespace WikipediaMaze.Services
 {
@@ -37,32 +38,21 @@ namespace WikipediaMaze.Services
 
         public void SendPuzzleCreatedMessage(int puzzleId)
         {
-            Puzzle puzzle;
+            var puzzle = _repository.All<Puzzle>().ById(puzzleId);
+            if (puzzle == null) return;
 
-            using (_repository.OpenSession())
-            {
-                puzzle = _repository.All<Puzzle>().ById(puzzleId);
-            }
-                if (puzzle == null) return;
+            var url = GetPuzzleUrl(puzzle.Id);
 
-                var url = GetPuzzleUrl(puzzle.Id);
+            var userName = GetTwitterUserName(puzzle.User);
 
-                var userName = GetTwitterUserName(puzzle.User);
+            var msg = "New puzzle by {0} {1} - {2} to {3} #wikipediamaze".ToFormat(userName, url, puzzle.StartTopic.FormatTopic(), puzzle.EndTopic.FormatTopic());
 
-                var msg = "New puzzle by {0} {1} - {2} to {3} #wikipediamaze".ToFormat(userName, url, puzzle.StartTopic.FormatTopic(), puzzle.EndTopic.FormatTopic());
-            
-            _messageSender.BeginInvoke(msg, null, null); 
+            _messageSender.BeginInvoke(msg, null, null);
         }
         public void SendNewPuzzleLeaderMessage(int userId, int stepCount, int puzzleId)
         {
-            Puzzle puzzle;
-            WikipediaMaze.Core.User user;
-
-            using (_repository.OpenSession())
-            {
-                user = _repository.All<WikipediaMaze.Core.User>().ById(userId);
-                puzzle = _repository.All<Puzzle>().ById(puzzleId);
-            }
+            var user = _repository.All<Core.User>().ById(userId);
+            var puzzle = _repository.All<Puzzle>().ById(puzzleId);
 
             if (puzzle == null || user == null) return;
 
@@ -75,20 +65,13 @@ namespace WikipediaMaze.Services
         }
         public void TweetSolution(int solutionId)
         {
-            Solution solution;
-            WikipediaMaze.Core.User user;
-            Puzzle puzzle;
+            var solution = _repository.All<Solution>().ById(solutionId);
+            if (solution == null) return;
 
-            using (_repository.OpenSession())
-            {
-                solution = _repository.All<Solution>().ById(solutionId);
-                if (solution == null) return;
+            var user = _repository.All<WikipediaMaze.Core.User>().ById(solution.UserId);
+            if (user == null) return;
 
-                user = _repository.All<WikipediaMaze.Core.User>().ById(solution.UserId);
-                if (user == null) return;
-
-                puzzle = _repository.All<Puzzle>().ById(solution.PuzzleId);
-            }
+            var puzzle = _repository.All<Puzzle>().ById(solution.PuzzleId);
 
             var userName = GetTwitterUserName(user);
 
