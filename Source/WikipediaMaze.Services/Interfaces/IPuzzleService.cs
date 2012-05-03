@@ -15,7 +15,7 @@ namespace WikipediaMaze.Services
         IPagination<PuzzleDetailView> GetPuzzleDetailView(PuzzleSortType sort, int page, int pageSize);
         IPagination<Puzzle> GetPuzzles(PuzzleSortType sort, int page, int pageSize, IEnumerable<string> themes);
         IPagination<PuzzleDetailView> GetPuzzleDetailView(PuzzleSortType sort, int page, int pageSize, IEnumerable<string> themes);
-        CreatePuzzleResult CreatePuzzle(string startTopic, string endTopic);
+        CreatePuzzleResult CreatePuzzle(string startTopic, string endTopic, IEnumerable<string> themes);
         VoteResult VoteOnPuzzle(int puzzleId, VoteType voteType);
         int UpdatePuzzleVoteCount(int puzzleId);
         IEnumerable<Vote> GetVotes(IEnumerable<int> puzzleIds, int userId);
@@ -34,7 +34,7 @@ namespace WikipediaMaze.Services
         IPagination<SolutionProfile> GetSolutionsByUserId(int userId, SolutionSortType sortType, int page, int pageSize);
 
         IEnumerable<Theme> GetAllThemes();
-        void AddThemesToPuzzle(int puzzleId, int userId, IEnumerable<string> themes);
+        void RetagPuzzle(int puzzleId, int userId, IEnumerable<string> themes);
         IPagination<Theme> GetThemes(int pageSize, int page, ThemeSortType sortType);   
 
         void UpdateThemeCount();

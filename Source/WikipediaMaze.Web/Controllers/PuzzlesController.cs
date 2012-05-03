@@ -246,15 +246,13 @@ namespace WikipediaMaze.Controllers
                 return View(viewModel);
             }
 
-            var result = _puzzleService.CreatePuzzle(viewModel.StartTopic, viewModel.EndTopic);
+            var result = _puzzleService.CreatePuzzle(viewModel.StartTopic, viewModel.EndTopic, themes);
             
             if (!result.Success)
             {
                 ModelState.AddModelErrors(result.RuleViolations);
                 return View(viewModel);
             }
-
-            _puzzleService.AddThemesToPuzzle(result.PuzzleId, _authenticationService.CurrentUserId, themes);
 
             return RedirectToAction("Display", new {id = result.PuzzleId});
         }
@@ -342,7 +340,7 @@ namespace WikipediaMaze.Controllers
             if (!ModelState.IsValid)
                 return View(viewModel);
 
-            _puzzleService.AddThemesToPuzzle(viewModel.Id, _authenticationService.CurrentUserId, themes);
+            _puzzleService.RetagPuzzle(viewModel.Id, _authenticationService.CurrentUserId, themes);
 
             return RedirectToAction("Display", new { id = viewModel.Id });
         }

@@ -17,12 +17,15 @@ namespace WikipediaMaze.Data.Mongo
     {
         public static readonly MongoServer Server;
         public static readonly MongoDatabase Database;
+        public const string SequenceCollectionName = "Sequences";
+
         static MongoRepository()
         {
             var conventions = new ConventionProfile();
             conventions.SetIgnoreExtraElementsConvention(new AlwaysIgnoreExtraElementsConvention());
             conventions.SetIdMemberConvention(new NamedIdMemberConvention("Id", "Identifier", "Theme", "Name"));
             conventions.SetIgnoreIfDefaultConvention(new AlwaysIgnoreIfDefaultConvention());
+            conventions.SetIdGeneratorConvention(new IdGeneratorConvention());
 
             BsonClassMap.RegisterConventions(conventions, (t) => true);
 

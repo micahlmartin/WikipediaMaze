@@ -73,7 +73,10 @@
   <ItemGroup>
     <Compile Include="Filters.cs" />
     <Compile Include="IRepository.cs" />
+    <Compile Include="Mongo\IdGeneratorConvention.cs" />
+    <Compile Include="Mongo\IntIdGenerator.cs" />
     <Compile Include="Mongo\MongoRepository.cs" />
+    <Compile Include="Mongo\LongIdGenerator.cs" />
     <Compile Include="NHibernate\Mappings\ActionItemMap.cs" />
     <Compile Include="NHibernate\Mappings\BadgeMap.cs" />
     <Compile Include="NHibernate\Mappings\NotificationMap.cs" />

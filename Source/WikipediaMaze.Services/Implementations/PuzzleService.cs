@@ -68,16 +68,20 @@ namespace WikipediaMaze.Services
 	    /// <summary>
 		/// Creates a new puzzle
 		/// </summary>
-        public CreatePuzzleResult CreatePuzzle(string startTopic, string endTopic)
+        public CreatePuzzleResult CreatePuzzle(string startTopic, string endTopic, IEnumerable<string> themes)
 	    {
-	        var id = 0;
 	        var user = _authenticationService.CurrentUser;
 
-	        #region Ensure
+            #region Ensure
 
-	        if (user == null)
-	            return
-	                new CreatePuzzleResult(new RuleViolation("You must be logged in to create a puzzle.", "Puzzle"));
+            if (user == null)
+	            return new CreatePuzzleResult(new RuleViolation("You must be logged in to create a puzzle.", "Puzzle"));
+
+            if (themes == null || !themes.Any())
+                return new CreatePuzzleResult(new RuleViolation("You must choose at least one theme.", "Puzzle"));
+
+            if (themes.Count() > 5)
+                return new CreatePuzzleResult(new RuleViolation("Cannot add more than 5 themes to a puzzle"));
 
 	        var puzzleViolations = ValidatePuzzle(startTopic, endTopic);
 	        if (puzzleViolations.Count() > 0)
@@ -104,19 +108,38 @@ namespace WikipediaMaze.Services
 
 	        #endregion
 
-	        var puzzle = new Puzzle
-	                         {
-	                             StartTopic = _topicService.GetTopicNameFromUrl(startTopic),
-	                             EndTopic = _topicService.GetTopicNameFromUrl(endTopic),
-	                             User = user,
-	                             DateCreated = DateTime.Now,
-	                             Level = 0,
-	                             SolutionCount = 0,
-	                             VoteCount = 0,
-	                             IsVerified = false,
-	                         };
+            var puzzle = new Puzzle
+            {
+                StartTopic = _topicService.GetTopicNameFromUrl(startTopic),
+                EndTopic = _topicService.GetTopicNameFromUrl(endTopic),
+                CreatedById = user.Id,
+                DateCreated = DateTime.Now,
+                IsVerified = false,
+                Themes = themes,
+            };
 
-	        _repository.Save(puzzle);
+            _repository.Save(puzzle);
+
+            //Create themes if they're new
+            foreach (var themeName in themes)
+            {
+                var loweredThemeName = themeName.ToLowerInvariant();
+                var theme = _repository.All<Theme>().ByName(loweredThemeName);
+
+                if (theme != null)
+                    theme.Count++;
+                else
+                    theme = new Theme
+                                {
+                                    DateCreated = DateTime.Now,
+                                    Name = loweredThemeName,
+                                    UserId = user.Id
+                                };
+
+                _repository.Save(theme);
+            }
+
+
 	        _repository.Save(new ActionItem
 	                             {
 	                                 Action = ActionType.CreatedPuzzle,
@@ -124,8 +147,7 @@ namespace WikipediaMaze.Services
 	                                 PuzzleId = puzzle.Id,
 	                                 UserId = user.Id
 	                             });
-	        id = puzzle.Id;
-	        return new CreatePuzzleResult(id);
+	        return new CreatePuzzleResult(puzzle.Id);
 	    }
 
 	    private IEnumerable<RuleViolation> ValidatePuzzle(string startTopic, string endTopic)
@@ -703,7 +725,7 @@ namespace WikipediaMaze.Services
             return solutions.Skip((page - 1)*pageSize).Take(pageSize).AsCustomPagination(page, pageSize, solutions.Count);
         }
 
-        public void AddThemesToPuzzle(int puzzleId, int userId, IEnumerable<string> themes)
+        public void RetagPuzzle(int puzzleId, int userId, IEnumerable<string> themes)
         {
             if (themes.Count() == 0)
                 return;
@@ -715,41 +737,35 @@ namespace WikipediaMaze.Services
             if (puzzle == null)
                 throw new InvalidOperationException("Puzzle does not exist");
 
-            var isRetagging = false;
-            if (puzzle.Themes.Count() > 0)
-                isRetagging = true;
-
-            var newThemes = new List<string>();
+            puzzle.Themes = themes;
+            _repository.Save(puzzle);
 
             foreach (var themeName in themes)
             {
                 var loweredThemeName = themeName.ToLowerInvariant();
                 var theme = _repository.All<Theme>().ByName(loweredThemeName);
-                if (theme == null)
-                {
+
+                if (theme != null)
+                    theme.Count++;
+                else
                     theme = new Theme
-                    {
-                        DateCreated = DateTime.Now,
-                        Name = loweredThemeName,
-                        UserId = userId
-                    };
-                    _repository.Save(theme);
-                }
+                                {
+                                    DateCreated = DateTime.Now,
+                                    Name = loweredThemeName,
+                                    UserId = userId
+                                };
 
-                newThemes.Add(theme.Name);
+                _repository.Save(theme);
             }
-            puzzle.Themes = newThemes;
-            _repository.Save(puzzle);
 
-            if (isRetagging)
-                _repository.Save(new ActionItem
-                                     {
-                                         Action = ActionType.ReTaggedPuzzle,
-                                         AffectedUserId = puzzle.CreatedById,
-                                         DateCreated = DateTime.Now,
-                                         PuzzleId = puzzle.Id,
-                                         UserId = _authenticationService.CurrentUserId
-                                     });
+            _repository.Save(new ActionItem
+            {
+                Action = ActionType.ReTaggedPuzzle,
+                AffectedUserId = puzzle.User.Id,
+                DateCreated = DateTime.Now,
+                PuzzleId = puzzle.Id,
+                UserId = _authenticationService.CurrentUserId
+            });
 
         }
 

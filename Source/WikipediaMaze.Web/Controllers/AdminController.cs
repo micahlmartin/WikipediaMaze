@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using MongoDB.Driver.Builders;
 using WikipediaMaze.Core;
 using WikipediaMaze.Data;
 using WikipediaMaze.Data.Mongo;
@@ -45,6 +46,9 @@ namespace WikipediaMaze.Web.Controllers
 
                 _mongoRepository.InsertBatch(puzzles);
 
+                var maxPuzzleId = puzzles.Max(x => x.Id);
+                MongoRepository.Database.GetCollection(MongoRepository.SequenceCollectionName).FindAndModify(Query.EQ("_id", MongoRepository.GetCollectionNamingConvention(typeof(Puzzle))), SortBy.Null, new UpdateBuilder().Set("seq", maxPuzzleId), false, true);
+
                 #endregion
 
                 #region Users
@@ -69,6 +73,16 @@ namespace WikipediaMaze.Web.Controllers
                                                                                           });
 
                 _mongoRepository.InsertBatch(users);
+
+                var maxUserId = users.Max(x => x.Id);
+                MongoRepository.Database.GetCollection(MongoRepository.SequenceCollectionName).FindAndModify(Query.EQ("_id", MongoRepository.GetCollectionNamingConvention(typeof(User))), SortBy.Null, new UpdateBuilder().Set("seq", maxUserId), false, true);
+
+                #endregion
+
+                #region Themes
+
+                var themes = _nhibernateRepository.All<Theme>().ToList();
+                _mongoRepository.InsertBatch(themes);
 
                 #endregion
 
