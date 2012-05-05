@@ -15,7 +15,6 @@ namespace WikipediaMaze.Services
         IPagination<Puzzle> GetPuzzles(PuzzleSortType sort, int page, int pageSize, IEnumerable<string> themes);
         CreatePuzzleResult CreatePuzzle(string startTopic, string endTopic, IEnumerable<string> themes);
         VoteResult VoteOnPuzzle(int puzzleId, VoteType voteType);
-        IEnumerable<Vote> GetVotes(IEnumerable<int> puzzleIds, int userId);
         IEnumerable<int> GetPuzzlesLedByUser(IEnumerable<Puzzle> puzzles, int userId);
         IEnumerable<int> GetPuzzlesLedByUser(int userId);
 
@@ -23,8 +22,6 @@ namespace WikipediaMaze.Services
         IEnumerable<Step> GetSteps(int solutionId);
 
         IEnumerable<Solution> GetSolutions(int puzzleId);
-        IEnumerable<Vote> GetVotes(int puzzleId);
-
 
         IPagination<Solution> GetSolutionsByUserId(int userId, SolutionSortType sortType, int page, int pageSize);
 

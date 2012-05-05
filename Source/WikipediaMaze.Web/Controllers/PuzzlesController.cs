@@ -355,23 +355,6 @@ namespace WikipediaMaze.Controllers
                 ModelState.AddModelError("Themes", "Can only select up to 5 themes.");
         }
 
-        public ActionResult Votes()
-        {
-            if (!_authenticationService.IsAuthenticated)
-                return Json(null);
-
-            var puzzleIdString = Request.Form["puzzleIds[]"];
-            if (string.IsNullOrWhiteSpace(puzzleIdString))
-                return Json(null);
-
-            var puzzleIds = puzzleIdString.Split(new[]{','}, StringSplitOptions.RemoveEmptyEntries).Select(x => int.Parse(x));
-
-            var votes = _puzzleService.GetVotes(puzzleIds, _authenticationService.CurrentUserId);
-
-            return Json(votes.Select(x => new { puzzleId = x.PuzzleId, voteType = x.VoteType }));
-        }
-
-
         protected override void OnException(ExceptionContext filterContext)
         {
             _log.Error(filterContext.Exception.Message, filterContext.Exception);
