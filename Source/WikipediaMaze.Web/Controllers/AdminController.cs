@@ -32,7 +32,7 @@ namespace WikipediaMaze.Web.Controllers
                 var puzzles = _nhibernateRepository.All<Puzzle>().ToList().Select(puzzle => new Puzzle
                                                                     {
                                                                         Id = puzzle.Id,
-                                                                        DateCreated = puzzle.DateCreated,
+                                                                        DateCreated = puzzle.DateCreated.ToUniversalTime(),
                                                                         EndTopic = puzzle.EndTopic,
                                                                         IsVerified = puzzle.IsVerified,
                                                                         LeaderId = puzzle.LeaderId,
@@ -40,8 +40,14 @@ namespace WikipediaMaze.Web.Controllers
                                                                         SolutionCount = puzzle.SolutionCount,
                                                                         StartTopic = puzzle.StartTopic,
                                                                         Themes = _nhibernateRepository.All<PuzzleTheme>().Where(x => x.Puzzle.Id == puzzle.Id).Select(x => x.Theme).ToList(),
-                                                                        VoteCount = puzzle.VoteCount,
-                                                                        CreatedById = puzzle.User.Id
+                                                                        VoteCount = _nhibernateRepository.All<Vote>().Where(x => x.PuzzleId == puzzle.Id).ToList().Sum(x => (int)x.VoteType),
+                                                                        CreatedById = puzzle.User.Id,
+                                                                        Votes = _nhibernateRepository.All<Vote>().Where(x => x.PuzzleId == puzzle.Id).ToList().Select(vote => new Vote
+                                                                                                                                                                 {
+                                                                                                                                                                     DateVoted = vote.DateVoted.ToUniversalTime(),
+                                                                                                                                                                     UserId = vote.UserId,
+                                                                                                                                                                     VoteType = vote.VoteType
+                                                                                                                                                                 }).ToList()
                                                                     }).ToList();
 
 
@@ -61,7 +67,7 @@ namespace WikipediaMaze.Web.Controllers
                                                                                               Reputation = user.Reputation,
                                                                                               Badges = GetUserBadges(user.Id),
                                                                                               RealName = user.RealName,
-                                                                                              DateCreated = user.DateCreated,
+                                                                                              DateCreated = user.DateCreated.ToUniversalTime(),
                                                                                               BirthDate = user.BirthDate,
                                                                                               Location = user.Location,
                                                                                               Email = user.Email,
@@ -93,7 +99,7 @@ namespace WikipediaMaze.Web.Controllers
                                                                                                       {
                                                                                                           CurrentPuzzleLevel = solution.CurrentPuzzleLevel,
                                                                                                           CurrentSolutionCount = solution.CurrentSolutionCount,
-                                                                                                          DateCreated = solution.DateCreated,
+                                                                                                          DateCreated = solution.DateCreated.ToUniversalTime(),
                                                                                                           PuzzleId = solution.PuzzleId,
                                                                                                           Id = Guid.NewGuid(),
                                                                                                           PointsAwarded = solution.PointsAwarded,

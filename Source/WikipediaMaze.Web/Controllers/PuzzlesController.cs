@@ -112,7 +112,6 @@ namespace WikipediaMaze.Controllers
             }
 
             puzzle.Solutions = _puzzleService.GetSolutions(puzzle.Id);
-            puzzle.Votes = _puzzleService.GetVotes(puzzle.Id);
 
             var latestSolution = puzzle.Solutions.Where(x => x.UserId == _authenticationService.CurrentUserId).LastOrDefault();
             if (latestSolution != null)

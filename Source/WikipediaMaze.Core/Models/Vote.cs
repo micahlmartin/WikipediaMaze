@@ -7,7 +7,8 @@ namespace WikipediaMaze.Core
 {
     public class Vote
     {
-        public virtual int Id { get; private set; }
+        public virtual Guid Id { get; set; }
+        public virtual int VoteId { get; set; }
         public virtual int UserId { get; set; }
         public virtual int PuzzleId { get; set; }
         public virtual VoteType VoteType { get; set; }

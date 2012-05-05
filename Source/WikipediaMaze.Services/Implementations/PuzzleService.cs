@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using MongoDB.Driver.Builders;
 using WikipediaMaze.Data;
 using MvcContrib.Pagination;
 using WikipediaMaze.Core;
@@ -221,22 +222,22 @@ namespace WikipediaMaze.Services
 					null;
 		}
 
-		/// <summary>
-		/// Updates the vote count of the puzzle
-		/// </summary>
-		/// <param name="puzzleId">The id of the puzzle to update.</param>
-		/// <returns>The updated vote count.</returns>
-        public int UpdatePuzzleVoteCount(int puzzleId)
-		{
-		    int puzzleVoteCount = _repository.All<Vote>().Where(p => p.PuzzleId == puzzleId).Sum(p => (int) p.VoteType);
-		    var puzzle = _repository.All<Puzzle>().ById(puzzleId);
+        ///// <summary>
+        ///// Updates the vote count of the puzzle
+        ///// </summary>
+        ///// <param name="puzzleId">The id of the puzzle to update.</param>
+        ///// <returns>The updated vote count.</returns>
+        //public int UpdatePuzzleVoteCount(int puzzleId)
+        //{
+        //    var puzzleVoteCount = _repository.All<Vote>().Where(p => p.PuzzleId == puzzleId).ToList().Sum(x => (int)x.VoteType);
+        //    var puzzle = _repository.All<Puzzle>().ById(puzzleId);
 
-		    puzzle.VoteCount = puzzleVoteCount;
+        //    puzzle.VoteCount = puzzleVoteCount;
 
-		    _repository.Save(puzzle);
+        //    _repository.Save(puzzle);
 
-		    return puzzleVoteCount;
-		}
+        //    return puzzleVoteCount;
+        //}
 
 		public void UpdatePuzzleStats(int puzzleId)
 		{
@@ -251,21 +252,10 @@ namespace WikipediaMaze.Services
 			}
 		}
 
-		/// <summary>
-		/// Returns all the votes for a specific user for each puzzle in the collection
-		/// </summary>
-		/// <param name="puzzles">The collection of puzzles to retrieve the votes for</param>
-		/// <param name="userId">The user id of votes to retrieve</param>
-		/// <returns>A collection votes</returns>
-        public IEnumerable<Vote> GetVotes(IEnumerable<Puzzle> puzzles, int userId)
-		{
-		    return puzzles.Select(puzzle => _repository.All<Vote>().Where(x => x.PuzzleId == puzzle.Id && x.UserId == userId).OrderByDescending(x => x.DateVoted).FirstOrDefault()).Where(vote => vote != null).ToList();
-		}
-
         public IEnumerable<Vote> GetVotes(IEnumerable<int> puzzleIds, int userId)
         {
-            var ids = puzzleIds.ToList();
-            return _repository.All<Vote>().Where(x => ids.Contains(x.PuzzleId) && x.UserId == userId).ToList();
+            var ids = puzzleIds.ToList().Distinct();
+            return _repository.All<Vote>().Where(x => x.PuzzleId.In(ids)).ToList();
         }
 
 	    /// <summary>
@@ -388,41 +378,40 @@ namespace WikipediaMaze.Services
 		        return new VoteResult {ErrorMessage = "You cannot vote on your own puzzle."};
 
 		    //Make sure the user hasn't reached their vote limit for the day
-		    var todaysNumberOfVotes =
-		        _repository.All<Vote>().Where(x => x.UserId == user.Id && x.DateVoted == DateTime.Now.Date).
-		            Count();
+            //var todaysNumberOfVotes = _repository.All<Vote>().Where(x => x.UserId == user.Id && x.DateVoted == DateTime.Now.ToUniversalTime().Date).Count();
 
-		    if (todaysNumberOfVotes >= Settings.MaximumDailyVoteLimit)
-		        return new VoteResult
-		                   {
-		                       ErrorMessage =
-		                           "You have reached the daily vote limit of {0}. Please wait a little while before voting again."
-		                           .ToFormat(Settings.MaximumDailyVoteLimit)
-		                   };
+            //if (todaysNumberOfVotes >= Settings.MaximumDailyVoteLimit)
+            //    return new VoteResult
+            //               {
+            //                   ErrorMessage =
+            //                       "You have reached the daily vote limit of {0}. Please wait a little while before voting again."
+            //                       .ToFormat(Settings.MaximumDailyVoteLimit)
+            //               };
 
 		    #endregion
 
-		    //Begin transaction
+		    var puzzleCreator = _repository.All<User>().First(x => x.Id == puzzle.CreatedById);
+            
 		    voteResult = new VoteResult();
 		    puzzleCreatorRep += GetPointsForVotee(voteType);
 		    voterRep += GetPointsForVoter(voteType);
 
 		    //Check for an existing vote record.
-		    var vote = _repository.All<Vote>().Where(v => v.UserId == user.Id && v.PuzzleId == puzzleId).FirstOrDefault();
+		    var vote = puzzle.Votes.Where(v => v.UserId == user.Id && v.PuzzleId == puzzleId).FirstOrDefault();
 		    if (vote == null)
 		    {
 		        //No vote exists so create a new vote.
 		        vote = new Vote
 		                   {
+                               Id = Guid.NewGuid(),
 		                       DateVoted = DateTime.Now.Date,
 		                       PuzzleId = puzzleId,
 		                       UserId = user.Id,
 		                       VoteType = voteType
 		                   };
 
-		        _repository.Save(vote);
-
 		        voteResult.VoteType = voteType;
+		        puzzle.Votes.Add(vote);
 		    }
 		    else
 		    {
@@ -446,21 +435,23 @@ namespace WikipediaMaze.Services
 
 
 		        if (voteTypeToApply == VoteType.None)
-		            _repository.Delete(vote);
+		            puzzle.Votes.Remove(vote);
 		        else
 		        {
 		            vote.VoteType = voteTypeToApply;
-		            _repository.Save(vote);
 		        }
 
 		        voteResult.VoteType = voteTypeToApply;
 		    }
 
-		    puzzle.User.Reputation += puzzleCreatorRep;
+		    puzzleCreator.Reputation += puzzleCreatorRep;
 		    user.Reputation += voterRep;
+		    puzzle.VoteCount = puzzle.Votes.Select(x => (int) x.VoteType).Sum();
+		    voteResult.VoteCount = puzzle.VoteCount;
 
-		    _repository.Save(puzzle.User);
+		    _repository.Save(puzzleCreator);
 		    _repository.Save(user);
+		    _repository.Save(puzzle);
 
 		    _repository.Save(new UserAction
 		                         {
@@ -471,9 +462,6 @@ namespace WikipediaMaze.Services
 		                             VoteType = voteResult.VoteType.Value,
                                      AffectedUserId = puzzle.CreatedById
 		                         });
-
-		    //Update Puzzle Vote Count
-		    voteResult.VoteCount = UpdatePuzzleVoteCount(puzzleId);
 
 		    return voteResult;
 		}

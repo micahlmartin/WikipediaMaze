@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Authentication;
 using WikipediaMaze.Core;
@@ -214,30 +215,35 @@ namespace WikipediaMaze.Services
                                         StepCount = puzzleInfo.Steps.Count + 1 /* add 1 for the final step */,
                                         DateCreated = DateTime.Now,
                                         CurrentPuzzleLevel = puzzle.Level,
-                                        CurrentSolutionCount = puzzle.SolutionCount
+                                        CurrentSolutionCount = puzzle.SolutionCount,
                                     };
 
-            _repository.Save(solution);
+            var steps = new List<Step>();
 
             for (var i = 0; i < puzzleInfo.Steps.Count; i++)
             {
-                var step = new Step
+                steps.Add(new Step
                                {
                                    StepNumber = i,
                                    Topic = puzzleInfo.Steps[i].Name,
                                    SolutionId = solution.SolutionId,
-                               };
-                _repository.Save(step);
+                               });
             }
-            var finalStep = new Step
-                                {
-                                    StepNumber = puzzleInfo.Steps.Count,
-                                    Topic = puzzle.EndTopic,
-                                    SolutionId = solution.SolutionId
-                                };
 
-            _repository.Save(finalStep);
+            //final step
+            steps.Add(new Step
+                          {
+                              StepNumber = puzzleInfo.Steps.Count,
+                              Topic = puzzle.EndTopic,
+                              SolutionId = solution.SolutionId
+                          });
 
+            solution.Steps = steps;
+            solution.StepCount = steps.Count;
+
+            _repository.Save(solution);
+
+            puzzle.SolutionCount++;
             if (!puzzle.IsVerified)
             {
                 isValidating = true;

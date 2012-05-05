@@ -17,7 +17,7 @@ namespace WikipediaMaze.Core
         public virtual DateTime DateCreated { get; set; }
         public virtual int Level { get; set; }
         public virtual IEnumerable<Solution> Solutions { get; set; }
-        public virtual IEnumerable<Vote> Votes { get; set; }
+        public virtual IList<Vote> Votes { get; set; }
         public virtual int VoteCount { get; set; }
         public virtual int SolutionCount { get; set; }
         public virtual bool IsVerified { get; set; }

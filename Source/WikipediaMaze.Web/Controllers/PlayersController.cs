@@ -372,13 +372,12 @@ namespace WikipediaMaze.Controllers
                 return View("NotFound");
 
             var puzzles = _puzzleService.GetPuzzlesByUserId(id, sortType.Value, page.Value, pageSize.Value);
-            var votes = _puzzleService.GetVotes(puzzles, loggedInUserId);
 
             var puzzleVms = new List<UserProfilePuzzleViewModel>();
             foreach (var puzzle in puzzles)
             {
                 var puzzleId = puzzle.Id;
-                var userVote = votes.Where(x => x.UserId == loggedInUserId && x.PuzzleId == puzzleId).SingleOrDefault();
+                var userVote = puzzle.Votes.Where(x => x.UserId == loggedInUserId && x.PuzzleId == puzzleId).SingleOrDefault();
                 var userVoteType = userVote == null ? VoteType.None : userVote.VoteType;
                 puzzleVms.Add(new UserProfilePuzzleViewModel(puzzle, userVoteType, _authenticationService.IsAuthenticated, loggedInUserId));
             }

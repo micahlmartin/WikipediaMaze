@@ -96,7 +96,7 @@ namespace WikipediaMaze.Services
 
         public void CalculateUserReputationForSolution(Solution currentSolution)
         {
-            if (_repository.All<Puzzle>().ById(currentSolution.PuzzleId).User.Id == currentSolution.UserId)
+            if (_repository.All<Puzzle>().ById(currentSolution.PuzzleId).CreatedById == currentSolution.UserId)
                 return;
 
             var solutionUser = _repository.All<User>().ById(currentSolution.UserId);
