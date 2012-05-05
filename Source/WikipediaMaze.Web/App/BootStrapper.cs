@@ -1,6 +1,7 @@
 ﻿using System;
 using StructureMap;
 using WikipediaMaze.Data;
+using WikipediaMaze.Data.Mongo;
 using WikipediaMaze.Data.NHibernate;
 using NHibernate;
 using FluentNHibernate.Cfg;
@@ -35,7 +36,7 @@ namespace WikipediaMaze.App
                 ForRequestedType<IAuthenticationService>().TheDefaultIsConcreteType<FormsAuthenticationService>();
                 ForRequestedType<IAccountService>().TheDefaultIsConcreteType<AccountService>();
                 ForRequestedType<IPuzzleCache>().TheDefaultIsConcreteType<PuzzleCache>();
-                ForRequestedType<IRepository>().TheDefaultIsConcreteType<NHibernateRepository>();
+                ForRequestedType<IRepository>().TheDefaultIsConcreteType<MongoRepository>();
                 ForRequestedType<IWebSnapshotService>().TheDefaultIsConcreteType<WebSnapshotService>();
                 //ForRequestedType<ISessionFactory>().TheDefault.Is.Object(SessionFactory);
                 ForRequestedType<IRecurringService>().AddConcreteType<AwardBadgesService>();

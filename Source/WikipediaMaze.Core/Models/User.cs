@@ -61,5 +61,18 @@ namespace WikipediaMaze.Core
         }
 
         #endregion
+
+        public virtual int GoldBadgeCount
+        {
+            get { return Badges.Where(x => x.Level == BadgeLevel.Gold).Sum(x => x.Count); }
+        }
+        public virtual int SilverBadgeCount
+        {
+            get { return Badges.Where(x => x.Level == BadgeLevel.Silver).Sum(x => x.Count); }
+        }
+        public virtual int BronzeBadgeCount
+        {
+            get { return Badges.Where(x => x.Level == BadgeLevel.Bronze).Sum(x => x.Count); }
+        }
     }
 }

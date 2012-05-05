@@ -7,16 +7,16 @@ using WikipediaMaze.Core;
 
 namespace WikipediaMaze.Data.NHibernate.Mappings
 {
-    public class ActionItemMap : ClassMap<ActionItem>
+    public class UserActionMap : ClassMap<UserAction>
     {
-        public ActionItemMap()
+        public UserActionMap()
         {
             Table("Actions");
             Id(x => x.ActionId, "Id");
             Map(x => x.UserId);
             Map(x => x.Action)
                 .Columns.Add("ActionType")
-                .CustomType<ActionType>();
+                .CustomType<UserActionType>();
                 
             Map(x => x.DateCreated);
             Map(x => x.PuzzleId);

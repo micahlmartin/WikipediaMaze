@@ -7,11 +7,11 @@
         i++;
         bool isAlternateRow = (i%2 != 0);
         
-    <div id="puzzle-@puzzle.PuzzleId" class="puzzle-row-wrapper @if(Model.IsLeadingPuzzle(puzzle.PuzzleId)) { <text>leader</text> } @if(isAlternateRow) { <text>alternate</text> }" @if(Model.IsLeadingPuzzle(puzzle.PuzzleId)) { <text>title="You are currently leading this puzzle"</text> }>
-        @*<iframe src="http://www.facebook.com/plugins/like.php?href=www.wikipediamaze.com/puzzles/@(puzzle.PuzzleId)&amp;layout=button_count&amp;show_faces=true&amp;width=100&amp;action=like&amp;colorscheme=light&amp;height=21" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:100px; height:21px;" allowTransparency="true"></iframe>*@
+    <div id="puzzle-@puzzle.Id" class="puzzle-row-wrapper @if(Model.IsLeadingPuzzle(puzzle.Id)) { <text>leader</text> } @if(isAlternateRow) { <text>alternate</text> }" @if(Model.IsLeadingPuzzle(puzzle.Id)) { <text>title="You are currently leading this puzzle"</text> }>
+        @*<iframe src="http://www.facebook.com/plugins/like.php?href=www.wikipediamaze.com/puzzles/@(puzzle.Id)&amp;layout=button_count&amp;show_faces=true&amp;width=100&amp;action=like&amp;colorscheme=light&amp;height=21" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:100px; height:21px;" allowTransparency="true"></iframe>*@
         <div class="puzzle-row">
             <div class="votes-arrows">
-               <input type="hidden" value="@puzzle.PuzzleId" />
+               <input type="hidden" value="@puzzle.Id" />
                <span class="vote-up" title="This puzzle is fun and interesting. (Click again to undo)">Vote Up</span>
                <span class="vote-down" title="This puzzle is a waste of time. (Click again to undo)">Vote Down</span>
             </div>
@@ -41,21 +41,21 @@
             </div>
             <div class="puzzle-row-info">
                 <div class="puzzle-links">
-                    @Html.ActionLink("Solve", "start", new { controller = "game", id = puzzle.PuzzleId }, new { @class = "start", title = "Solve this puzzle" })
-                    @Html.ActionLink("View", "display", new { controller = "puzzles", id = puzzle.PuzzleId }, new { @class = "view", title = "View the stats on this puzzle" })
+                    @Html.ActionLink("Solve", "start", new { controller = "game", id = puzzle.Id }, new { @class = "start", title = "Solve this puzzle" })
+                    @Html.ActionLink("View", "display", new { controller = "puzzles", id = puzzle.Id }, new { @class = "view", title = "View the stats on this puzzle" })
                 </div>   
                 <div class="puzzle-user-info">
                     <span>Created @puzzle.DateCreated.FormatDate() by</span>
                     <img height="30" width="30" src="@Html.Raw(puzzle.GetCreatorGravatarUrl(30))" alt="Gravatar" />
                     <ul>
-                        <li>@Html.ActionLink(puzzle.UserName, "display", new { controller = "Players", id = puzzle.CreatedById, userName = puzzle.UserName.FormatTitleForUrl() })</li>
-                        <li class="reputation" title="Your Reputation Score">@puzzle.Reputation.FormatInteger()</li> 
+                        <li>@Html.ActionLink(puzzle.User.PreferredUserName, "display", new { controller = "Players", id = puzzle.CreatedById, userName = puzzle.User.PreferredUserName.FormatTitleForUrl() })</li>
+                        <li class="reputation" title="Your Reputation Score">@puzzle.User.Reputation.FormatInteger()</li> 
                     </ul>
                     <ul class="accomplishments">
-                        <li class="leading-star" title="Number of puzzles you are leading">@puzzle.LeadingPuzzleCount</li>
-                        <li class="gold" title="Number of Gold Badges">@puzzle.GoldBadgeCount</li>
-                        <li class="silver" title="Number of Silver Badges">@puzzle.SilverBadgeCount</li>
-                        <li class="bronze" title="Number of Bronze Badges">@puzzle.BronzeBadgeCount</li>
+                        <li class="leading-star" title="Number of puzzles you are leading">@puzzle.User.LeadingPuzzleCount</li>
+                        <li class="gold" title="Number of Gold Badges">@puzzle.User.GoldBadgeCount</li>
+                        <li class="silver" title="Number of Silver Badges">@puzzle.User.SilverBadgeCount</li>
+                        <li class="bronze" title="Number of Bronze Badges">@puzzle.User.BronzeBadgeCount</li>
                     </ul>
                 </div>  
             </div>  
@@ -63,7 +63,7 @@
         {
             <ul class="puzzle-row-themes">
                 
-            @foreach (var theme in puzzle.ThemeList) {
+            @foreach (var theme in puzzle.Themes) {
                 <li>@Html.ActionLink(theme, "themed", new RouteValueDictionary{{"controller", "puzzles"},{"themes", theme}})</li>
             }
                 
@@ -74,7 +74,7 @@
      
     
     <script type="text/javascript">
-        var puzzleIds = [@(string.Join(",", Model.PaginatedPuzzles.Select(x => x.PuzzleId)))]
+        var puzzleIds = [@(string.Join(",", Model.PaginatedPuzzles.Select(x => x.Id)))]
     </script>
     
     }

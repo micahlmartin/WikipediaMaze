@@ -271,14 +271,14 @@ namespace WikipediaMaze.ViewModels
     }
     public class UserProfileSolutionListViewModel
     {
-        public UserProfileSolutionListViewModel(IPagination<SolutionProfile> solutions, SolutionSortType sortType, int profileId)
+        public UserProfileSolutionListViewModel(IPagination<Solution> solutions, SolutionSortType sortType, int profileId)
         {
             Solutions = solutions;
             SortType = sortType;
             ProfileId = profileId;
         }
 
-        public IPagination<SolutionProfile> Solutions { get; private set; }
+        public IPagination<Solution> Solutions { get; private set; }
         public SolutionSortType SortType { get; private set; }
         public int ProfileId { get; private set; }
     }
@@ -400,7 +400,7 @@ namespace WikipediaMaze.Controllers
             page = page ?? 1;
             var pageSize = 30;
 
-            IPagination<SolutionProfile> solutions = _puzzleService.GetSolutionsByUserId(id, sortType.Value, page.Value, pageSize);
+            IPagination<Solution> solutions = _puzzleService.GetSolutionsByUserId(id, sortType.Value, page.Value, pageSize);
 
             return PartialView(new UserProfileSolutionListViewModel(solutions, sortType.Value, id));
         }

@@ -51,5 +51,13 @@ namespace WikipediaMaze.Core
                 }
             }
         }
+
+        public virtual string GetCreatorGravatarUrl(int? size)
+        {
+            if (!string.IsNullOrEmpty(User.Email))
+                return User.Email.AsGravatarUrl(size);
+
+            return (User.PreferredUserName + "@wikipediamaze.com").AsGravatarUrl(size);
+        }
     }
 }

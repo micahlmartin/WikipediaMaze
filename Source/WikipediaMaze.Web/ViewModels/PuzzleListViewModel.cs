@@ -16,7 +16,7 @@ namespace WikipediaMaze.ViewModels
 
         #region Constructors
 
-        public PuzzleListViewModel(string pageTitle, IPagination<PuzzleDetailView> paginatedPuzzles, PuzzleSortType sortType, bool isLoggedIn, int currentUserId)
+        public PuzzleListViewModel(string pageTitle, IPagination<Puzzle> paginatedPuzzles, PuzzleSortType sortType, bool isLoggedIn, int currentUserId)
         {
             PaginatedPuzzles = paginatedPuzzles;
             SortType = sortType;
@@ -26,7 +26,7 @@ namespace WikipediaMaze.ViewModels
         }
 
         #endregion
-        public IPagination<PuzzleDetailView> PaginatedPuzzles { get; private set; }
+        public IPagination<Puzzle> PaginatedPuzzles { get; private set; }
         public PuzzleSortType SortType { get; private set; }
         public bool IsLoggedIn { get; private set; }
         public IEnumerable<string> Themes { get; set; }
@@ -39,7 +39,7 @@ namespace WikipediaMaze.ViewModels
 
         public bool IsLeadingPuzzle(int puzzleId)
         {
-            return PaginatedPuzzles.Any(x => x.LeaderId == CurrentUserId && x.PuzzleId == puzzleId);
+            return PaginatedPuzzles.Any(x => x.LeaderId == CurrentUserId && x.Id == puzzleId);
         }
     }
 }

@@ -12,15 +12,12 @@ namespace WikipediaMaze.Services
         void UpdatePuzzleStats(int puzzleId);
         Puzzle GetPuzzleById(int id);
         IPagination<Puzzle> GetPuzzles(PuzzleSortType sort, int page, int pageSize);
-        IPagination<PuzzleDetailView> GetPuzzleDetailView(PuzzleSortType sort, int page, int pageSize);
         IPagination<Puzzle> GetPuzzles(PuzzleSortType sort, int page, int pageSize, IEnumerable<string> themes);
-        IPagination<PuzzleDetailView> GetPuzzleDetailView(PuzzleSortType sort, int page, int pageSize, IEnumerable<string> themes);
         CreatePuzzleResult CreatePuzzle(string startTopic, string endTopic, IEnumerable<string> themes);
         VoteResult VoteOnPuzzle(int puzzleId, VoteType voteType);
         int UpdatePuzzleVoteCount(int puzzleId);
         IEnumerable<Vote> GetVotes(IEnumerable<int> puzzleIds, int userId);
         IEnumerable<Vote> GetVotes(IEnumerable<Puzzle> puzzles, int userId);
-        IEnumerable<Vote> GetVotes(IEnumerable<PuzzleDetailView> puzzles, int userId);
         IEnumerable<int> GetPuzzlesLedByUser(IEnumerable<Puzzle> puzzles, int userId);
         IEnumerable<int> GetPuzzlesLedByUser(int userId);
 
@@ -31,7 +28,7 @@ namespace WikipediaMaze.Services
         IEnumerable<Vote> GetVotes(int puzzleId);
 
 
-        IPagination<SolutionProfile> GetSolutionsByUserId(int userId, SolutionSortType sortType, int page, int pageSize);
+        IPagination<Solution> GetSolutionsByUserId(int userId, SolutionSortType sortType, int page, int pageSize);
 
         IEnumerable<Theme> GetAllThemes();
         void RetagPuzzle(int puzzleId, int userId, IEnumerable<string> themes);

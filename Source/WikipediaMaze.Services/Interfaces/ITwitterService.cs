@@ -11,7 +11,7 @@ namespace WikipediaMaze.Services
         bool IsAuthorized { get; }
         //void UpdateStatus(string status);
 
-        void TweetSolution(int id);
+        void TweetSolution(Guid id);
 
         void TweetPuzzle(int id);
     }

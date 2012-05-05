@@ -22,15 +22,15 @@ namespace WikipediaMaze.Services
         #region Fields
 
         WebConsumer _twitter;
-        UrlShorteningService _shorteningService;
-        IRepository _repository;
-        IAuthenticationService _authenticationService;
+        readonly UrlShorteningService _shorteningService;
+        readonly IRepository _repository;
+        readonly IAuthenticationService _authenticationService;
 
         #endregion
 
         #region Constructors
 
-        public TwitterService(MongoRepository repository, IAuthenticationService authenticationService)
+        public TwitterService(IRepository repository, IAuthenticationService authenticationService)
         {
             _twitter = new WebConsumer(TwitterConsumer.ServiceDescription, TokenManager);
             _shorteningService = new TwitterLib.UrlShorteningService(ShorteningService.Bitly);
@@ -82,19 +82,21 @@ namespace WikipediaMaze.Services
             message = _shorteningService.ShrinkUrls(message);
             UpdateStatus(message);
         }
-        public void TweetSolution(int solutionId)
+        public void TweetSolution(Guid solutionId)
         {
             //Can't tweet unless OAuth has occurred.
             if (!IsAuthorized) throw new UnauthorizedAccessException();
 
-            var solution = _repository.All<SolutionProfile>().Where(x => x.Id == solutionId).SingleOrDefault();
+            var solution = _repository.All<Solution>().Where(x => x.Id == solutionId).SingleOrDefault();
 
             if (solution == null) return;
 
             //Can't tweet solutions from other users.
             if (_authenticationService.CurrentUserId != solution.UserId) throw new UnauthorizedAccessException();
 
-            var message = "Solved the puzzle http://www.wikipediamaze.com/puzzles/{0} {1} to {2} in {3} steps. Can you beat it? #wikipediamaze".ToFormat(solution.PuzzleId, solution.StartTopic.FormatTopic(), solution.EndTopic.FormatTopic(), solution.StepCount);
+            var puzzle = _repository.All<Puzzle>().First(x => x.Id == solution.PuzzleId);
+
+            var message = "Solved the puzzle http://www.wikipediamaze.com/puzzles/{0} {1} to {2} in {3} steps. Can you beat it? #wikipediamaze".ToFormat(solution.PuzzleId, puzzle.StartTopic.FormatTopic(), puzzle.EndTopic.FormatTopic(), solution.StepCount);
             message = _shorteningService.ShrinkUrls(message);
             UpdateStatus(message);
         }

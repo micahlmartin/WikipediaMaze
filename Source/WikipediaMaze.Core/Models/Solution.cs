@@ -8,6 +8,7 @@ namespace WikipediaMaze.Core
     public class Solution
     {
         #region Properties
+
         public virtual Guid Id { get; set; }
         public virtual int SolutionId { get; set; }
         public virtual int UserId { get; set; }
@@ -18,7 +19,8 @@ namespace WikipediaMaze.Core
         public virtual DateTime DateCreated { get; set; }
         public virtual int CurrentPuzzleLevel { get; set; }
         public virtual int CurrentSolutionCount { get; set; }
-        //public virtual Puzzle Puzzle { get; private set; }
+        public virtual Puzzle Puzzle { get; set; }
+
         #endregion
         
     }

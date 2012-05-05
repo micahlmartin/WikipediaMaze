@@ -76,7 +76,7 @@ namespace WikipediaMaze.Controllers
 
             //Get sorted puzzles
             var themeList = Theme.GetThemesFromString(themes);
-            IPagination<PuzzleDetailView> puzzles = _puzzleService.GetPuzzleDetailView(sortType.Value, page.Value, pageSize.Value, themeList);
+            IPagination<Puzzle> puzzles = _puzzleService.GetPuzzles(sortType.Value, page.Value, pageSize.Value, themeList);
 
             var viewModel = new PuzzleListViewModel(GetThemedPageTitle(sortType.Value, themeList), puzzles, sortType.Value, _authenticationService.IsAuthenticated, _authenticationService.CurrentUserId) {Themes = themeList};
 
@@ -90,7 +90,7 @@ namespace WikipediaMaze.Controllers
             pageSize = pageSize ?? 15;
 
             //Get sorted puzzles
-            IPagination<PuzzleDetailView> puzzles = _puzzleService.GetPuzzleDetailView(sortType.Value, page.Value, pageSize.Value);
+            IPagination<Puzzle> puzzles = _puzzleService.GetPuzzles(sortType.Value, page.Value, pageSize.Value);
 
             var viewModel = new PuzzleListViewModel(GetPageTitle(sortType.Value), puzzles, sortType.Value, _authenticationService.IsAuthenticated, _authenticationService.CurrentUserId);
 
@@ -185,14 +185,14 @@ namespace WikipediaMaze.Controllers
             pageSize = pageSize ?? 15;
 
             //Get sorted puzzles
-            var puzzles = _puzzleService.GetPuzzleDetailView(sortType.Value, page.Value, pageSize.Value);
+            var puzzles = _puzzleService.GetPuzzles(sortType.Value, page.Value, pageSize.Value);
 
             var viewModel = new PuzzleListViewModel(GetPageTitle(sortType.Value), puzzles, sortType.Value, _authenticationService.IsAuthenticated, _authenticationService.CurrentUserId);
 
             return PartialView(viewModel);
         }
         
-        public ActionResult TweetSolution(int id, int? puzzleId)
+        public ActionResult TweetSolution(Guid id, int? puzzleId)
         {
             if (!_twitterService.IsAuthorized)
                 _twitterService.RequestAuthorization();

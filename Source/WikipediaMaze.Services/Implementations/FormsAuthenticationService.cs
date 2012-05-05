@@ -19,7 +19,7 @@ namespace WikipediaMaze.Services
 
         #region Constructors
 
-        public FormsAuthenticationService(MongoRepository repository)
+        public FormsAuthenticationService(IRepository repository)
         {
             _repository = repository;
         }

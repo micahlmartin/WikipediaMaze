@@ -19,13 +19,13 @@
                 {
                     var solution = Model.Solutions.ElementAt(u);
                 
-                    <div class="user-display-solution" title="@solution.StartTopic.FormatTopic() to @solution.EndTopic.FormatTopic()">
+                    <div class="user-display-solution" title="@solution.Puzzle.StartTopic.FormatTopic() to @solution.Puzzle.EndTopic.FormatTopic()">
                     @Html.Hidden("user-display-solution", solution.PuzzleId)
                     <p class="level"><span>@solution.StepCount.FormatInteger()</span> Steps</p>
                     <p class="points-awarded"><span>@solution.PointsAwarded.FormatInteger()</span> Points</p>
                     <div class="user-display-solution-puzzle-detail">
-                    <p><span class="start">From</span> @solution.StartTopic.FormatTopic()</p>
-                    <p><span class="end">To</span> @solution.EndTopic.FormatTopic()</p>
+                    <p><span class="start">From</span> @solution.Puzzle.StartTopic.FormatTopic()</p>
+                    <p><span class="end">To</span> @solution.Puzzle.EndTopic.FormatTopic()</p>
                     </div>
                 </div>
                         

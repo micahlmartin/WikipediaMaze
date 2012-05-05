@@ -35,59 +35,6 @@ namespace WikipediaMaze.Data.Mongo
             Database = Server.GetDatabase(mongoUrl.DatabaseName);
         }
 
-        //public MongoCollection<ActionItem> Actions
-        //{
-        //    get { return _db.GetCollection<ActionItem>("Actions"); }
-        //}
-        //public MongoCollection<Badge> Badges
-        //{
-        //    get { return _db.GetCollection<Badge>("Badges"); }
-        //}
-        //public MongoCollection<Notification> Notifications
-        //{
-        //    get { return _db.GetCollection<Notification>("Notifications"); }
-        //}
-        //public MongoCollection<OpenIdentifier> OpenIdentifiers
-        //{
-        //    get { return _db.GetCollection<OpenIdentifier>("OpenIdentifiers"); }
-        //}
-        ////public MongoCollection<PuzzleDetailView> PuzzleDetailView
-        ////{
-        ////    get { return _db.GetCollection<PuzzleDetailView>("PuzzleDetailView"); }
-        ////}
-        //public MongoCollection<Puzzle> Puzzles
-        //{
-        //    get { return _db.GetCollection<Puzzle>("Puzzles"); }
-        //}
-        //public MongoCollection<PuzzleTheme> PuzzleThemes
-        //{
-        //    get { return _db.GetCollection<PuzzleTheme>("PuzzleThemes"); }
-        //}
-        //public MongoCollection<Solution> Solutions
-        //{
-        //    get { return _db.GetCollection<Solution>("Solutions"); }
-        //}
-        ////public MongoCollection<SolutionProfile> SolutionProfileView
-        ////{
-        ////    get { return _db.GetCollection<SolutionProfile>("SolutionProfileView"); }
-        ////}
-        //public MongoCollection<Step> Steps
-        //{
-        //    get { return _db.GetCollection<Step>("Steps"); }
-        //}
-        //public MongoCollection<Theme> Themes
-        //{
-        //    get { return _db.GetCollection<Theme>("Themes"); }
-        //}
-        //public MongoCollection<User> Users
-        //{
-        //    get { return _db.GetCollection<User>("Users"); }
-        //}
-        //public MongoCollection<Vote> Votes
-        //{
-        //    get { return _db.GetCollection<Vote>("Votes"); }
-        //}
-
         public ISession OpenSession()
         {
             throw new NotSupportedException();

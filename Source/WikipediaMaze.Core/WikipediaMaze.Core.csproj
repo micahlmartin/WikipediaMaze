@@ -76,11 +76,9 @@
     <Compile Include="Models\OpenIdentifier.cs" />
     <Compile Include="Models\OpenIdProfile.cs" />
     <Compile Include="Models\Puzzle.cs" />
-    <Compile Include="Models\PuzzleDetailView.cs" />
     <Compile Include="Models\PuzzleTheme.cs" />
     <Compile Include="Models\RuleViolation.cs" />
     <Compile Include="Models\Solution.cs" />
-    <Compile Include="Models\SolutionProfile.cs" />
     <Compile Include="Models\Step.cs" />
     <Compile Include="Models\Theme.cs" />
     <Compile Include="Models\Topic.cs" />

@@ -25,7 +25,7 @@ namespace WikipediaMaze.Services
 
 		#region Constructors
 
-		public PuzzleService(MongoRepository repository, IAccountService accountService, IAuthenticationService authenticationService, ITopicService topicService, IReputationService reputationService)
+		public PuzzleService(IRepository repository, IAccountService accountService, IAuthenticationService authenticationService, ITopicService topicService, IReputationService reputationService)
 		{
 			_repository = repository;
 			_accountService = accountService;
@@ -120,34 +120,39 @@ namespace WikipediaMaze.Services
 
             _repository.Save(puzzle);
 
-            //Create themes if they're new
-            foreach (var themeName in themes)
-            {
-                var loweredThemeName = themeName.ToLowerInvariant();
-                var theme = _repository.All<Theme>().ByName(loweredThemeName);
-
-                if (theme != null)
-                    theme.Count++;
-                else
-                    theme = new Theme
-                                {
-                                    DateCreated = DateTime.Now,
-                                    Name = loweredThemeName,
-                                    UserId = user.Id
-                                };
-
-                _repository.Save(theme);
-            }
+            CreateOrUpdateTheme(themes, user.Id);
 
 
-	        _repository.Save(new ActionItem
+	        _repository.Save(new UserAction
 	                             {
-	                                 Action = ActionType.CreatedPuzzle,
+	                                 Action = UserActionType.CreatedPuzzle,
 	                                 DateCreated = DateTime.Now,
 	                                 PuzzleId = puzzle.Id,
 	                                 UserId = user.Id
 	                             });
 	        return new CreatePuzzleResult(puzzle.Id);
+	    }
+
+	    private void CreateOrUpdateTheme(IEnumerable<string> themes, int userId)
+	    {
+	        foreach (var themeName in themes)
+	        {
+	            var loweredThemeName = themeName.ToLowerInvariant();
+	            var theme = _repository.All<Theme>().ByName(loweredThemeName);
+
+	            if (theme != null)
+	                theme.Count++;
+	            else
+	                theme = new Theme
+	                            {
+	                                DateCreated = DateTime.Now,
+	                                Name = loweredThemeName,
+	                                UserId = userId,
+	                                Count = 1
+	                            };
+
+	            _repository.Save(theme);
+	        }
 	    }
 
 	    private IEnumerable<RuleViolation> ValidatePuzzle(string startTopic, string endTopic)
@@ -261,11 +266,6 @@ namespace WikipediaMaze.Services
         {
             var ids = puzzleIds.ToList();
             return _repository.All<Vote>().Where(x => ids.Contains(x.PuzzleId) && x.UserId == userId).ToList();
-        }
-
-        public IEnumerable<Vote> GetVotes(IEnumerable<PuzzleDetailView> puzzles, int userId)
-        {
-            return puzzles.Select(puzzle => _repository.All<Vote>().Where(x => x.PuzzleId == puzzle.PuzzleId && x.UserId == userId).OrderByDescending(x => x.DateVoted).FirstOrDefault()).Where(vote => vote != null).ToList();
         }
 
 	    /// <summary>
@@ -462,9 +462,9 @@ namespace WikipediaMaze.Services
 		    _repository.Save(puzzle.User);
 		    _repository.Save(user);
 
-		    _repository.Save(new ActionItem
+		    _repository.Save(new UserAction
 		                         {
-		                             Action = ActionType.Voted,
+		                             Action = UserActionType.Voted,
 		                             DateCreated = DateTime.Now,
 		                             UserId = user.Id,
 		                             PuzzleId = puzzleId,
@@ -572,34 +572,20 @@ namespace WikipediaMaze.Services
                 default:
                     throw new ArgumentOutOfRangeException("sort");
             }
+		    LoadUsersForPuzzles(puzzles);
             return new CustomPagination<Puzzle>(puzzles, page, pageSize, _repository.All<Puzzle>().Where(x => x.IsVerified).Count());
         }
 
-        public IPagination<PuzzleDetailView> GetPuzzleDetailView(PuzzleSortType sort, int page, int pageSize)
-        {
-            IEnumerable<PuzzleDetailView> puzzles;
+	    private void LoadUsersForPuzzles(IEnumerable<Puzzle> puzzles)
+	    {
+	        var userIds = puzzles.Select(x => x.CreatedById).Distinct();
+	        var users = _repository.All<User>().Where(x => x.Id.In(userIds)).ToList();
 
-            switch (sort)
-            {
-                case PuzzleSortType.Newest:
-                    puzzles = _repository.All<PuzzleDetailView>().Where(x => x.IsVerified).OrderByDescending(p => p.DateCreated).Skip((page - 1) * pageSize).Take(pageSize).ToList();
-                    break;
-                case PuzzleSortType.Solutions:
-                    puzzles = _repository.All<PuzzleDetailView>().Where(x => x.IsVerified).OrderByDescending(p => p.SolutionCount).Skip((page - 1) * pageSize).Take(pageSize).ToList();
-                    break;
-                case PuzzleSortType.Level:
-                    puzzles = _repository.All<PuzzleDetailView>().Where(x => x.IsVerified).OrderByDescending(p => p.Level).Skip((page - 1) * pageSize).Take(pageSize).ToList();
-                    break;
-                case PuzzleSortType.Votes:
-                    puzzles = _repository.All<PuzzleDetailView>().Where(x => x.IsVerified).OrderByDescending(p => p.VoteCount).Skip((page - 1) * pageSize).Take(pageSize).ToList();
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException("sort");
-            }
-            return new CustomPagination<PuzzleDetailView>(puzzles, page, pageSize, _repository.All<PuzzleDetailView>().Where(x => x.IsVerified).Count());
-        }
+	        foreach (var puzzle in puzzles)
+	            puzzle.User = users.First(x => x.Id == puzzle.CreatedById);
+	    }
 
-        public IPagination<Puzzle> GetPuzzles(PuzzleSortType sort, int page, int pageSize, IEnumerable<string> themes)
+	    public IPagination<Puzzle> GetPuzzles(PuzzleSortType sort, int page, int pageSize, IEnumerable<string> themes)
         {
             IList<Puzzle> puzzles = new List<Puzzle>();
 
@@ -631,39 +617,10 @@ namespace WikipediaMaze.Services
                 default:
                     throw new ArgumentOutOfRangeException("sort");
             }
+
+	        LoadUsersForPuzzles(puzzles);
+
             return new CustomPagination<Puzzle>(puzzles.Skip((page - 1) * pageSize).Take(pageSize), page, pageSize, puzzles.Count());
-        }
-        public IPagination<PuzzleDetailView> GetPuzzleDetailView(PuzzleSortType sort, int page, int pageSize, IEnumerable<string> themes)
-        {
-            IList<PuzzleDetailView> puzzles = new List<PuzzleDetailView>();
-
-            foreach (var theme in themes)
-            {
-                var currentTheme = theme;
-                puzzles.AddRange(_repository.All<PuzzleDetailView>().Where(x => x.Themes.Contains(theme)).ToList());
-            }
-
-
-            puzzles = puzzles.Distinct(PuzzleDetailView.Comparers.PuzzleIdComparer).ToList();
-
-            switch (sort)
-            {
-                case PuzzleSortType.Newest:
-                    puzzles = puzzles.Where(x => x.IsVerified).OrderByDescending(p => p.DateCreated).ToList();
-                    break;
-                case PuzzleSortType.Solutions:
-                    puzzles = puzzles.Where(x => x.IsVerified).OrderByDescending(p => p.SolutionCount).ToList();
-                    break;
-                case PuzzleSortType.Level:
-                    puzzles = puzzles.Where(x => x.IsVerified).OrderByDescending(p => p.Level).ToList();
-                    break;
-                case PuzzleSortType.Votes:
-                    puzzles = puzzles.Where(x => x.IsVerified).OrderByDescending(p => p.VoteCount).ToList();
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException("sort");
-            }
-            return new CustomPagination<PuzzleDetailView>(puzzles.Skip((page - 1) * pageSize).Take(pageSize), page, pageSize, puzzles.Count());
         }
 		public IPagination<Puzzle> GetPuzzlesByTheme(string theme, PuzzleSortType sort, int? page, int? pageSize)
 		{
@@ -699,11 +656,11 @@ namespace WikipediaMaze.Services
             return _repository.All<Vote>().Where(x => x.PuzzleId == puzzleId).ToList();
         }
 
-        public IPagination<SolutionProfile> GetSolutionsByUserId(int userId, SolutionSortType sortType, int page, int pageSize)
+        public IPagination<Solution> GetSolutionsByUserId(int userId, SolutionSortType sortType, int page, int pageSize)
         {
-            var groupedSolutions = _repository.All<SolutionProfile>().ByUserId(userId).ToList().GroupBy(x => x.PuzzleId);
+            var groupedSolutions = _repository.All<Solution>().ByUserId(userId).ToList().GroupBy(x => x.PuzzleId);
 
-            var solutions = new List<SolutionProfile>();
+            var solutions = new List<Solution>();
             foreach (var ig in groupedSolutions)
             {
                 solutions.Add(ig.OrderByDescending(x => x.PointsAwarded).First());
@@ -722,10 +679,21 @@ namespace WikipediaMaze.Services
                     break;
             }
 
+            LoadPuzzlesForSolutions(solutions);
+
             return solutions.Skip((page - 1)*pageSize).Take(pageSize).AsCustomPagination(page, pageSize, solutions.Count);
         }
 
-        public void RetagPuzzle(int puzzleId, int userId, IEnumerable<string> themes)
+	    private void LoadPuzzlesForSolutions(List<Solution> solutions)
+	    {
+	        var puzzleIds = solutions.Select(x => x.PuzzleId).Distinct();
+	        var puzzles = _repository.All<Puzzle>().Where(x => x.Id.In(puzzleIds)).ToList();
+
+            foreach (var solution in solutions)
+                solution.Puzzle = puzzles.First(x => x.Id == solution.PuzzleId);
+	    }
+
+	    public void RetagPuzzle(int puzzleId, int userId, IEnumerable<string> themes)
         {
             if (themes.Count() == 0)
                 return;
@@ -740,27 +708,11 @@ namespace WikipediaMaze.Services
             puzzle.Themes = themes;
             _repository.Save(puzzle);
 
-            foreach (var themeName in themes)
+            CreateOrUpdateTheme(themes, userId);
+
+            _repository.Save(new UserAction
             {
-                var loweredThemeName = themeName.ToLowerInvariant();
-                var theme = _repository.All<Theme>().ByName(loweredThemeName);
-
-                if (theme != null)
-                    theme.Count++;
-                else
-                    theme = new Theme
-                                {
-                                    DateCreated = DateTime.Now,
-                                    Name = loweredThemeName,
-                                    UserId = userId
-                                };
-
-                _repository.Save(theme);
-            }
-
-            _repository.Save(new ActionItem
-            {
-                Action = ActionType.ReTaggedPuzzle,
+                Action = UserActionType.ReTaggedPuzzle,
                 AffectedUserId = puzzle.User.Id,
                 DateCreated = DateTime.Now,
                 PuzzleId = puzzle.Id,

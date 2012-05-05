@@ -39,7 +39,7 @@ namespace WikipediaMaze.Core
         Popular = 0,
         Alphabetical = 1
     }
-    public enum ActionType
+    public enum UserActionType
     {
         None = 0,
         Voted = 1,

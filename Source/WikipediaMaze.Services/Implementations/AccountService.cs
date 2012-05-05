@@ -38,7 +38,7 @@ namespace WikipediaMaze.Services
 
         #region Constructors
 
-        public AccountService(MongoRepository repository, IAuthenticationService authenticationService)
+        public AccountService(IRepository repository, IAuthenticationService authenticationService)
         {
             _repository = repository;
             _authenticationService = authenticationService;
@@ -185,7 +185,7 @@ namespace WikipediaMaze.Services
                 user.LastVisit = DateTime.Now;
 
                 _repository.Save(user);
-                _repository.Save(new ActionItem { Action = ActionType.LoggedIn, DateCreated = DateTime.Now, UserId = user.Id });
+                _repository.Save(new UserAction { Action = UserActionType.LoggedIn, DateCreated = DateTime.Now, UserId = user.Id });
 
                 return user;
             }
@@ -241,8 +241,8 @@ namespace WikipediaMaze.Services
 
             _repository.Save(openIdentifier);
 
-            _repository.Save(new ActionItem
-                                 {Action = ActionType.Registered, DateCreated = DateTime.Now, UserId = user.Id});
+            _repository.Save(new UserAction
+                                 {Action = UserActionType.Registered, DateCreated = DateTime.Now, UserId = user.Id});
 
             Rpx.Map(profile.Identifier, user.Id.ToString(System.Globalization.CultureInfo.CurrentCulture));
 
@@ -311,7 +311,7 @@ namespace WikipediaMaze.Services
 
         public DateTime? GetLastActivityDate(int userId)
         {
-            var action = _repository.All<ActionItem>().Where(x =>x.UserId == userId).OrderByDescending(x => x.DateCreated).FirstOrDefault();
+            var action = _repository.All<UserAction>().Where(x =>x.UserId == userId).OrderByDescending(x => x.DateCreated).FirstOrDefault();
 
             if (action != null)
                 return action.DateCreated;

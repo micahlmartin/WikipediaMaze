@@ -14,7 +14,7 @@ namespace WikipediaMaze.Data
         {
             return query.Where(x => x.Solutions.Select(y => y.UserId).Contains(userId));
         }
-        public static IQueryable<SolutionProfile> ByUserId(this IQueryable<SolutionProfile> query, int userId)
+        public static IQueryable<Solution> ByUserId(this IQueryable<Solution> query, int userId)
         {
             return query.Where(x => x.UserId == userId);
         }

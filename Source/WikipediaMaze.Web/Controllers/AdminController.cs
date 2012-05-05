@@ -28,6 +28,7 @@ namespace WikipediaMaze.Web.Controllers
             using (_nhibernateRepository.OpenSession())
             {
                 #region Puzzles
+
                 var puzzles = _nhibernateRepository.All<Puzzle>().ToList().Select(puzzle => new Puzzle
                                                                     {
                                                                         Id = puzzle.Id,
@@ -106,6 +107,13 @@ namespace WikipediaMaze.Web.Controllers
                                                                                                       }).ToList();
 
                 _mongoRepository.InsertBatch(solutions);
+
+                #endregion
+
+                #region Actions
+
+                var actions = _nhibernateRepository.All<UserAction>().ToList();
+                _mongoRepository.InsertBatch(actions);
 
                 #endregion
             }

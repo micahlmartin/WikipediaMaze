@@ -77,15 +77,13 @@
     <Compile Include="Mongo\IntIdGenerator.cs" />
     <Compile Include="Mongo\MongoRepository.cs" />
     <Compile Include="Mongo\LongIdGenerator.cs" />
-    <Compile Include="NHibernate\Mappings\ActionItemMap.cs" />
+    <Compile Include="NHibernate\Mappings\UserActionMap.cs" />
     <Compile Include="NHibernate\Mappings\BadgeMap.cs" />
     <Compile Include="NHibernate\Mappings\NotificationMap.cs" />
     <Compile Include="NHibernate\Mappings\OpenIdentifierMap.cs" />
-    <Compile Include="NHibernate\Mappings\PuzzleDetailViewMap.cs" />
     <Compile Include="NHibernate\Mappings\PuzzleMap.cs" />
     <Compile Include="NHibernate\Mappings\PuzzleThemeMap.cs" />
     <Compile Include="NHibernate\Mappings\SolutionMap.cs" />
-    <Compile Include="NHibernate\Mappings\SolutionProfileMap.cs" />
     <Compile Include="NHibernate\Mappings\StepMap.cs" />
     <Compile Include="NHibernate\Mappings\ThemeMap.cs" />
     <Compile Include="NHibernate\Mappings\UserMap.cs" />

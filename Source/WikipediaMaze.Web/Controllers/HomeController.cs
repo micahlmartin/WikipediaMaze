@@ -48,7 +48,7 @@ namespace WikipediaMaze.Controllers
             pageSize = pageSize ?? 15;
 
             //Get sorted puzzles
-            var puzzles = _puzzleService.GetPuzzleDetailView(sortType.Value, page.Value, pageSize.Value);
+            var puzzles = _puzzleService.GetPuzzles(sortType.Value, page.Value, pageSize.Value);
 
             var viewModel = new PuzzleListViewModel("Welcome", puzzles, sortType.Value, _authenticationService.IsAuthenticated, _authenticationService.CurrentUserId);
 

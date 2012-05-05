@@ -5,11 +5,11 @@ using System.Web;
 
 namespace WikipediaMaze.Core
 {
-    public class ActionItem
+    public class UserAction
     {
         public virtual int ActionId { get; set; }
         public virtual Guid Id { get; set; }
-        public virtual ActionType Action { get; set; }
+        public virtual UserActionType Action { get; set; }
         public virtual int UserId { get; set; }
         public virtual DateTime DateCreated { get; set; }
         public virtual int? PuzzleId { get; set; }
