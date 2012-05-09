@@ -71,10 +71,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Binaries\NHibernate.Linq.dll</HintPath>
     </Reference>
-    <Reference Include="StructureMap, Version=2.5.3.0, Culture=neutral, PublicKeyToken=e60ad81abae3c223, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Binaries\StructureMap.dll</HintPath>
-    </Reference>
+    <Reference Include="StructureMap, Version=2.5.3.0, Culture=neutral, PublicKeyToken=e60ad81abae3c223, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -101,6 +98,8 @@
     </Compile>
     <Compile Include="Implementations\AccountService.cs" />
     <Compile Include="Implementations\AwardBadgesService.cs" />
+    <Compile Include="Implementations\BadgeAwarders\AwardBadgeBase.cs" />
+    <Compile Include="Implementations\BadgeAwarders\AwardBetaBadge.cs" />
     <Compile Include="Implementations\FaceBookService.cs" />
     <Compile Include="Implementations\FormsAuthenticationService.cs" />
     <Compile Include="Implementations\GameService.cs" />
@@ -122,6 +121,7 @@
     <Compile Include="Interfaces\IApiAuthorizationService.cs" />
     <Compile Include="Interfaces\IAuthenticationsService.cs" />
     <Compile Include="Interfaces\IAccountService.cs" />
+    <Compile Include="Interfaces\IAwardBadge.cs" />
     <Compile Include="Interfaces\IFaceBookService.cs" />
     <Compile Include="Interfaces\IGameService.cs" />
     <Compile Include="Interfaces\IMessengerService.cs" />

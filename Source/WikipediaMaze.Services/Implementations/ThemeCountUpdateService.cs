@@ -3,14 +3,24 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
+using MongoDB.Driver.Builders;
 using StructureMap;
 using WikipediaMaze.Data;
 using WikipediaMaze.Core;
+using WikipediaMaze.Data.Mongo;
+using MongoDB.Driver.Linq;
 
 namespace WikipediaMaze.Services
 {
     public class ThemeCountUpdateService : RecurringServiceBase
     {
+        private readonly IRepository _repository;
+
+        public ThemeCountUpdateService(IRepository repository)
+        {
+            _repository = repository;
+        }
+
         public override string ServiceName
         {
             get { return "Theme Count Update Service"; }
@@ -30,14 +40,12 @@ namespace WikipediaMaze.Services
 
         protected override void DoWork()
         {
-            using (var connection = new SqlConnection(Settings.WikipediaMazeConnection))
+            foreach (var theme in _repository.All<Theme>())
             {
-                connection.Open();
-                using (var command = connection.CreateCommand())
-                {
-                    command.CommandText = "EXEC UpdateThemeCount";
-                    command.ExecuteNonQuery();
-                }
+                var currentTheme = theme;
+                var count = _repository.All<Puzzle>().Where(x => x.Themes.Contains(currentTheme.Name)).Count();
+                theme.Count = count;
+                _repository.Save(theme);
             }
         }
     }

@@ -188,7 +188,7 @@ namespace WikipediaMaze.ViewModels
                 if(!IsAuthenticated)
                     return false;
 
-                return _puzzle.User.Id == CurrentUserId;
+                return _puzzle.CreatedById == CurrentUserId;
             }
         }
     }

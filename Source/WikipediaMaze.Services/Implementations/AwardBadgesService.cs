@@ -6,11 +6,21 @@ using System.Text;
 using StructureMap;
 using WikipediaMaze.Data;
 using WikipediaMaze.Core;
+using WikipediaMaze.Services.Interfaces;
 
 namespace WikipediaMaze.Services
 {
     public class AwardBadgesService : RecurringServiceBase
     {
+        private readonly IRepository _repository;
+        private readonly IEnumerable<IAwardBadge> _badgeAwarders;
+
+        public AwardBadgesService(IRepository repository, IEnumerable<IAwardBadge> badgeAwarders)
+        {
+            _repository = repository;
+            _badgeAwarders = badgeAwarders;
+        }
+
         /// <summary>
         /// The unique name of the service.
         /// </summary>
@@ -36,14 +46,16 @@ namespace WikipediaMaze.Services
         /// </summary>
         protected override void DoWork()
         {
-            using (var connection = new SqlConnection(Settings.WikipediaMazeConnection))
+            foreach (var action in _repository.All<UserAction>().Where(x => !x.HasBeenChecked))
             {
-                connection.Open();
-                using (var command = connection.CreateCommand())
+                var currentAction = action;
+                if (currentAction.AffectedUserId.HasValue)
                 {
-                    command.CommandText = "EXEC AwardBadges";
-                    command.ExecuteNonQuery();
+                    _badgeAwarders.AsParallel().ForAll(x => x.AwardBadge(currentAction.AffectedUserId.Value));
                 }
+
+                currentAction.HasBeenChecked = true;
+                _repository.Save(action);
             }
         }
     }

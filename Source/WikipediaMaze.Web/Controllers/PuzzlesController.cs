@@ -111,7 +111,7 @@ namespace WikipediaMaze.Controllers
                     return View("NotFound");
             }
 
-            puzzle.Solutions = _puzzleService.GetSolutions(puzzle.Id);
+            puzzle.Solutions = _puzzleService.GetSolutions(puzzle.Id).ToList();
 
             var latestSolution = puzzle.Solutions.Where(x => x.UserId == _authenticationService.CurrentUserId).LastOrDefault();
             if (latestSolution != null)

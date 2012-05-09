@@ -6,11 +6,19 @@ using System.Text;
 using StructureMap;
 using WikipediaMaze.Data;
 using WikipediaMaze.Core;
+using MongoDB.Driver.Linq;
 
 namespace WikipediaMaze.Services
 {
     public class PuzzleLeaderUpdateService : RecurringServiceBase
     {
+        private readonly IRepository _repository;
+
+        public PuzzleLeaderUpdateService(IRepository repository)
+        {
+            _repository = repository;
+        }
+
         public override string ServiceName
         {
             get { return "PuzzleLeaderUpdateService"; }
@@ -30,14 +38,10 @@ namespace WikipediaMaze.Services
 
         protected override void DoWork()
         {
-            using (var connection = new SqlConnection(Settings.WikipediaMazeConnection))
+            foreach (var puzzle in _repository.All<Puzzle>().Where(x => x.SolutionCount >= 5))
             {
-                connection.Open();
-                using (var command = connection.CreateCommand())
-                {
-                    command.CommandText = "EXEC UpdatePuzzleLeadCount";
-                    command.ExecuteNonQuery();
-                }
+                puzzle.LeaderId = puzzle.Solutions.OrderBy(x => x.StepCount).ThenBy(x => x.DateCreated).Select(x => x.UserId).First();
+                _repository.Save(puzzle);
             }
         }
     }

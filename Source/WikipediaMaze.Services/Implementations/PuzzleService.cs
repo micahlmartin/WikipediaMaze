@@ -116,7 +116,7 @@ namespace WikipediaMaze.Services
 				CreatedById = user.Id,
 				DateCreated = DateTime.Now,
 				IsVerified = false,
-				Themes = themes,
+				Themes = themes.ToList(),
 			};
 
 			_repository.Save(puzzle);
@@ -291,20 +291,21 @@ namespace WikipediaMaze.Services
 			switch (sort)
 			{
 				case PuzzleSortType.Newest:
-					puzzles = _repository.All<Puzzle>().Where(x => x.User.Id == userId).OrderByDescending(p => p.DateCreated).Skip((page - 1) * pageSize).Take(pageSize);
+					puzzles = _repository.All<Puzzle>().Where(x => x.CreatedById == userId).OrderByDescending(p => p.DateCreated).Skip((page - 1) * pageSize).Take(pageSize);
 					break;
 				case PuzzleSortType.Solutions:
-					puzzles = _repository.All<Puzzle>().Where(x => x.User.Id == userId).OrderByDescending(p => p.SolutionCount).Skip((page - 1) * pageSize).Take(pageSize);
+                    puzzles = _repository.All<Puzzle>().Where(x => x.CreatedById == userId).OrderByDescending(p => p.SolutionCount).Skip((page - 1) * pageSize).Take(pageSize);
 					break;
 				case PuzzleSortType.Level:
-					puzzles = _repository.All<Puzzle>().Where(x => x.User.Id == userId).OrderByDescending(p => p.Level).Skip((page - 1) * pageSize).Take(pageSize);
+                    puzzles = _repository.All<Puzzle>().Where(x => x.CreatedById == userId).OrderByDescending(p => p.Level).Skip((page - 1) * pageSize).Take(pageSize);
 					break;
 				case PuzzleSortType.Votes:
-					puzzles = _repository.All<Puzzle>().Where(x => x.User.Id == userId).OrderByDescending(p => p.VoteCount).Skip((page - 1) * pageSize).Take(pageSize);
+                    puzzles = _repository.All<Puzzle>().Where(x => x.CreatedById == userId).OrderByDescending(p => p.VoteCount).Skip((page - 1) * pageSize).Take(pageSize);
 					break;
 				default:
 					throw new ArgumentOutOfRangeException("sort");
 			}
+
 			return new CustomPagination<Puzzle>(puzzles.ToList(), page, pageSize, _repository.All<Puzzle>().Where(x => x.User.Id == userId).Count());
 		}
 
@@ -355,15 +356,15 @@ namespace WikipediaMaze.Services
 				return new VoteResult {ErrorMessage = "You cannot vote on your own puzzle."};
 
 			//Make sure the user hasn't reached their vote limit for the day
-			//var todaysNumberOfVotes = _repository.All<Vote>().Where(x => x.UserId == user.Id && x.DateVoted == DateTime.Now.ToUniversalTime().Date).Count();
+            var todaysNumberOfVotes = MongoRepository.Database.GetCollection<Puzzle>(MongoRepository.GetCollectionNamingConvention(typeof(Puzzle))).Find(Query.ElemMatch("Votes", Query.And(Query.GTE("DateVoted", DateTime.Now.ToUniversalTime().AddDays(-1)), Query.EQ("UserId", user.Id)))).Count();
 
-			//if (todaysNumberOfVotes >= Settings.MaximumDailyVoteLimit)
-			//    return new VoteResult
-			//               {
-			//                   ErrorMessage =
-			//                       "You have reached the daily vote limit of {0}. Please wait a little while before voting again."
-			//                       .ToFormat(Settings.MaximumDailyVoteLimit)
-			//               };
+            if (todaysNumberOfVotes >= Settings.MaximumDailyVoteLimit)
+                return new VoteResult
+                           {
+                               ErrorMessage =
+                                   "You have reached the daily vote limit of {0}. Please wait a little while before voting again."
+                                   .ToFormat(Settings.MaximumDailyVoteLimit)
+                           };
 
 			#endregion
 
@@ -374,7 +375,7 @@ namespace WikipediaMaze.Services
 			voterRep += GetPointsForVoter(voteType);
 
 			//Check for an existing vote record.
-			var vote = puzzle.Votes.Where(v => v.UserId == user.Id && v.PuzzleId == puzzleId).FirstOrDefault();
+			var vote = puzzle.Votes.Where(v => v.UserId == user.Id).FirstOrDefault();
 			if (vote == null)
 			{
 				//No vote exists so create a new vote.
@@ -665,7 +666,7 @@ namespace WikipediaMaze.Services
 			if (puzzle == null)
 				throw new InvalidOperationException("Puzzle does not exist");
 
-			puzzle.Themes = themes;
+			puzzle.Themes = themes.ToList();
 			_repository.Save(puzzle);
 
 			CreateOrUpdateTheme(themes, userId);
@@ -673,7 +674,7 @@ namespace WikipediaMaze.Services
 			_repository.Save(new UserAction
 			{
 				Action = UserActionType.ReTaggedPuzzle,
-				AffectedUserId = puzzle.User.Id,
+				AffectedUserId = puzzle.CreatedById,
 				DateCreated = DateTime.Now,
 				PuzzleId = puzzle.Id,
 				UserId = _authenticationService.CurrentUserId

@@ -10,6 +10,13 @@ namespace WikipediaMaze.Services
 {
     public class UpdatePuzzleSolutionCountService : RecurringServiceBase
     {
+        private readonly IRepository _repository;
+
+        public UpdatePuzzleSolutionCountService(IRepository repository)
+        {
+            _repository = repository;
+        }
+
         public override string ServiceName
         {
             get { return "UpdatePuzzleSolutionCountService"; }
@@ -26,16 +33,14 @@ namespace WikipediaMaze.Services
                 base.Interval = value;
             }
         }
+
         protected override void DoWork()
         {
-            using (var connection = new SqlConnection(Settings.WikipediaMazeConnection))
+            foreach (var puzzle in _repository.All<Puzzle>())
             {
-                connection.Open();
-                using (var command = connection.CreateCommand())
-                {
-                    command.CommandText = "EXEC UpdateSolutionCount";
-                    command.ExecuteNonQuery();
-                }
+                var currentPuzzle = puzzle;
+                currentPuzzle.SolutionCount = _repository.All<Solution>().Where(x => x.PuzzleId == currentPuzzle.Id).Select(x => x.UserId).Distinct().Count();
+                _repository.Save(currentPuzzle);
             }
         }
     }

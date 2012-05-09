@@ -41,6 +41,8 @@ namespace WikipediaMaze.Core
                     return Dominator;
                 case BadgeType.Leader:
                     return Leader;
+                case BadgeType.Beta:
+                    return Beta;
                 default:
                     throw new ArgumentOutOfRangeException("type");
             }
@@ -241,6 +243,24 @@ namespace WikipediaMaze.Core
                                   };
 
                 return _leader;
+            }
+        }
+
+        private static Badge _beta;
+        public static Badge Beta
+        {
+            get
+            {
+                if (_beta == null)
+                    _beta = new Badge
+                    {
+                        Description = "Participated in the Beta",
+                        Level = BadgeLevel.Silver,
+                        Name = "Beta",
+                        Id = (int)BadgeType.Beta
+                    };
+
+                return _beta;
             }
         }
     }

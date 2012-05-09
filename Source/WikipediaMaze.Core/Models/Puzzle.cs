@@ -4,11 +4,57 @@ using System.Linq;
 using System.Web;
 using System.Text.RegularExpressions;
 
+
 namespace WikipediaMaze.Core
 {
     public class Puzzle
     {
-        #region Properties
+        private IList<Vote> _votes;
+        private IList<Solution> _solutions;
+        private IList<string> _themes;
+
+        public virtual IList<Vote> Votes
+        {
+            get
+            {
+                if (_votes == null)
+                    _votes = new List<Vote>();
+
+                return _votes;
+            }
+            set
+            {
+                _votes = value;
+            }
+        }
+        public virtual IList<Solution> Solutions
+        {
+            get
+            {
+                if (_solutions == null)
+                    _solutions = new List<Solution>();
+
+                return _solutions;
+            }
+            set
+            {
+                _solutions = value;
+            }
+        }
+        public virtual IList<string> Themes
+        {
+            get
+            {
+                if (_themes == null)
+                    _themes = new List<string>();
+
+                return _themes;
+            }
+            set
+            {
+                _themes = value;
+            }
+        }
 
         public virtual int Id { get; set; }
         public virtual string StartTopic { get; set; }
@@ -16,15 +62,11 @@ namespace WikipediaMaze.Core
         public virtual User User { get; set; }
         public virtual DateTime DateCreated { get; set; }
         public virtual int Level { get; set; }
-        public virtual IEnumerable<Solution> Solutions { get; set; }
-        public virtual IList<Vote> Votes { get; set; }
         public virtual int VoteCount { get; set; }
         public virtual int SolutionCount { get; set; }
         public virtual bool IsVerified { get; set; }
-        public virtual IEnumerable<string> Themes { get; set; }
         public virtual int LeaderId { get; set; }
         public virtual int CreatedById { get; set; }
-        #endregion
 
         public static class Comparers
         {

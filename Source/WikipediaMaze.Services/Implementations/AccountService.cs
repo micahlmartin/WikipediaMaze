@@ -229,7 +229,8 @@ namespace WikipediaMaze.Services
                                Photo = profile.Photo + "",
                                PreferredUserName = profile.PreferredUserName + "",
                                RealName = (profile.Name != null ? profile.Name.FormattedName : string.Empty) + "",
-                               Reputation = 0
+                               Reputation = 0,
+                               OpenIdentifiers = new List<OpenIdentifier> { openIdentifier }
                            };
 
             if (user.DisplayName.Trim() == string.Empty)
@@ -238,8 +239,6 @@ namespace WikipediaMaze.Services
             _repository.Save(user);
 
             openIdentifier.UserId = user.Id;
-
-            _repository.Save(openIdentifier);
 
             _repository.Save(new UserAction
                                  {Action = UserActionType.Registered, DateCreated = DateTime.Now, UserId = user.Id});
