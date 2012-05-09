@@ -1,7 +1,0 @@
-<Modules>
-  <Module PersistentId="22E5EE09-C5CE-4085-B90C-E8F5E04BDF97" ModuleId="WikipediaMaze.Web" />
-  <Module PersistentId="7894DBAE-0DD3-46A3-8BB7-1CBB920D2639" ModuleId="WikipediaMaze.Core" />
-  <Module PersistentId="F2C5FFA6-4AC7-4B5D-A826-1D76712D12D3" ModuleId="WikipediaMaze.Data" />
-  <Module PersistentId="A73743B4-9109-4ED4-A7A9-7BED6330B647" ModuleId="WikipediaMaze.Services" />
-  <Module PersistentId="5FE56D67-BB3D-4FA3-94C2-E1BCFAD6CDA7" ModuleId="MigrateData" />
-</Modules>

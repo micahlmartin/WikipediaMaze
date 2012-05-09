@@ -42,11 +42,20 @@ namespace WikipediaMaze.Services.Implementations.BadgeAwarders
             }
 
             badgeInfo.Count++;
+            user.Notifications.Add(new Notification
+                                       {
+                                           Id = Guid.NewGuid(),
+                                           Message = "You have earned the " + BadgeType + "badge"
+                                       });
 
             _repository.Save(user);
         }
 
         protected abstract bool ShouldAwardBadge(User user);
         protected abstract BadgeType BadgeType { get; }
+        protected IRepository Repository
+        {
+            get { return _repository; }
+        }
     }
 }

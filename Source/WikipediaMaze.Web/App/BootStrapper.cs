@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using StructureMap;
 using WikipediaMaze.Data;
 using WikipediaMaze.Data.Mongo;

@@ -8,7 +8,7 @@ namespace WikipediaMaze.Services.Implementations.BadgeAwarders
 {
     public class AwardBetaBadge : AwardBadgeBase
     {
-        private static readonly DateTime CutoffDate = new DateTime(2010, 3, 1).ToUniversalTime();
+        private static readonly DateTime CutoffDate = new DateTime(2010, 3, 1, 0, 0, 0, DateTimeKind.Utc);
 
         public AwardBetaBadge(IRepository repository) : base(repository) { }
 

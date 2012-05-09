@@ -174,7 +174,7 @@ namespace WikipediaMaze.Controllers
                 if (Request.Cookies.Get("Notifications") == null || Request.Cookies.Get("Notifications").Value == "true")
                 {
                     const string message = "First time here? <a href='home/howtoplay' title='Learn how to play'>Click here</a> to learn how to play.";
-                    notifications.Add(new Notification {Id = -1, Message = message});
+                    notifications.Add(new Notification {NotificationId = -1, Message = message});
                     return Json(notifications, JsonRequestBehavior.AllowGet);
                 }
             }

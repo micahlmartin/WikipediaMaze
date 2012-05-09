@@ -325,7 +325,7 @@ namespace WikipediaMaze.Services
 
         public void DeleteNotification(int playerId, int notificationId)
         {
-            var notification = _repository.All<Notification>().FirstOrDefault(x => x.UserId == playerId && x.Id == notificationId);
+            var notification = _repository.All<Notification>().FirstOrDefault(x => x.UserId == playerId && x.NotificationId == notificationId);
             if (notification != null)
                 _repository.Delete(notification);
         }

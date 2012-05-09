@@ -6,10 +6,56 @@ namespace WikipediaMaze.Core
 {
     public class User : IValidate
     {
+        private IList<UserBadgeInfo> _badges;
+        private IList<OpenIdentifier> _openIdentifiers;
+        private IList<Notification> _notifications;
+
+        public virtual IList<UserBadgeInfo> Badges
+        {
+            get
+            {
+                if (_badges == null)
+                    _badges = new List<UserBadgeInfo>();
+
+                return _badges;
+            }
+            set
+            {
+                _badges = value;
+            }
+        }
+        public virtual IList<OpenIdentifier> OpenIdentifiers
+        {
+            get
+            {
+                if (_openIdentifiers == null)
+                    _openIdentifiers = new List<OpenIdentifier>();
+
+                return _openIdentifiers;
+            }
+            set
+            {
+                _openIdentifiers = value;
+            }
+        }
+        public IList<Notification> Notifications
+        {
+            get
+            {
+                if (_notifications == null)
+                    _notifications = new List<Notification>();
+
+                return _notifications;
+            }
+            set
+            {
+                _notifications = value;
+            }
+        }
+
         public virtual int Id { get;  set; }
         public virtual DateTime LastVisit { get; set; }
         public virtual int Reputation { get; set; }
-        public virtual IList<UserBadgeInfo> Badges { get; set; }    
         public virtual string RealName { get; set; }
         public virtual DateTime DateCreated { get; set; }
         public virtual DateTime? BirthDate { get; set; }
@@ -19,7 +65,6 @@ namespace WikipediaMaze.Core
         public virtual string DisplayName { get; set; }
         public virtual string PreferredUserName { get; set; }
         public virtual int LeadingPuzzleCount { get; set; }
-        public virtual IList<OpenIdentifier> OpenIdentifiers { get; set; }
         public virtual string TwitterUserName { get; set; }
         public virtual string GetGravatarUrl(int? size)
         {

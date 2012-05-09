@@ -77,6 +77,11 @@ namespace WikipediaMaze.Web.Controllers
                                                                                               LeadingPuzzleCount = user.LeadingPuzzleCount,
                                                                                               TwitterUserName = user.TwitterUserName,
                                                                                               OpenIdentifiers = GetOpenIdentifiers(user),
+                                                                                              Notifications = _nhibernateRepository.All<Notification>().Where(x => x.UserId == user.Id).ToList().Select(notification => new Notification
+                                                                                                                                                                                                                            {
+                                                                                                                                                                                                                                Id = Guid.NewGuid(),
+                                                                                                                                                                                                                                Message = notification.Message
+                                                                                                                                                                                                                            }).ToList()
                                                                                           });
 
                 _mongoRepository.InsertBatch(users);

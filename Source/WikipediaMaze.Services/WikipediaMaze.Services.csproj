@@ -98,6 +98,7 @@
     </Compile>
     <Compile Include="Implementations\AccountService.cs" />
     <Compile Include="Implementations\AwardBadgesService.cs" />
+    <Compile Include="Implementations\BadgeAwarders\AwardAddictBadge.cs" />
     <Compile Include="Implementations\BadgeAwarders\AwardBadgeBase.cs" />
     <Compile Include="Implementations\BadgeAwarders\AwardBetaBadge.cs" />
     <Compile Include="Implementations\FaceBookService.cs" />

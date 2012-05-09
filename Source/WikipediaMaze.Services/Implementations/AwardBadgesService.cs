@@ -15,10 +15,10 @@ namespace WikipediaMaze.Services
         private readonly IRepository _repository;
         private readonly IEnumerable<IAwardBadge> _badgeAwarders;
 
-        public AwardBadgesService(IRepository repository, IEnumerable<IAwardBadge> badgeAwarders)
+        public AwardBadgesService(IRepository repository)
         {
             _repository = repository;
-            _badgeAwarders = badgeAwarders;
+            _badgeAwarders = ObjectFactory.GetAllInstances<IAwardBadge>();
         }
 
         /// <summary>
@@ -51,7 +51,10 @@ namespace WikipediaMaze.Services
                 var currentAction = action;
                 if (currentAction.AffectedUserId.HasValue)
                 {
-                    _badgeAwarders.AsParallel().ForAll(x => x.AwardBadge(currentAction.AffectedUserId.Value));
+                    foreach (var awarder in _badgeAwarders)
+                        awarder.AwardBadge(currentAction.AffectedUserId.Value);
+
+                    //_badgeAwarders.AsParallel().ForAll(x => x.AwardBadge(currentAction.AffectedUserId.Value));
                 }
 
                 currentAction.HasBeenChecked = true;

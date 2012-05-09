@@ -12,7 +12,7 @@ namespace WikipediaMaze.Data.NHibernate.Mappings
         public NotificationMap()
         {
             Table("Notifications");
-            Id(x => x.Id);
+            Id(x => x.NotificationId, "Id");
             Map(x => x.Message);
             Map(x => x.UserId);
         }
