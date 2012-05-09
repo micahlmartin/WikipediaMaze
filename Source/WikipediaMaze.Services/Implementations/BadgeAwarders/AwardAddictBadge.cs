@@ -16,7 +16,7 @@ namespace WikipediaMaze.Services.Implementations.BadgeAwarders
             get { return false; }
         }
 
-        protected override bool ShouldAwardBadge(Core.User user)
+        protected override bool ShouldAwardBadge(User user)
         {
             var thirtyDaysAgo = DateTime.UtcNow.AddDays(-30).Date;
             var actions = Repository.All<UserAction>().Where(x => x.UserId == user.Id && x.DateCreated <= thirtyDaysAgo && x.Action == UserActionType.SolvedPuzzle);

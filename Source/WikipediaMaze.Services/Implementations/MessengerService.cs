@@ -38,6 +38,8 @@ namespace WikipediaMaze.Services
 
         public void SendPuzzleCreatedMessage(int puzzleId)
         {
+            return;
+
             var puzzle = _repository.All<Puzzle>().ById(puzzleId);
             if (puzzle == null) return;
 
@@ -51,6 +53,8 @@ namespace WikipediaMaze.Services
         }
         public void SendNewPuzzleLeaderMessage(int userId, int stepCount, int puzzleId)
         {
+            return;
+
             var user = _repository.All<Core.User>().ById(userId);
             var puzzle = _repository.All<Puzzle>().ById(puzzleId);
 
@@ -65,6 +69,8 @@ namespace WikipediaMaze.Services
         }
         public void TweetSolution(int solutionId)
         {
+            return;
+
             var solution = _repository.All<Solution>().ById(solutionId);
             if (solution == null) return;
 
