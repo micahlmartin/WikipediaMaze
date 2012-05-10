@@ -67,6 +67,7 @@
     <Compile Include="Models\ActionItem.cs" />
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\Badge.cs" />
+    <Compile Include="Models\Badges.cs" />
     <Compile Include="Models\CreatePuzzleResult.cs" />
     <Compile Include="Models\CurrentPuzzleInfo.cs" />
     <Compile Include="Models\Name.cs" />

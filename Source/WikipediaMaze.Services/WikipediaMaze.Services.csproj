@@ -101,6 +101,15 @@
     <Compile Include="Implementations\BadgeAwarders\AwardAddictBadge.cs" />
     <Compile Include="Implementations\BadgeAwarders\AwardBadgeBase.cs" />
     <Compile Include="Implementations\BadgeAwarders\AwardBetaBadge.cs" />
+    <Compile Include="Implementations\BadgeAwarders\AwardCrazedBadge.cs" />
+    <Compile Include="Implementations\BadgeAwarders\AwardCreatorBadge.cs" />
+    <Compile Include="Implementations\BadgeAwarders\AwardCriticBadge.cs" />
+    <Compile Include="Implementations\BadgeAwarders\AwardDominatorBadge.cs" />
+    <Compile Include="Implementations\BadgeAwarders\AwardEnigmatistBadge.cs" />
+    <Compile Include="Implementations\BadgeAwarders\AwardFamousBadge.cs" />
+    <Compile Include="Implementations\BadgeAwarders\AwardLeaderBadge.cs" />
+    <Compile Include="Implementations\BadgeAwarders\AwardMasterBadge.cs" />
+    <Compile Include="Implementations\BadgeAwarders\AwardMysterioBadge.cs" />
     <Compile Include="Implementations\FaceBookService.cs" />
     <Compile Include="Implementations\FormsAuthenticationService.cs" />
     <Compile Include="Implementations\GameService.cs" />
