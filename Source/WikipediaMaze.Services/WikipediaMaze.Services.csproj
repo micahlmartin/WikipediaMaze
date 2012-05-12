@@ -110,6 +110,12 @@
     <Compile Include="Implementations\BadgeAwarders\AwardLeaderBadge.cs" />
     <Compile Include="Implementations\BadgeAwarders\AwardMasterBadge.cs" />
     <Compile Include="Implementations\BadgeAwarders\AwardMysterioBadge.cs" />
+    <Compile Include="Implementations\BadgeAwarders\AwardNotableBadge.cs" />
+    <Compile Include="Implementations\BadgeAwarders\AwardPlayerBadge.cs" />
+    <Compile Include="Implementations\BadgeAwarders\AwardPopularBadge.cs" />
+    <Compile Include="Implementations\BadgeAwarders\AwardRiddlerBadge.cs" />
+    <Compile Include="Implementations\BadgeAwarders\AwardSupporterBadge.cs" />
+    <Compile Include="Implementations\BadgeAwarders\AwardYearlingBadge.cs" />
     <Compile Include="Implementations\FaceBookService.cs" />
     <Compile Include="Implementations\FormsAuthenticationService.cs" />
     <Compile Include="Implementations\GameService.cs" />
