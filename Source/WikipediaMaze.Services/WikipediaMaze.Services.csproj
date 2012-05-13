@@ -99,7 +99,6 @@
     <Compile Include="Implementations\AccountService.cs" />
     <Compile Include="Implementations\AwardBadgesService.cs" />
     <Compile Include="Implementations\BadgeAwarders\AwardAddictBadge.cs" />
-    <Compile Include="Implementations\BadgeAwarders\AwardBadgeBase.cs" />
     <Compile Include="Implementations\BadgeAwarders\AwardBetaBadge.cs" />
     <Compile Include="Implementations\BadgeAwarders\AwardCrazedBadge.cs" />
     <Compile Include="Implementations\BadgeAwarders\AwardCreatorBadge.cs" />
@@ -116,6 +115,7 @@
     <Compile Include="Implementations\BadgeAwarders\AwardRiddlerBadge.cs" />
     <Compile Include="Implementations\BadgeAwarders\AwardSupporterBadge.cs" />
     <Compile Include="Implementations\BadgeAwarders\AwardYearlingBadge.cs" />
+    <Compile Include="Implementations\BadgeAwarders\BaseBadgeAwarder.cs" />
     <Compile Include="Implementations\FaceBookService.cs" />
     <Compile Include="Implementations\FormsAuthenticationService.cs" />
     <Compile Include="Implementations\GameService.cs" />
@@ -166,6 +166,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

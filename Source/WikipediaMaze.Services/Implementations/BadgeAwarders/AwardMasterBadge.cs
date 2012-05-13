@@ -1,29 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using WikipediaMaze.Core;
+﻿using WikipediaMaze.Core;
 using WikipediaMaze.Data;
 
 namespace WikipediaMaze.Services.Implementations.BadgeAwarders
 {
-    public class AwardMasterBadge : AwardBadgeBase
+    public class AwardMasterBadge : BaseBadgeAwarder
     {
-        public AwardMasterBadge(IRepository repository) : base(repository) { }
+        protected override Core.UserActionType ActionType
+        {
+            get { return Core.UserActionType.SolvedPuzzle; }
+        }
+
+        protected override Core.BadgeType BadgeType
+        {
+            get { return Core.BadgeType.Master; }
+        }
 
         protected override bool AllowMultiple
         {
             get { return false; }
         }
 
-        protected override bool ShouldAwardBadge(User user)
+        protected override Core.User GetAffectedUser(Core.UserAction action)
         {
-            return user.LeadingPuzzleCount >= 50;
+            return Repository.All<User>().ById(action.UserId);
         }
 
-        protected override BadgeType BadgeType
+        protected override bool ShouldAwardBadge(Core.User user, Core.UserAction action)
         {
-            get { return BadgeType.Master; }
+            return user.LeadingPuzzleCount >= 50;
         }
     }
 }

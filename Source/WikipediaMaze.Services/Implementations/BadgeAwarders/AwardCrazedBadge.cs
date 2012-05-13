@@ -1,22 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using WikipediaMaze.Core;
 using WikipediaMaze.Data;
 
 namespace WikipediaMaze.Services.Implementations.BadgeAwarders
 {
-    public class AwardCrazedBadge : AwardBadgeBase
+    public class AwardCrazedBadge : BaseBadgeAwarder
     {
-        public AwardCrazedBadge(IRepository repository) : base(repository) { }
-
-        protected override bool AllowMultiple
+        protected override Core.UserActionType ActionType
         {
-            get { return false; }
+            get { return UserActionType.SolvedPuzzle; }
         }
 
-        protected override bool ShouldAwardBadge(User user)
+        protected override Core.BadgeType BadgeType
+        {
+            get { return Core.BadgeType.Crazed; }
+        }
+
+        protected override bool ShouldAwardBadge(Core.User user, Core.UserAction action)
         {
             var thirtyDaysAgo = DateTime.UtcNow.AddDays(-60).Date;
             var actions = Repository.All<UserAction>().Where(x => x.UserId == user.Id && x.DateCreated <= thirtyDaysAgo && x.Action == UserActionType.SolvedPuzzle);
@@ -27,7 +28,8 @@ namespace WikipediaMaze.Services.Implementations.BadgeAwarders
 
             while (dateToCheck < today && awardBadge)
             {
-                if (actions.Any(x => x.DateCreated.Date == dateToCheck))
+                DateTime check = dateToCheck;
+                if (actions.Any(x => x.DateCreated.Date == check))
                     awardBadge = false;
 
                 dateToCheck = dateToCheck.AddDays(1);
@@ -36,9 +38,14 @@ namespace WikipediaMaze.Services.Implementations.BadgeAwarders
             return awardBadge;
         }
 
-        protected override BadgeType BadgeType
+        protected override Core.User GetAffectedUser(Core.UserAction action)
         {
-            get { return BadgeType.Crazed; }
+            return Repository.All<User>().ById(action.UserId);
+        }
+
+        protected override bool AllowMultiple
+        {
+            get { return false; }
         }
     }
 }

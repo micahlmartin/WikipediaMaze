@@ -77,4 +77,9 @@ namespace WikipediaMaze.Core
         Famous = 16,
         Master = 17
     }
+
+    public enum NotificationType
+    {
+        Badge = 1
+    }
 }

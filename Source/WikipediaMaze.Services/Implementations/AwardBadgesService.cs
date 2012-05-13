@@ -49,13 +49,8 @@ namespace WikipediaMaze.Services
             foreach (var action in _repository.All<UserAction>().Where(x => !x.HasBeenChecked))
             {
                 var currentAction = action;
-                if (currentAction.AffectedUserId.HasValue)
-                {
-                    foreach (var awarder in _badgeAwarders)
-                        awarder.AwardBadge(currentAction.AffectedUserId.Value);
-
-                    //_badgeAwarders.AsParallel().ForAll(x => x.AwardBadge(currentAction.AffectedUserId.Value));
-                }
+                foreach (var awarder in _badgeAwarders)
+                    awarder.AwardBadge(currentAction);
 
                 currentAction.HasBeenChecked = true;
                 _repository.Save(action);

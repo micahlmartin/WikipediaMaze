@@ -1,31 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using MongoDB.Driver.Builders;
+﻿using MongoDB.Driver.Builders;
 using WikipediaMaze.Core;
 using WikipediaMaze.Data;
 using WikipediaMaze.Data.Mongo;
 
 namespace WikipediaMaze.Services.Implementations.BadgeAwarders
 {
-    public class AwardCriticBadge : AwardBadgeBase
+    public class AwardCriticBadge : BaseBadgeAwarder
     {
-        public AwardCriticBadge(IRepository repository) : base(repository) { }
-
-        protected override bool AllowMultiple
+        protected override Core.UserActionType ActionType
         {
-            get { return false; }
+            get { return Core.UserActionType.Voted; }
         }
 
-        protected override bool ShouldAwardBadge(Core.User user)
+        protected override Core.BadgeType BadgeType
+        {
+            get { return Core.BadgeType.Critic; }
+        }
+
+        protected override Core.User GetAffectedUser(Core.UserAction action)
+        {
+            return Repository.All<User>().ById(action.UserId);
+        }
+
+        protected override bool ShouldAwardBadge(Core.User user, Core.UserAction action)
         {
             return MongoRepository.Database.GetCollection(MongoRepository.GetCollectionNamingConvention(typeof(Puzzle))).Count(Query.ElemMatch("Votes", Query.And(Query.EQ("UserId", user.Id), Query.EQ("VoteType", VoteType.Down)))) > 0;
         }
 
-        protected override BadgeType BadgeType
+        protected override bool AllowMultiple
         {
-            get { return BadgeType.Critic; }
+            get { return false; }
         }
     }
 }

@@ -1,37 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using WikipediaMaze.Core;
+﻿using WikipediaMaze.Core;
 using WikipediaMaze.Data;
 
 namespace WikipediaMaze.Services.Implementations.BadgeAwarders
 {
-    public class AwardEnigmatistBadge : AwardBadgeBase
+    public class AwardEnigmatistBadge : BaseBadgeAwarder
     {
-        private int _badgeCount;
+        private Puzzle _puzzle;
 
-        public AwardEnigmatistBadge(IRepository repository) : base(repository) { }
+        protected override Core.UserActionType ActionType
+        {
+            get { return Core.UserActionType.Voted; }
+        }
+
+        protected override Core.BadgeType BadgeType
+        {
+            get { return Core.BadgeType.Enigmatist; }
+        }
+
+        protected override Core.User GetAffectedUser(Core.UserAction action)
+        {
+            _puzzle = Repository.All<Puzzle>().ById(action.PuzzleId.Value);
+            var userId = _puzzle.CreatedById;
+            return Repository.All<User>().ById(userId);
+        }
 
         protected override bool AllowMultiple
         {
             get { return true; }
         }
 
-        protected override bool ShouldAwardBadge(User user)
+        protected override bool ShouldAwardBadge(User user, UserAction action)
         {
-            _badgeCount = Repository.All<Puzzle>().Count(x => x.CreatedById == user.Id && x.VoteCount >= 25);
-            return _badgeCount > 0;
-        }
-
-        protected override void AssignBadgeCount(UserBadgeInfo badgeInfo)
-        {
-            badgeInfo.Count = _badgeCount;
-        }
-
-        protected override BadgeType BadgeType
-        {
-            get { return BadgeType.Enigmatist; }
+            return _puzzle.VoteCount >= 50;
         }
     }
 }

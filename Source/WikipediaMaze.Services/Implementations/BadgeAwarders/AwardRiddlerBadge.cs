@@ -1,37 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using WikipediaMaze.Core;
 using WikipediaMaze.Data;
-using WikipediaMaze.Core;
 
 namespace WikipediaMaze.Services.Implementations.BadgeAwarders
 {
-    public class AwardRiddlerBadge : AwardBadgeBase
+    public class AwardRiddlerBadge : BaseBadgeAwarder
     {
-        private int _badgeCount;
+        private Puzzle _puzzle;
 
-        public AwardRiddlerBadge(IRepository repository) : base(repository) { }
+        protected override Core.UserActionType ActionType
+        {
+            get { return Core.UserActionType.Voted; }
+        }
+
+        protected override Core.BadgeType BadgeType
+        {
+            get { return Core.BadgeType.Riddler; }
+        }
 
         protected override bool AllowMultiple
         {
             get { return true; }
         }
 
-        protected override bool ShouldAwardBadge(User user)
+        protected override Core.User GetAffectedUser(Core.UserAction action)
         {
-            _badgeCount = Repository.All<Puzzle>().Count(x => x.VoteCount >= 5 && x.CreatedById == user.Id);
-            return _badgeCount > 0;
+            _puzzle = Repository.All<Puzzle>().ById(action.PuzzleId.Value);
+            return Repository.All<User>().ById(_puzzle.CreatedById);
         }
 
-        protected override void AssignBadgeCount(UserBadgeInfo badgeInfo)
+        protected override bool ShouldAwardBadge(Core.User user, Core.UserAction action)
         {
-            badgeInfo.Count = _badgeCount;
-        }
-
-        protected override BadgeType BadgeType
-        {
-            get { return BadgeType.Riddler; }
+            return _puzzle.VoteCount >= 5;
         }
     }
 }

@@ -1,29 +1,34 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using WikipediaMaze.Data;
 using WikipediaMaze.Core;
 
 namespace WikipediaMaze.Services.Implementations.BadgeAwarders
 {
-    public class AwardYearlingBadge : AwardBadgeBase
+    public class AwardYearlingBadge : BaseBadgeAwarder
     {
-        public AwardYearlingBadge(IRepository repository) : base(repository) { }
+        protected override Core.UserActionType ActionType
+        {
+            get { return Core.UserActionType.None; }
+        }
+
+        protected override Core.BadgeType BadgeType
+        {
+            get { return Core.BadgeType.Yearling; }
+        }
 
         protected override bool AllowMultiple
         {
             get { return false; }
         }
 
-        protected override bool ShouldAwardBadge(User user)
+        protected override Core.User GetAffectedUser(Core.UserAction action)
         {
-            return DateTime.UtcNow.Date >= user.DateCreated.Date.AddYears(1);
+            return Repository.All<User>().ById(action.UserId);
         }
 
-        protected override Core.BadgeType BadgeType
+        protected override bool ShouldAwardBadge(Core.User user, Core.UserAction action)
         {
-            get { return BadgeType.Yearling; }
+            return DateTime.UtcNow.Date >= user.DateCreated.Date.AddYears(1);
         }
     }
 }
