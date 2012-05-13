@@ -38,7 +38,7 @@ namespace WikipediaMaze.Core
                 _openIdentifiers = value;
             }
         }
-        public IList<Notification> Notifications
+        public virtual IList<Notification> Notifications
         {
             get
             {

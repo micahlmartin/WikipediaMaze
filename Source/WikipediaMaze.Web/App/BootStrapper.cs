@@ -49,7 +49,23 @@ namespace WikipediaMaze.App
                 ForRequestedType<IRecurringService>().AddConcreteType<ThemeCountUpdateService>();
 
                 //Badge Awarders
+                ForRequestedType<IAwardBadge>().AddConcreteType<AwardAddictBadge>();
                 ForRequestedType<IAwardBadge>().AddConcreteType<AwardBetaBadge>();
+                ForRequestedType<IAwardBadge>().AddConcreteType<AwardCrazedBadge>();
+                ForRequestedType<IAwardBadge>().AddConcreteType<AwardCreatorBadge>();
+                ForRequestedType<IAwardBadge>().AddConcreteType<AwardCriticBadge>();
+                ForRequestedType<IAwardBadge>().AddConcreteType<AwardDominatorBadge>();
+                ForRequestedType<IAwardBadge>().AddConcreteType<AwardEnigmatistBadge>();
+                ForRequestedType<IAwardBadge>().AddConcreteType<AwardFamousBadge>();
+                ForRequestedType<IAwardBadge>().AddConcreteType<AwardLeaderBadge>();
+                ForRequestedType<IAwardBadge>().AddConcreteType<AwardMasterBadge>();
+                ForRequestedType<IAwardBadge>().AddConcreteType<AwardMysterioBadge>();
+                ForRequestedType<IAwardBadge>().AddConcreteType<AwardNotableBadge>();
+                ForRequestedType<IAwardBadge>().AddConcreteType<AwardPlayerBadge>();
+                ForRequestedType<IAwardBadge>().AddConcreteType<AwardPopularBadge>();
+                ForRequestedType<IAwardBadge>().AddConcreteType<AwardRiddlerBadge>();
+                ForRequestedType<IAwardBadge>().AddConcreteType<AwardSupporterBadge>();
+                ForRequestedType<IAwardBadge>().AddConcreteType<AwardYearlingBadge>();
             }   
         }
 

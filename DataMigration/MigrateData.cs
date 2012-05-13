@@ -1,33 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+using System.Text;
 using MongoDB.Driver.Builders;
 using WikipediaMaze.Core;
-using WikipediaMaze.Data;
 using WikipediaMaze.Data.Mongo;
 using WikipediaMaze.Data.NHibernate;
+using log4net;
 
-namespace WikipediaMaze.Web.Controllers
+namespace DataMigration
 {
-    public class AdminController : Controller
+    class MigrateData
     {
         private readonly NHibernateRepository _nhibernateRepository;
         private readonly MongoRepository _mongoRepository;
+        private readonly ILog _logger = LogManager.GetLogger(typeof (MigrateData));
 
-        public AdminController(NHibernateRepository nhibernateRepository, MongoRepository mongoRepository)
+        public MigrateData(NHibernateRepository nhibernateRepository, MongoRepository mongoRepository)
         {
-
             _nhibernateRepository = nhibernateRepository;
             _mongoRepository = mongoRepository;
+                
+            MongoRepository.Database.Drop();
         }
 
-        public ActionResult Index()
+        public void Run()
         {
             using (_nhibernateRepository.OpenSession())
             {
                 #region Puzzles
+
+                _logger.Info("Migrating Puzzles");
 
                 var puzzles = _nhibernateRepository.All<Puzzle>().ToList().Select(puzzle => new Puzzle
                                                                     {
@@ -59,6 +62,8 @@ namespace WikipediaMaze.Web.Controllers
                 #endregion
 
                 #region Users
+
+                _logger.Info("Migrating users");
 
                 var users = _nhibernateRepository.All<User>().ToList().Select(user => new User
                                                                                           {
@@ -93,12 +98,16 @@ namespace WikipediaMaze.Web.Controllers
 
                 #region Themes
 
+                _logger.Info("Migrating themes");
+
                 var themes = _nhibernateRepository.All<Theme>().ToList();
                 _mongoRepository.InsertBatch(themes);
 
                 #endregion
 
                 #region Solutions
+
+                _logger.Info("Migrating solutions");
 
                 var solutions = _nhibernateRepository.All<Solution>().ToList().Select(solution => new Solution
                                                                                                       {
@@ -123,13 +132,13 @@ namespace WikipediaMaze.Web.Controllers
 
                 #region Actions
 
+                _logger.Info("Migrating actions");
+
                 var actions = _nhibernateRepository.All<UserAction>().ToList();
                 _mongoRepository.InsertBatch(actions);
 
                 #endregion
             }
-
-            return Content("Success");
         }
 
         private IList<OpenIdentifier> GetOpenIdentifiers(User user)
