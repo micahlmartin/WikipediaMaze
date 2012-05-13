@@ -8,12 +8,14 @@ namespace WikipediaMaze.Core
         {
             switch (type)
             {
+                case BadgeType.Addict:
+                    return Addict;
                 case BadgeType.Player:
                     return Player;
                 case BadgeType.Critic:
                     return Critic;
                 case BadgeType.Creator:
-                    return Contributor;
+                    return Creator;
                 case BadgeType.Riddler:
                     return Riddler;
                 case BadgeType.Supporter:
@@ -34,8 +36,64 @@ namespace WikipediaMaze.Core
                     return Beta;
                 case BadgeType.Enigmatist:
                     return Enigmatist;
+                case BadgeType.Crazed:
+                    return Crazed;
                 default:
                     throw new ArgumentOutOfRangeException("type");
+            }
+        }
+
+        private static Badge _addict;
+        public static Badge Addict
+        {
+            get
+            {
+                if (_addict == null)
+                    _addict = new Badge
+                    {
+                        Name = "Addict",
+                        Description = "Plays at least 1 puzzle everyday for 30 days",
+                        Id = (int)BadgeType.Addict,
+                        Level = BadgeLevel.Silver
+                    };
+
+                return _addict;
+            }
+        }
+
+        private static Badge _crazed;
+        public static Badge Crazed
+        {
+            get
+            {
+                if (_crazed == null)
+                    _crazed = new Badge
+                    {
+                        Name = "Crazed",
+                        Description = "Plays at least 1 puzzle everyday for 60 days",
+                        Id = (int)BadgeType.Addict,
+                        Level = BadgeLevel.Silver
+                    };
+
+                return _crazed;
+            }
+        }
+
+        private static Badge _creator;
+        public static Badge Creator
+        {
+            get
+            {
+                if (_creator == null)
+                    _creator = new Badge
+                    {
+                        Name = "Creator",
+                        Description = "Created first puzzle",
+                        Id = (int)BadgeType.Creator,
+                        Level = BadgeLevel.Bronze
+                    };
+
+                return _creator;
             }
         }
 

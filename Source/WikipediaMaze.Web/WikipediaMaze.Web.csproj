@@ -52,29 +52,14 @@
     <FilesToIncludeForPublish>AllFilesInProjectFolder</FilesToIncludeForPublish>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Antlr3.Runtime">
-      <HintPath>..\..\Binaries\Antlr3.Runtime.dll</HintPath>
-    </Reference>
-    <Reference Include="Castle.Core">
-      <HintPath>..\..\Binaries\Castle.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Castle.DynamicProxy2">
-      <HintPath>..\..\Binaries\Castle.DynamicProxy2.dll</HintPath>
-    </Reference>
     <Reference Include="DotNetOpenAuth">
       <HintPath>..\..\Binaries\DotNetOpenAuth.dll</HintPath>
     </Reference>
     <Reference Include="Elmah">
       <HintPath>..\..\Binaries\Elmah.dll</HintPath>
     </Reference>
-    <Reference Include="FluentNHibernate">
-      <HintPath>..\..\Binaries\FluentNHibernate.dll</HintPath>
-    </Reference>
     <Reference Include="HtmlAgilityPack">
       <HintPath>..\..\Binaries\HtmlAgilityPack.dll</HintPath>
-    </Reference>
-    <Reference Include="Iesi.Collections">
-      <HintPath>..\..\Binaries\Iesi.Collections.dll</HintPath>
     </Reference>
     <Reference Include="Littlefish.SQLiteSessionStateProvider, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\Binaries\Littlefish.SQLiteSessionStateProvider.dll</HintPath>
@@ -101,15 +86,6 @@
     </Reference>
     <Reference Include="MvcContrib.StructureMap">
       <HintPath>..\..\Binaries\MvcContrib.StructureMap.dll</HintPath>
-    </Reference>
-    <Reference Include="NHibernate">
-      <HintPath>..\..\Binaries\NHibernate.dll</HintPath>
-    </Reference>
-    <Reference Include="NHibernate.ByteCode.Castle">
-      <HintPath>..\..\Binaries\NHibernate.ByteCode.Castle.dll</HintPath>
-    </Reference>
-    <Reference Include="NHibernate.Linq">
-      <HintPath>..\..\Binaries\NHibernate.Linq.dll</HintPath>
     </Reference>
     <Reference Include="Recaptcha">
       <HintPath>..\..\Binaries\Recaptcha.dll</HintPath>
@@ -169,7 +145,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\BadgesController.cs" />
     <Compile Include="Controllers\CacheController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />

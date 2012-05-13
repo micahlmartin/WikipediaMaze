@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using WikipediaMaze.Data;
 using WikipediaMaze.Core;
-using NHibernate;
-using WikipediaMaze.Data.Mongo;
 
 namespace WikipediaMaze.Services
 {

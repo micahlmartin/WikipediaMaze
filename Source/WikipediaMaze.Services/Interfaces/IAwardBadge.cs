@@ -8,6 +8,6 @@ namespace WikipediaMaze.Services.Interfaces
 {
     public interface IAwardBadge
     {
-        void AwardBadge(UserAction action);
+        bool AwardBadge(UserAction action);
     }
 }

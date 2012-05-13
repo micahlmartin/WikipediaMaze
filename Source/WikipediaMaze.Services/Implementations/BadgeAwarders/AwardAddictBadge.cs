@@ -19,20 +19,20 @@ namespace WikipediaMaze.Services.Implementations.BadgeAwarders
 
         protected override bool ShouldAwardBadge(Core.User user, Core.UserAction action)
         {
-            var thirtyDaysAgo = DateTime.UtcNow.AddDays(-30).Date;
-            var actions = Repository.All<UserAction>().Where(x => x.UserId == user.Id && x.DateCreated <= thirtyDaysAgo && x.Action == UserActionType.SolvedPuzzle);
+            var numberOfDaysToCheck = 30;
+            var now = DateTime.UtcNow;
+            var actions = Repository.All<UserAction>().Where(x => x.UserId == user.Id && x.DateCreated > now.AddDays(numberOfDaysToCheck * -1) && x.Action == UserActionType.SolvedPuzzle);
 
-            var dateToCheck = thirtyDaysAgo;
             var awardBadge = true;
-            var today = DateTime.UtcNow.Date;
+            var counter = 0;
 
-            while (dateToCheck < today && awardBadge)
+            while (counter < numberOfDaysToCheck && awardBadge)
             {
-                var check = dateToCheck;
-                if (actions.Any(x => x.DateCreated.Date == check))
+                var dateToCheck = now.AddDays(counter * -1).Date;
+                if (!actions.Any(x => x.DateCreated.Date == dateToCheck))
                     awardBadge = false;
 
-                dateToCheck = dateToCheck.AddDays(1);
+                counter++;
             }
 
             return awardBadge;

@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using StructureMap;
 using WikipediaMaze.Data;
 using WikipediaMaze.Data.Mongo;
-using WikipediaMaze.Data.NHibernate;
-using NHibernate;
-using FluentNHibernate.Cfg;
 using StructureMap.Configuration.DSL;
 using WikipediaMaze.Services;
 using WikipediaMaze.Services.Implementations.BadgeAwarders;
@@ -29,43 +25,43 @@ namespace WikipediaMaze.App
             public ServiceRegistry()
             {
                 //Data
-                ForRequestedType<IRepository>().TheDefaultIsConcreteType<MongoRepository>();
+                For<IRepository>().Use<MongoRepository>();
 
                 //Services
-                ForRequestedType<ITwitterService>().TheDefaultIsConcreteType<TwitterService>();
-                ForRequestedType<IMessengerService>().TheDefaultIsConcreteType<MessengerService>();
-                ForRequestedType<IReputationService>().TheDefaultIsConcreteType<ReputationService>();
-                ForRequestedType<ITopicCache>().TheDefaultIsConcreteType<TopicCache>();
-                ForRequestedType<IGameService>().TheDefaultIsConcreteType<GameService>();
-                ForRequestedType<ITopicService>().TheDefaultIsConcreteType<TopicService>();
-                ForRequestedType<IPuzzleService>().TheDefaultIsConcreteType<PuzzleService>();
-                ForRequestedType<IAuthenticationService>().TheDefaultIsConcreteType<FormsAuthenticationService>();
-                ForRequestedType<IAccountService>().TheDefaultIsConcreteType<AccountService>();
-                ForRequestedType<IPuzzleCache>().TheDefaultIsConcreteType<PuzzleCache>();
-                ForRequestedType<IWebSnapshotService>().TheDefaultIsConcreteType<WebSnapshotService>();
+                For<ITwitterService>().Use<TwitterService>();
+                For<IMessengerService>().Use<MessengerService>();
+                For<IReputationService>().Use<ReputationService>();
+                For<ITopicCache>().Use<TopicCache>();
+                For<IGameService>().Use<GameService>();
+                For<ITopicService>().Use<TopicService>();
+                For<IPuzzleService>().Use<PuzzleService>();
+                For<IAuthenticationService>().Use<FormsAuthenticationService>();
+                For<IAccountService>().Use<AccountService>();
+                For<IPuzzleCache>().Use<PuzzleCache>();
+                For<IWebSnapshotService>().Use<WebSnapshotService>();
                 
                 //Recurring Services
-                ForRequestedType<IRecurringService>().AddConcreteType<AwardBadgesService>();
-                ForRequestedType<IRecurringService>().AddConcreteType<ThemeCountUpdateService>();
+                For<IRecurringService>().Use<AwardBadgesService>();
+                For<IRecurringService>().Use<ThemeCountUpdateService>();
 
                 //Badge Awarders
-                ForRequestedType<IAwardBadge>().AddConcreteType<AwardAddictBadge>();
-                ForRequestedType<IAwardBadge>().AddConcreteType<AwardBetaBadge>();
-                ForRequestedType<IAwardBadge>().AddConcreteType<AwardCrazedBadge>();
-                ForRequestedType<IAwardBadge>().AddConcreteType<AwardCreatorBadge>();
-                ForRequestedType<IAwardBadge>().AddConcreteType<AwardCriticBadge>();
-                ForRequestedType<IAwardBadge>().AddConcreteType<AwardDominatorBadge>();
-                ForRequestedType<IAwardBadge>().AddConcreteType<AwardEnigmatistBadge>();
-                ForRequestedType<IAwardBadge>().AddConcreteType<AwardFamousBadge>();
-                ForRequestedType<IAwardBadge>().AddConcreteType<AwardLeaderBadge>();
-                ForRequestedType<IAwardBadge>().AddConcreteType<AwardMasterBadge>();
-                ForRequestedType<IAwardBadge>().AddConcreteType<AwardMysterioBadge>();
-                ForRequestedType<IAwardBadge>().AddConcreteType<AwardNotableBadge>();
-                ForRequestedType<IAwardBadge>().AddConcreteType<AwardPlayerBadge>();
-                ForRequestedType<IAwardBadge>().AddConcreteType<AwardPopularBadge>();
-                ForRequestedType<IAwardBadge>().AddConcreteType<AwardRiddlerBadge>();
-                ForRequestedType<IAwardBadge>().AddConcreteType<AwardSupporterBadge>();
-                ForRequestedType<IAwardBadge>().AddConcreteType<AwardYearlingBadge>();
+                For<IAwardBadge>().Use<AwardAddictBadge>();
+                For<IAwardBadge>().Use<AwardBetaBadge>();
+                For<IAwardBadge>().Use<AwardCrazedBadge>();
+                For<IAwardBadge>().Use<AwardCreatorBadge>();
+                For<IAwardBadge>().Use<AwardCriticBadge>();
+                For<IAwardBadge>().Use<AwardDominatorBadge>();
+                For<IAwardBadge>().Use<AwardEnigmatistBadge>();
+                For<IAwardBadge>().Use<AwardFamousBadge>();
+                For<IAwardBadge>().Use<AwardLeaderBadge>();
+                For<IAwardBadge>().Use<AwardMasterBadge>();
+                For<IAwardBadge>().Use<AwardMysterioBadge>();
+                For<IAwardBadge>().Use<AwardNotableBadge>();
+                For<IAwardBadge>().Use<AwardPlayerBadge>();
+                For<IAwardBadge>().Use<AwardPopularBadge>();
+                For<IAwardBadge>().Use<AwardRiddlerBadge>();
+                For<IAwardBadge>().Use<AwardSupporterBadge>();
+                For<IAwardBadge>().Use<AwardYearlingBadge>();
             }   
         }
 

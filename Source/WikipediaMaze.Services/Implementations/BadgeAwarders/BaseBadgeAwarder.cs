@@ -9,19 +9,19 @@ namespace WikipediaMaze.Services.Implementations.BadgeAwarders
 {
     public abstract class BaseBadgeAwarder : IAwardBadge
     {
-        public void AwardBadge(UserAction action)
+        public bool AwardBadge(UserAction action)
         {
             if (ActionType != UserActionType.None && ActionType != action.Action)
-                return;
+                return false;
 
             var affectedUser = GetAffectedUser(action);
             var badgeInfo = affectedUser.Badges.FirstOrDefault(x => x.Name == BadgeType.ToString());
 
             if (!AllowMultiple && badgeInfo != null && badgeInfo.Count > 0)
-                return;
+                return false;
 
             if (!ShouldAwardBadge(affectedUser, action))
-                return;
+                return false;
 
             if (badgeInfo == null)
             {
@@ -46,6 +46,8 @@ namespace WikipediaMaze.Services.Implementations.BadgeAwarders
             });
 
             _repository.Save(affectedUser);
+
+            return true;
         }
 
         protected abstract UserActionType ActionType { get; }
