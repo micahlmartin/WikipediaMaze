@@ -37,7 +37,7 @@ namespace WikipediaMaze.Services.Tests.Badges
             var badgeInfo = new UserBadgeInfo
                                 {
                                     Count = 1,
-                                    Name = BadgeType.Dominator.ToString()
+                                    Name = BadgeType.Enigmatist.ToString()
                                 };
             var user = new User
                 {
