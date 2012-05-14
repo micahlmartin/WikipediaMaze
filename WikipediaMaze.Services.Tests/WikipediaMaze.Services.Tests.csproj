@@ -77,6 +77,12 @@
     <Compile Include="Badges\AwardCriticBadgeTest.cs" />
     <Compile Include="Badges\AwardDominatorBadgeTest.cs" />
     <Compile Include="Badges\AwardEnigmatistBadgeTest.cs" />
+    <Compile Include="Badges\AwardFamousBadgeTest.cs" />
+    <Compile Include="Badges\AwardLeaderBadgeTest.cs" />
+    <Compile Include="Badges\AwardMasterBadgeTest.cs" />
+    <Compile Include="Badges\AwardMysterioBadgeTest.cs" />
+    <Compile Include="Badges\AwardNotableBadgeTest.cs" />
+    <Compile Include="Badges\AwardPlayerBadgeTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
