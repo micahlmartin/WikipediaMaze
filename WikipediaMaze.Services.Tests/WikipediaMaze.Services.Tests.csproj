@@ -74,6 +74,9 @@
     <Compile Include="Badges\AwardBetaBadgeTest.cs" />
     <Compile Include="Badges\AwardCrazedBadgeTest.cs" />
     <Compile Include="Badges\AwardCreatorBadgeTest.cs" />
+    <Compile Include="Badges\AwardCriticBadgeTest.cs" />
+    <Compile Include="Badges\AwardDominatorBadgeTest.cs" />
+    <Compile Include="Badges\AwardEnigmatistBadgeTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
