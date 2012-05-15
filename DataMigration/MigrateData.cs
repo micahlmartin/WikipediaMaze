@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using MongoDB.Driver.Builders;
+using StructureMap;
+using WikipediaMaze.App;
 using WikipediaMaze.Core;
 using WikipediaMaze.Data.Mongo;
 using WikipediaMaze.Data.NHibernate;
+using WikipediaMaze.Services.Interfaces;
 using log4net;
 
 namespace DataMigration
@@ -22,6 +25,9 @@ namespace DataMigration
             _mongoRepository = mongoRepository;
                 
             MongoRepository.Database.Drop();
+
+            var bootstrapper = new Bootstrapper();
+            bootstrapper.BootstrapStructureMap();
         }
 
         public void Run()
@@ -70,7 +76,7 @@ namespace DataMigration
                                                                                               Id = user.Id,
                                                                                               LastVisit = user.LastVisit,
                                                                                               Reputation = user.Reputation,
-                                                                                              Badges = GetUserBadges(user.Id),
+                                                                                              //Badges = GetUserBadges(user.Id),
                                                                                               RealName = user.RealName,
                                                                                               DateCreated = user.DateCreated.ToUniversalTime(),
                                                                                               BirthDate = user.BirthDate,
@@ -135,7 +141,32 @@ namespace DataMigration
                 _logger.Info("Migrating actions");
 
                 var actions = _nhibernateRepository.All<UserAction>().ToList();
-                _mongoRepository.InsertBatch(actions);
+
+                _mongoRepository.InsertBatch(actions.Select(action => new UserAction
+                                                                          {
+                                                                              Action = action.Action,
+                                                                              Id = Guid.NewGuid(),
+                                                                              DateCreated = action.DateCreated,
+                                                                              PuzzleId = action.PuzzleId,
+                                                                              SolutionId = action.SolutionId,
+                                                                              UserId = action.UserId,
+                                                                              VoteType = action.VoteType
+                                                                          }).ToList());
+
+
+                
+                #endregion
+
+                #region Badges
+
+                var badgeAwarders = ObjectFactory.GetAllInstances<IAwardBadge>();
+
+                foreach (var action in _mongoRepository.All<UserAction>())
+                {
+                    foreach (var awarder in badgeAwarders)
+                        awarder.AwardBadge(action);
+                }
+                    
 
                 #endregion
             }

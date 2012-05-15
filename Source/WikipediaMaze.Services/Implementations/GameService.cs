@@ -259,7 +259,6 @@ namespace WikipediaMaze.Services
                                      PuzzleId = puzzle.Id,
                                      SolutionId = solution.SolutionId,
                                      UserId = user.Id,
-                                     AffectedUserId = puzzle.CreatedById
                                  });
 
             //Solution is commited at this point so if there is only 1 solution then we are the leader

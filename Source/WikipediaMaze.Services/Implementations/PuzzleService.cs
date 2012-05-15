@@ -438,7 +438,6 @@ namespace WikipediaMaze.Services
 									 UserId = user.Id,
 									 PuzzleId = puzzleId,
 									 VoteType = voteResult.VoteType.Value,
-									 AffectedUserId = puzzle.CreatedById
 								 });
 
 			return voteResult;
@@ -674,7 +673,6 @@ namespace WikipediaMaze.Services
 			_repository.Save(new UserAction
 			{
 				Action = UserActionType.ReTaggedPuzzle,
-				AffectedUserId = puzzle.CreatedById,
 				DateCreated = DateTime.Now,
 				PuzzleId = puzzle.Id,
 				UserId = _authenticationService.CurrentUserId

@@ -92,6 +92,10 @@
       <Project>{A73743B4-9109-4ED4-A7A9-7BED6330B647}</Project>
       <Name>WikipediaMaze.Services</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Source\WikipediaMaze.Web\WikipediaMaze.Web.csproj">
+      <Project>{22E5EE09-C5CE-4085-B90C-E8F5E04BDF97}</Project>
+      <Name>WikipediaMaze.Web</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
