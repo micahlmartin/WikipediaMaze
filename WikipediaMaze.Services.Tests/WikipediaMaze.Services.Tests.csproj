@@ -83,6 +83,10 @@
     <Compile Include="Badges\AwardMysterioBadgeTest.cs" />
     <Compile Include="Badges\AwardNotableBadgeTest.cs" />
     <Compile Include="Badges\AwardPlayerBadgeTest.cs" />
+    <Compile Include="Badges\AwardPopularBadgeTest.cs" />
+    <Compile Include="Badges\AwardRiddlerBadgeTest.cs" />
+    <Compile Include="Badges\AwardSupporterBadgeTest.cs" />
+    <Compile Include="Badges\AwardYearlingBadgeTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

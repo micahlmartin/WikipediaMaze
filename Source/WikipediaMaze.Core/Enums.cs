@@ -46,7 +46,6 @@ namespace WikipediaMaze.Core
         ReceivedVote = 2,
         CreatedPuzzle = 3,
         SolvedPuzzle = 4,
-        PuzzlePlayed = 5,
         LoggedIn = 6,
         Registered = 7,
         ReTaggedPuzzle = 8,

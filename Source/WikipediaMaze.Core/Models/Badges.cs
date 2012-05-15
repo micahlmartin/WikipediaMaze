@@ -38,8 +38,28 @@ namespace WikipediaMaze.Core
                     return Enigmatist;
                 case BadgeType.Crazed:
                     return Crazed;
+                case BadgeType.Yearling:
+                    return Yearling;
                 default:
                     throw new ArgumentOutOfRangeException("type");
+            }
+        }
+
+        private static Badge _yearling;
+        public static Badge Yearling
+        {
+            get
+            {
+                if (_yearling == null)
+                    _yearling = new Badge
+                    {
+                        Name = "Yearling",
+                        Description = "Active member for 1 year",
+                        Id = (int)BadgeType.Yearling,
+                        Level = BadgeLevel.Silver
+                    };
+
+                return _yearling;
             }
         }
 

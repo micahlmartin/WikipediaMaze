@@ -9,7 +9,7 @@ namespace WikipediaMaze.Services.Implementations.BadgeAwarders
 
         protected override UserActionType ActionType
         {
-            get { return UserActionType.PuzzlePlayed; }
+            get { return UserActionType.SolvedPuzzle; }
         }
 
         protected override BadgeType BadgeType
