@@ -164,7 +164,14 @@ namespace DataMigration
                 foreach (var action in _mongoRepository.All<UserAction>())
                 {
                     foreach (var awarder in badgeAwarders)
-                        awarder.AwardBadge(action);
+                        try
+                        {
+                            awarder.AwardBadge(action);
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.Error("An exception occurred awarding a badge", ex);
+                        }
                 }
                     
 

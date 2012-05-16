@@ -185,7 +185,7 @@ namespace WikipediaMaze.Services
                 user.LastVisit = DateTime.Now;
 
                 _repository.Save(user);
-                _repository.Save(new UserAction { Action = UserActionType.LoggedIn, DateCreated = DateTime.Now, UserId = user.Id });
+                _repository.Save(new UserAction { Action = UserActionType.LoggedIn, DateCreated = DateTime.UtcNow, UserId = user.Id });
 
                 return user;
             }
@@ -241,7 +241,7 @@ namespace WikipediaMaze.Services
             openIdentifier.UserId = user.Id;
 
             _repository.Save(new UserAction
-                                 {Action = UserActionType.Registered, DateCreated = DateTime.Now, UserId = user.Id});
+                                 {Action = UserActionType.Registered, DateCreated = DateTime.UtcNow, UserId = user.Id});
 
             Rpx.Map(profile.Identifier, user.Id.ToString(System.Globalization.CultureInfo.CurrentCulture));
 

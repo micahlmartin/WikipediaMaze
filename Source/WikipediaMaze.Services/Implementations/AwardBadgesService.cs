@@ -50,10 +50,13 @@ namespace WikipediaMaze.Services
             {
                 var currentAction = action;
                 foreach (var awarder in _badgeAwarders)
-                    awarder.AwardBadge(currentAction);
-
-                currentAction.HasBeenChecked = true;
-                _repository.Save(action);
+                    try
+                    {
+                        awarder.AwardBadge(currentAction);
+                        currentAction.HasBeenChecked = true;
+                        _repository.Save(action);
+                    }
+                    catch (Exception) { }
             }
         }
     }

@@ -1,4 +1,6 @@
-﻿using WikipediaMaze.Core;
+﻿using System;
+using System.Collections.Generic;
+using WikipediaMaze.Core;
 using WikipediaMaze.Data;
 
 namespace WikipediaMaze.Services.Implementations.BadgeAwarders
@@ -15,7 +17,7 @@ namespace WikipediaMaze.Services.Implementations.BadgeAwarders
             get { return BadgeType.Creator; }
         }
 
-        protected override bool ShouldAwardBadge(User user, UserAction action)
+        protected override bool ShouldAwardBadge(User user, UserAction action, IList<BadgeAwardInfo> awardInfo)
         {
             return true;
         }
@@ -28,6 +30,15 @@ namespace WikipediaMaze.Services.Implementations.BadgeAwarders
         protected override bool AllowMultiple
         {
             get { return false; }
+        }
+
+        protected override BadgeAwardInfo GetBadgeAwardInfo(UserAction action)
+        {
+            return new BadgeAwardInfo
+            {
+                Data = action.PuzzleId,
+                DateAwarded = action.DateCreated
+            };
         }
     }
 }

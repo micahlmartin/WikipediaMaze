@@ -76,7 +76,8 @@ namespace WikipediaMaze.Services.Tests.Badges
                 {
                     Action = UserActionType.SolvedPuzzle,
                     UserId = 1,
-                    DateCreated = DateTime.UtcNow.AddDays(i * -1)
+                    DateCreated = DateTime.UtcNow.AddDays(i * -1),
+                    PuzzleId = i
                 });
             }
 

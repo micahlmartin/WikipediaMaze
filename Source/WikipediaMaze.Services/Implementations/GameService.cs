@@ -255,7 +255,7 @@ namespace WikipediaMaze.Services
             _repository.Save(new UserAction
                                  {
                                      Action = UserActionType.SolvedPuzzle,
-                                     DateCreated = DateTime.Now,
+                                     DateCreated = DateTime.UtcNow,
                                      PuzzleId = puzzle.Id,
                                      SolutionId = solution.SolutionId,
                                      UserId = user.Id,

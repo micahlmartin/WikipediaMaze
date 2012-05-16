@@ -42,15 +42,15 @@ namespace WikipediaMaze.Controllers.SubControllers
         }
         public int GoldBadgeCount
         {
-            get { return _user.Badges.Where(x => x.Level == BadgeLevel.Gold).Count(); }
+            get { return _user.GoldBadgeCount; }
         }
         public int SilverBadgeCount
         {
-            get { return _user.Badges.Where(x => x.Level == BadgeLevel.Silver).Count(); }
+            get { return _user.SilverBadgeCount; }
         }
         public int BronzeBadgeCount
         {
-            get { return _user.Badges.Where(x => x.Level == BadgeLevel.Bronze).Count(); }
+            get { return _user.BronzeBadgeCount; }
         }
         public int Reputation
         {

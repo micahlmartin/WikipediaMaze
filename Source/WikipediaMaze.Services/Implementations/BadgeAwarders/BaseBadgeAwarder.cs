@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using StructureMap;
 using WikipediaMaze.Core;
@@ -20,7 +21,9 @@ namespace WikipediaMaze.Services.Implementations.BadgeAwarders
             if (!AllowMultiple && badgeInfo != null && badgeInfo.Count > 0)
                 return false;
 
-            if (!ShouldAwardBadge(affectedUser, action))
+            var awardInfo = badgeInfo == null ? new List<BadgeAwardInfo>() : badgeInfo.AwardInfo;
+
+            if (!ShouldAwardBadge(affectedUser, action, awardInfo))
                 return false;
 
             if (badgeInfo == null)
@@ -37,6 +40,7 @@ namespace WikipediaMaze.Services.Implementations.BadgeAwarders
             }
 
             badgeInfo.Count++;
+            badgeInfo.AwardInfo.Add(GetBadgeAwardInfo(action));
 
             affectedUser.Notifications.Add(new Notification
             {
@@ -54,7 +58,8 @@ namespace WikipediaMaze.Services.Implementations.BadgeAwarders
         protected abstract BadgeType BadgeType { get; }
         protected abstract bool AllowMultiple { get; }
         protected abstract User GetAffectedUser(UserAction action);
-        protected abstract bool ShouldAwardBadge(User user, UserAction action);
+        protected abstract bool ShouldAwardBadge(User user, UserAction action, IList<BadgeAwardInfo> awardInfo);
+        protected abstract BadgeAwardInfo GetBadgeAwardInfo(UserAction action);
 
         private IRepository _repository;
         public IRepository Repository

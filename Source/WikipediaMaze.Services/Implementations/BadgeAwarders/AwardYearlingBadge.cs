@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using WikipediaMaze.Data;
 using WikipediaMaze.Core;
 
@@ -26,9 +27,17 @@ namespace WikipediaMaze.Services.Implementations.BadgeAwarders
             return Repository.All<User>().ById(action.UserId);
         }
 
-        protected override bool ShouldAwardBadge(Core.User user, Core.UserAction action)
+        protected override bool ShouldAwardBadge(Core.User user, Core.UserAction action, IList<BadgeAwardInfo> awardInfo)
         {
             return DateTime.UtcNow.Date >= user.DateCreated.Date.AddYears(1);
+        }
+
+        protected override BadgeAwardInfo GetBadgeAwardInfo(UserAction action)
+        {
+            return new BadgeAwardInfo
+            {
+                DateAwarded = action.DateCreated,
+            };
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using WikipediaMaze.Core;
+﻿using System;
+using System.Collections.Generic;
+using WikipediaMaze.Core;
 using WikipediaMaze.Data;
 
 namespace WikipediaMaze.Services.Implementations.BadgeAwarders
@@ -25,9 +27,17 @@ namespace WikipediaMaze.Services.Implementations.BadgeAwarders
             return Repository.All<User>().ById(action.UserId);
         }
 
-        protected override bool ShouldAwardBadge(User user, UserAction action)
+        protected override bool ShouldAwardBadge(User user, UserAction action, IList<BadgeAwardInfo> awardInfo)
         {
             return user.LeadingPuzzleCount >= 5;
+        }
+
+        protected override BadgeAwardInfo GetBadgeAwardInfo(UserAction action)
+        {
+            return new BadgeAwardInfo
+            {
+                DateAwarded = action.DateCreated
+            };
         }
     }
 }

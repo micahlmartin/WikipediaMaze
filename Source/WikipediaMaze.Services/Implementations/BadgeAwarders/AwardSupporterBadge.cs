@@ -1,4 +1,6 @@
-﻿using MongoDB.Driver.Builders;
+﻿using System;
+using System.Collections.Generic;
+using MongoDB.Driver.Builders;
 using WikipediaMaze.Core;
 using WikipediaMaze.Data;
 using WikipediaMaze.Data.Mongo;
@@ -27,9 +29,18 @@ namespace WikipediaMaze.Services.Implementations.BadgeAwarders
             return Repository.All<User>().ById(action.UserId);
         }
 
-        protected override bool ShouldAwardBadge(Core.User user, Core.UserAction action)
+        protected override bool ShouldAwardBadge(Core.User user, Core.UserAction action, IList<BadgeAwardInfo> awardInfo)
         {
-            return MongoRepository.Database.GetCollection(MongoRepository.GetCollectionNamingConvention(typeof(Puzzle))).Count(Query.ElemMatch("Votes", Query.And(Query.EQ("UserId", user.Id), Query.EQ("VoteType", VoteType.Up)))) > 0;
+            return action.VoteType == VoteType.Up;
+        }
+
+        protected override BadgeAwardInfo GetBadgeAwardInfo(UserAction action)
+        {
+            return new BadgeAwardInfo
+            {
+                Data = action.PuzzleId,
+                DateAwarded = action.DateCreated
+            };
         }
     }
 }

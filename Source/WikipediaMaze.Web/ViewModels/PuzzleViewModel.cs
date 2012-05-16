@@ -34,13 +34,13 @@ namespace WikipediaMaze.ViewModels
         }
         public string StartTopic
         {
-            get { return _puzzle.StartTopic.FormatTopic(); }
+            get { return _puzzle.StartTopic; }
         }
         public string EndTopic
         {
             get
             {
-                return _puzzle.EndTopic.FormatTopic();
+                return _puzzle.EndTopic;
             }
         }
         public int PuzzleLevel

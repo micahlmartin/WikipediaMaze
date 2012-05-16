@@ -127,7 +127,7 @@ namespace WikipediaMaze.Services
 			_repository.Save(new UserAction
 								 {
 									 Action = UserActionType.CreatedPuzzle,
-									 DateCreated = DateTime.Now,
+									 DateCreated = DateTime.UtcNow,
 									 PuzzleId = puzzle.Id,
 									 UserId = user.Id
 								 });
@@ -434,7 +434,7 @@ namespace WikipediaMaze.Services
 			_repository.Save(new UserAction
 								 {
 									 Action = UserActionType.Voted,
-									 DateCreated = DateTime.Now,
+									 DateCreated = DateTime.UtcNow,
 									 UserId = user.Id,
 									 PuzzleId = puzzleId,
 									 VoteType = voteResult.VoteType.Value,
@@ -673,7 +673,7 @@ namespace WikipediaMaze.Services
 			_repository.Save(new UserAction
 			{
 				Action = UserActionType.ReTaggedPuzzle,
-				DateCreated = DateTime.Now,
+				DateCreated = DateTime.UtcNow,
 				PuzzleId = puzzle.Id,
 				UserId = _authenticationService.CurrentUserId
 			});

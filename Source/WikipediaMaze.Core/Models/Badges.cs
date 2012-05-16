@@ -215,7 +215,7 @@ namespace WikipediaMaze.Core
                 if (_popularPuzzle == null)
                     _popularPuzzle = new Badge
                                          {
-                                             Name = "Popular Puzzle",
+                                             Name = BadgeType.Popular.ToString(),
                                              Description = "Created a puzzle with 10+ solutions.",
                                              Id = (int)BadgeType.Popular,
                                              Level = BadgeLevel.Bronze
@@ -235,7 +235,7 @@ namespace WikipediaMaze.Core
                                          {
                                              Description = "Created a puzzle with 25+ solutions.",
                                              Level = BadgeLevel.Silver,
-                                             Name = "Notable Puzzle",
+                                             Name = BadgeType.Notable.ToString(),
                                              Id = (int)BadgeType.Notable
                                          };
 
@@ -253,7 +253,7 @@ namespace WikipediaMaze.Core
                                         {
                                             Description = "Created a puzzle with 100+ solutions.",
                                             Level = BadgeLevel.Gold,
-                                            Name = "Famous Puzzle",
+                                            Name = BadgeType.Famous.ToString(),
                                             Id = (int)BadgeType.Famous
                                         };
 
@@ -271,7 +271,7 @@ namespace WikipediaMaze.Core
                                   {
                                       Description = "Leader of 50+ puzzles.",
                                       Level = BadgeLevel.Gold,
-                                      Name = "Master",
+                                      Name = BadgeType.Master.ToString(),
                                       Id = (int)BadgeType.Master
                                   };
 
@@ -289,7 +289,7 @@ namespace WikipediaMaze.Core
                                      {
                                          Description = "Leader of 50+ puzzles.",
                                          Level = BadgeLevel.Silver,
-                                         Name = "Dominator",
+                                         Name = BadgeType.Dominator.ToString(),
                                          Id = (int)BadgeType.Dominator
                                      };
 
@@ -307,7 +307,7 @@ namespace WikipediaMaze.Core
                                   {
                                       Description = "Leader of 5+ puzzles.",
                                       Level = BadgeLevel.Bronze,
-                                      Name = "Leader",
+                                      Name = BadgeType.Leader.ToString(),
                                       Id = (int)BadgeType.Leader
                                   };
 
@@ -325,7 +325,7 @@ namespace WikipediaMaze.Core
                                 {
                                     Description = "Participated in the Beta",
                                     Level = BadgeLevel.Silver,
-                                    Name = "Beta",
+                                    Name = BadgeType.Beta.ToString(),
                                     Id = (int)BadgeType.Beta
                                 };
 
@@ -343,7 +343,7 @@ namespace WikipediaMaze.Core
                                       {
                                           Description = "Created a puzzle with 25 votes",
                                           Level = BadgeLevel.Gold,
-                                          Name = "Enigmatist",
+                                          Name = BadgeType.Beta.ToString(),
                                           Id = (int)BadgeType.Beta
                                       };
 

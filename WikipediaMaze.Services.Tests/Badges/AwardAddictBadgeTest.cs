@@ -77,7 +77,8 @@ namespace WikipediaMaze.Services.Tests.Badges
                                 {
                                     Action = UserActionType.SolvedPuzzle,
                                     UserId = 1,
-                                    DateCreated = DateTime.UtcNow.AddDays(i * -1)
+                                    DateCreated = DateTime.UtcNow.AddDays(i * -1),
+                                    PuzzleId = i
                                 });
             }
 
@@ -89,7 +90,7 @@ namespace WikipediaMaze.Services.Tests.Badges
             var result = awarder.AwardBadge(new UserAction
             {
                 Action = UserActionType.SolvedPuzzle,
-                UserId = 1
+                UserId = 1,
             });
 
             Assert.IsTrue(result);

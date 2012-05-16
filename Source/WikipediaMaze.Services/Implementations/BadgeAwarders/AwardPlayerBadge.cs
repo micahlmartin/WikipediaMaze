@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using MongoDB.Driver.Linq;
 using WikipediaMaze.Core;
 using WikipediaMaze.Data;
@@ -17,7 +19,7 @@ namespace WikipediaMaze.Services.Implementations.BadgeAwarders
             get { return Core.BadgeType.Player; }
         }
 
-        protected override bool ShouldAwardBadge(Core.User user, Core.UserAction action)
+        protected override bool ShouldAwardBadge(Core.User user, Core.UserAction action, IList<BadgeAwardInfo> awardInfo)
         {
             var puzzleIds = Repository.All<Solution>().Where(x => x.UserId == action.UserId).Select(x => x.PuzzleId).Distinct().ToList();
             return Repository.All<Puzzle>().Any(x => x.Id.In(puzzleIds) && x.CreatedById != user.Id);
@@ -31,6 +33,15 @@ namespace WikipediaMaze.Services.Implementations.BadgeAwarders
         protected override bool AllowMultiple
         {
             get { return false; }
+        }
+
+        protected override BadgeAwardInfo GetBadgeAwardInfo(UserAction action)
+        {
+            return new BadgeAwardInfo
+            {
+                DateAwarded = action.DateCreated,
+                Data = action.PuzzleId
+            };
         }
     }
 }
