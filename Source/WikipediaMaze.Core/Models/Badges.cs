@@ -1,9 +1,39 @@
 using System;
+using System.Collections.Generic;
 
 namespace WikipediaMaze.Core
 {
     public static class Badges
     {
+        private static IList<Badge> _all;
+        public static IEnumerable<Badge> All
+        {
+            get
+            {
+                return _all ?? (_all = new List<Badge>
+                                           {
+                                               Yearling,
+                                               Addict,
+                                               Crazed,
+                                               Creator,
+                                               Player,
+                                               Critic,
+                                               Contributor,
+                                               Riddler,
+                                               Supporter,
+                                               PopularPuzzle,
+                                               NotablePuzzle,
+                                               FamousPuzzle,
+                                               Master,
+                                               Dominator,
+                                               Leader,
+                                               Beta,
+                                               Enigmatist
+                                           });
+            }
+        }
+
+
         public static Badge GetBadgeByType(BadgeType type)
         {
             switch (type)
